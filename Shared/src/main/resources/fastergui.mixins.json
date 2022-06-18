@@ -7,7 +7,8 @@
   "mixins": [
   ],
   "client": [
-    "GuiMixin"
+    "GuiMixin",
+    "DebugScreenOverlayMixin"
   ],
   "injectors": {
     "defaultRequire": 1
