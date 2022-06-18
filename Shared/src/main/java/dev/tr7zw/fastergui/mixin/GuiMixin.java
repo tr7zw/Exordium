@@ -7,26 +7,16 @@ import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 
-import com.mojang.blaze3d.pipeline.RenderTarget;
-import com.mojang.blaze3d.pipeline.TextureTarget;
-import com.mojang.blaze3d.systems.RenderSystem;
-import com.mojang.blaze3d.vertex.BufferBuilder;
-import com.mojang.blaze3d.vertex.DefaultVertexFormat;
 import com.mojang.blaze3d.vertex.PoseStack;
-import com.mojang.blaze3d.vertex.Tesselator;
-import com.mojang.blaze3d.vertex.VertexFormat;
 
 import dev.tr7zw.fastergui.FasterGuiModBase;
+import dev.tr7zw.fastergui.util.BufferRenderer;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.Gui;
-import net.minecraft.client.renderer.GameRenderer;
-import net.minecraft.resources.ResourceLocation;
 
 @Mixin(value= Gui.class, priority = 1500) // higher priority, so it also captures rendering happening at RETURN
 public class GuiMixin {
     
-    @Shadow
-    public static ResourceLocation VIGNETTE_LOCATION;
     @Shadow
     protected int screenWidth;
     @Shadow
@@ -35,8 +25,7 @@ public class GuiMixin {
     @Final
     private Minecraft minecraft;
     
-    private RenderTarget guiTarget = new TextureTarget(100, 100, true, false);
-    private long nextFrame = System.currentTimeMillis();
+    private BufferRenderer bufferRenderer = new BufferRenderer();
     
     
     @Inject(method = "render", at = @At(value="INVOKE", target = "Lnet/minecraft/client/Minecraft;getDeltaFrameTime()F"), cancellable = true)
@@ -44,19 +33,7 @@ public class GuiMixin {
         if(!FasterGuiModBase.instance.config.enabled) {
             return;
         }
-        boolean forceRender = false;
-        if(guiTarget.width != minecraft.getWindow().getWidth() || guiTarget.height != minecraft.getWindow().getHeight()) {
-            guiTarget.resize(minecraft.getWindow().getWidth(), minecraft.getWindow().getHeight(), true);
-            forceRender = true;
-        }
-        renderTextureOverlay(guiTarget.getColorTextureId());
-        if(!forceRender && System.currentTimeMillis() < nextFrame) {
-            ci.cancel();
-            return;
-        }
-        guiTarget.setClearColor(0, 0, 0, 0);
-        guiTarget.clear(false);
-        guiTarget.bindWrite(false);
+        bufferRenderer.render(screenWidth, screenHeight, ci);
     }
     
     @Inject(method = "render", at = @At("RETURN"))
@@ -64,31 +41,9 @@ public class GuiMixin {
         if(!FasterGuiModBase.instance.config.enabled) {
             return;
         }
-        guiTarget.unbindWrite();
-        Minecraft.getInstance().getMainRenderTarget().bindWrite(true);
-        // always just rendering last frame prevents double rendering due to the chat?
-//        renderTextureOverlay(guiTarget.getColorTextureId());
-        nextFrame = System.currentTimeMillis() + (1000/FasterGuiModBase.instance.config.targetFPSIngameGui);
+        bufferRenderer.renderEnd(1000/FasterGuiModBase.instance.config.targetFPSIngameGui);
     }
 
-    protected void renderTextureOverlay(int textureid) {
-        RenderSystem.enableDepthTest();
-        RenderSystem.depthMask(true);
-        RenderSystem.defaultBlendFunc();
-        RenderSystem.setShader(GameRenderer::getPositionTexShader);
-        RenderSystem.setShaderColor(1.0F, 1.0F, 1.0F, 1.0F);
-        RenderSystem.setShaderTexture(0, textureid);
-        Tesselator tesselator = Tesselator.getInstance();
-        BufferBuilder bufferbuilder = tesselator.getBuilder();
-        bufferbuilder.begin(VertexFormat.Mode.QUADS, DefaultVertexFormat.POSITION_TEX);
-        bufferbuilder.vertex(0.0D, this.screenHeight, -90.0D).uv(0.0F, 0.0F).endVertex(); // 1
-        bufferbuilder.vertex(this.screenWidth, this.screenHeight, -90.0D).uv(1.0F, 0.0F).endVertex(); // 2
-        bufferbuilder.vertex(this.screenWidth, 0.0D, -90.0D).uv(1.0F, 1.0F).endVertex(); // 3
-        bufferbuilder.vertex(0.0D, 0.0D, -90.0D).uv(0.0F, 1.0F).endVertex(); // 4
-        tesselator.end();
-        RenderSystem.depthMask(true);
-        RenderSystem.enableDepthTest();
-        RenderSystem.setShaderColor(1.0F, 1.0F, 1.0F, 1.0F);
-    }
+
 
 }
