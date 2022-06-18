@@ -15,7 +15,7 @@
   },
 
   "license": "tr7zw Protective License",
-  "icon": "assets/entityculling/icon.png",
+  "icon": "assets/fastergui/icon.png",
 
   "environment": "client",
   "entrypoints": {

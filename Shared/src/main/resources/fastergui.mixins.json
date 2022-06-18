@@ -8,7 +8,9 @@
   ],
   "client": [
     "GuiMixin",
-    "DebugScreenOverlayMixin"
+    "DebugScreenOverlayMixin",
+    "GameRendererMixinHigh",
+    "GameRendererMixinLow"
   ],
   "injectors": {
     "defaultRequire": 1

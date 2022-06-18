@@ -11,6 +11,7 @@ import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 
 import dev.tr7zw.config.CustomConfigScreen;
+import dev.tr7zw.fastergui.util.BufferRenderer;
 import net.minecraft.client.OptionInstance;
 import net.minecraft.client.gui.screens.Screen;
 
@@ -21,8 +22,9 @@ public abstract class FasterGuiModBase {
     public Config config;
     private final File settingsFile = new File("config", "fastergui.json");
     private final Gson gson = new GsonBuilder().setPrettyPrinting().create();
-	
-	public void onInitialize() {
+    private BufferRenderer screenBufferRenderer;
+
+    public void onInitialize() {
 		instance = this;
         if (settingsFile.exists()) {
             try {
@@ -54,6 +56,13 @@ public abstract class FasterGuiModBase {
         }
     }
     
+    public BufferRenderer getScreenBufferRenderer() {
+        if(screenBufferRenderer == null) {
+            screenBufferRenderer = new BufferRenderer();
+        }
+        return screenBufferRenderer;
+    }
+    
     public abstract void initModloader();
 
     public Screen createConfigScreen(Screen parent) {
@@ -62,9 +71,12 @@ public abstract class FasterGuiModBase {
             @Override
             public void initialize() {
                 List<OptionInstance<?>> options = new ArrayList<>();
-                options.add(getOnOffOption("text.fastergui.enable", () -> config.enabled,
-                        (b) -> config.enabled = b));
-                options.add(getIntOption("text.fastergui.targetFramerate", 5, 60, () -> config.targetFPSIngameGui, (v) -> config.targetFPSIngameGui = v));
+                options.add(getOnOffOption("text.fastergui.enableGui", () -> config.enabledGui,
+                        (b) -> config.enabledGui = b));
+                options.add(getIntOption("text.fastergui.targetFramerateGui", 5, 60, () -> config.targetFPSIngameGui, (v) -> config.targetFPSIngameGui = v));
+                options.add(getOnOffOption("text.fastergui.enableScreen", () -> config.enabledScreens,
+                        (b) -> config.enabledScreens = b));
+                options.add(getIntOption("text.fastergui.targetFramerateScreen", 20, 120, () -> config.targetFPSIngameScreens, (v) -> config.targetFPSIngameScreens = v));
               
                 getOptions().addSmall(options.toArray(new OptionInstance[0]));
 

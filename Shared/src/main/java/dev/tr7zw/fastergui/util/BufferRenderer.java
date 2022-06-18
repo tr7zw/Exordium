@@ -4,6 +4,7 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 
 import com.mojang.blaze3d.pipeline.RenderTarget;
 import com.mojang.blaze3d.pipeline.TextureTarget;
+import com.mojang.blaze3d.platform.GlStateManager;
 import com.mojang.blaze3d.systems.RenderSystem;
 import com.mojang.blaze3d.vertex.BufferBuilder;
 import com.mojang.blaze3d.vertex.DefaultVertexFormat;
@@ -18,33 +19,45 @@ public class BufferRenderer {
     private static final Minecraft minecraft = Minecraft.getInstance();
     private RenderTarget guiTarget = new TextureTarget(100, 100, true, false);
     private long nextFrame = System.currentTimeMillis();
-    
-    public void render(int screenWidth, int screenHeight, CallbackInfo ci) {
+    private boolean isRendering = false;
+
+    public void render(CallbackInfo ci) {
+        int screenWidth = minecraft.getWindow().getGuiScaledWidth();
+        int screenHeight = minecraft.getWindow().getGuiScaledHeight();
         boolean forceRender = false;
-        if(guiTarget.width != minecraft.getWindow().getWidth() || guiTarget.height != minecraft.getWindow().getHeight()) {
+        if (guiTarget.width != minecraft.getWindow().getWidth()
+                || guiTarget.height != minecraft.getWindow().getHeight()) {
             guiTarget.resize(minecraft.getWindow().getWidth(), minecraft.getWindow().getHeight(), true);
             forceRender = true;
         }
         renderTextureOverlay(guiTarget.getColorTextureId(), screenWidth, screenHeight);
-        if(!forceRender && System.currentTimeMillis() < nextFrame) {
+        if (!forceRender && System.currentTimeMillis() < nextFrame) {
             ci.cancel();
             return;
         }
         guiTarget.setClearColor(0, 0, 0, 0);
         guiTarget.clear(false);
         guiTarget.bindWrite(false);
+
+        RenderSystem.enableBlend();
+        RenderSystem.blendFunc(GlStateManager.SourceFactor.ONE, GlStateManager.DestFactor.ONE_MINUS_SRC_ALPHA);
+        RenderSystem.blendFuncSeparate(GlStateManager.SourceFactor.SRC_ALPHA,
+                GlStateManager.DestFactor.ONE_MINUS_SRC_ALPHA, GlStateManager.SourceFactor.ONE,
+                GlStateManager.DestFactor.ONE);
+        isRendering = true;
     }
-    
+
     public void renderEnd(int cacheTime) {
         guiTarget.unbindWrite();
         Minecraft.getInstance().getMainRenderTarget().bindWrite(true);
         nextFrame = System.currentTimeMillis() + cacheTime;
+        isRendering = false;
     }
-    
+
     private void renderTextureOverlay(int textureid, int screenWidth, int screenHeight) {
-        RenderSystem.enableDepthTest();
-        RenderSystem.depthMask(true);
-        RenderSystem.defaultBlendFunc();
+        RenderSystem.disableDepthTest();
+        RenderSystem.depthMask(false);
+        RenderSystem.blendFunc(GlStateManager.SourceFactor.ONE, GlStateManager.DestFactor.ONE_MINUS_SRC_ALPHA);
         RenderSystem.setShader(GameRenderer::getPositionTexShader);
         RenderSystem.setShaderColor(1.0F, 1.0F, 1.0F, 1.0F);
         RenderSystem.setShaderTexture(0, textureid);
@@ -60,5 +73,9 @@ public class BufferRenderer {
         RenderSystem.enableDepthTest();
         RenderSystem.setShaderColor(1.0F, 1.0F, 1.0F, 1.0F);
     }
-    
+
+    public boolean isRendering() {
+        return isRendering;
+    }
+
 }
