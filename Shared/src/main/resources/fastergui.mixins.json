@@ -1,0 +1,15 @@
+{
+  "required": true,
+  "minVersion": "0.8",
+  "package": "dev.tr7zw.fastergui.mixin",
+  "compatibilityLevel": "JAVA_16",
+  "refmap": "fastergui.refmap.mixins.json",
+  "mixins": [
+  ],
+  "client": [
+    "GuiMixin"
+  ],
+  "injectors": {
+    "defaultRequire": 1
+  }
+}
