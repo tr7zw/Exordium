@@ -11,7 +11,7 @@ import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 
 import dev.tr7zw.config.CustomConfigScreen;
-import net.minecraft.client.OptionInstance;
+import net.minecraft.client.Option;
 import net.minecraft.client.gui.screens.Screen;
 
 public abstract class FasterGuiModBase {
@@ -61,12 +61,12 @@ public abstract class FasterGuiModBase {
 
             @Override
             public void initialize() {
-                List<OptionInstance<?>> options = new ArrayList<>();
+                List<Option> options = new ArrayList<>();
                 options.add(getOnOffOption("text.fastergui.enable", () -> config.enabled,
                         (b) -> config.enabled = b));
                 options.add(getIntOption("text.fastergui.targetFramerate", 5, 60, () -> config.targetFPSIngameGui, (v) -> config.targetFPSIngameGui = v));
               
-                getOptions().addSmall(options.toArray(new OptionInstance[0]));
+                getOptions().addSmall(options.toArray(new Option[0]));
 
             }
 
