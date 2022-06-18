@@ -1,16 +1,44 @@
-# EntityCulling
+# FasterGUI
 
-__Using async path-tracing to skip rendering Tiles/Entities that are not visible.__
+__Render the HUD and screens at a lower framerate to speed up what's really important: the worldrendering.__
 
-Minecraft skips rendering things that are behind you, so why is it rendering everything that you still can't see because of a wall in the way? This mod utilizes your other CPU cores/threads to do really quick path-tracing from your camera to all tile/-entities to determine rather they are visible or not. During the rendering, the not visible ones will be skipped the same way entities behind you are.
-
-This mod calculates the visibility of tile/-entities 64 blocks in each direction of the player(so a 128x128x128 cube in total), everything outside of that is considered too far away and is invisible(should somewhat line up with the vanilla "Entity Distance" setting, but future changes to this size are possible).
+Renders the HUD at a lower fixed Framerate(configurable in the settings), freeing up cpu and gpu time for the world rendering. There is no good reason to render the hotbar at 100+ fps.
 
 ## Compatibility
 
-This has been tested with other mods, Optifine(Optifabric), Canvas, and Sodium, in all cases resulting in massive fps gains in places like Game Server lobbies.
+__This is still work in progress software! There will be issues, please report them!__
 
-You might wonder why it does increase the FPS with Sodium(and Canvas) since Sodium has "Use Entity Culling" in its Advanced settings and enabled by default. The difference is that Sodium does a really quick pass based on the visible chunks, being way less aggressive and thereby still rendering entities that just happen to be in visible chunks, but not visible themselves.
+### Affected vanilla features
+
+- Overlays except Vignette(Pumpkin, freezing, spyglass, portal...)
+- Hotbar(all parts of it)
+- Crosshair
+- Bossbars
+- Debug Screen(F3)
+- Titles
+- Scoreboard
+- Chat
+
+### Tested and working with
+
+- Sodium
+- Iris
+- Optifine
+- AppleSkin
+- Better Ping Display
+- Chat Heads
+- Detail Armro Bar
+- wthit(What the hell is that?)
+- JourneyMap
+- ToroHealth Damage Indicator
+
+### Not compatible
+
+- VulkanMod
+
+### Screen setting notice
+
+This feature is still not done(disabled by default) and has mainly transparency issues. It heavily speeds up mods like REI(Roughly Enough Items), but with visual issues.
 
 ## License
 
