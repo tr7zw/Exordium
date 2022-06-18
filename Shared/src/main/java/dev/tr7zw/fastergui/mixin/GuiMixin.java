@@ -22,7 +22,7 @@ import net.minecraft.client.gui.Gui;
 import net.minecraft.client.renderer.GameRenderer;
 import net.minecraft.resources.ResourceLocation;
 
-@Mixin(Gui.class)
+@Mixin(value= Gui.class, priority = 1500) // higher priority, so it also captures rendering happening at RETURN
 public class GuiMixin {
     
     @Shadow
@@ -59,7 +59,7 @@ public class GuiMixin {
         guiTarget.bindWrite(false);
     }
     
-    @Inject(method = "render", at = @At("TAIL"))
+    @Inject(method = "render", at = @At("RETURN"))
     public void renderEnd(PoseStack arg, float g, CallbackInfo ci) {
         if(!FasterGuiModBase.instance.config.enabled) {
             return;
