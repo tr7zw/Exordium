@@ -101,8 +101,7 @@ public abstract class DebugScreenOverlayMixin extends GuiComponent {
             m = frameTimer.wrapIndex(m + 1);
 
         }
-        bufferBuilder.end();
-        BufferUploader.end(bufferBuilder);
+        BufferUploader.drawWithShader(bufferBuilder.end());
         RenderSystem.enableTexture();
         RenderSystem.disableBlend();
         // TODO fix
@@ -124,8 +123,8 @@ public abstract class DebugScreenOverlayMixin extends GuiComponent {
         vLine(poseStack, i, t - 60, t, -1);
         vLine(poseStack, i + p - 1, t - 60, t, -1);
 
-        if (fpsGraph && this.minecraft.options.framerateLimit > 0 && this.minecraft.options.framerateLimit <= 250)
-            hLine(poseStack, i, i + p - 1, t - 1 - (int) (1800.0D / this.minecraft.options.framerateLimit), -16711681);
+        if (fpsGraph && this.minecraft.options.framerateLimit().get() > 0 && this.minecraft.options.framerateLimit().get() <= 250)
+            hLine(poseStack, i, i + p - 1, t - 1 - (int) (1800.0D / this.minecraft.options.framerateLimit().get()), -16711681);
 
         String string = "" + r + " ms min";
         String string2 = "" + df.format((float) q / p) + " ms avg";
