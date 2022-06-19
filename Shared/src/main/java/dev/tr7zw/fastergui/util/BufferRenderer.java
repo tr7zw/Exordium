@@ -72,6 +72,7 @@ public class BufferRenderer {
     private void renderTextureOverlay(int textureid, int screenWidth, int screenHeight) {
         RenderSystem.disableDepthTest();
         RenderSystem.depthMask(false);
+        RenderSystem.enableBlend();
         RenderSystem.blendFunc(GlStateManager.SourceFactor.ONE, GlStateManager.DestFactor.ONE_MINUS_SRC_ALPHA);
         RenderSystem.setShader(GameRenderer::getPositionTexShader);
         RenderSystem.setShaderColor(1.0F, 1.0F, 1.0F, 1.0F);
