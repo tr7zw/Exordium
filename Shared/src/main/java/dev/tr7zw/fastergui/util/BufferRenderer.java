@@ -49,11 +49,7 @@ public class BufferRenderer {
         guiTarget.clear(false);
         guiTarget.bindWrite(false);
 
-        RenderSystem.enableBlend();
-        RenderSystem.blendFunc(GlStateManager.SourceFactor.SRC_ALPHA, GlStateManager.DestFactor.ONE_MINUS_SRC_ALPHA);
-        RenderSystem.blendFuncSeparate(GlStateManager.SourceFactor.SRC_ALPHA,
-                GlStateManager.DestFactor.ONE_MINUS_SRC_ALPHA, GlStateManager.SourceFactor.ONE,
-                GlStateManager.DestFactor.ONE_MINUS_SRC_ALPHA);
+        FasterGuiModBase.correctBlendMode();
         isRendering = true;
         if(forceBlending) {
             FasterGuiModBase.setForceBlend(true);

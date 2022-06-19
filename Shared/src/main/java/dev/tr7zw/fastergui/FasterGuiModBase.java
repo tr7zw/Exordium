@@ -9,6 +9,8 @@ import java.util.List;
 
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
+import com.mojang.blaze3d.platform.GlStateManager;
+import com.mojang.blaze3d.systems.RenderSystem;
 
 import dev.tr7zw.config.CustomConfigScreen;
 import dev.tr7zw.fastergui.util.BufferRenderer;
@@ -112,7 +114,19 @@ public abstract class FasterGuiModBase {
     }
 
     public static void setBlendBypass(boolean blendBypass) {
+        // force blend is on, bypass is on and we are turning it off
+        if(forceBlend && FasterGuiModBase.blendBypass && !blendBypass) {
+            correctBlendMode(); // fix the blend state to the expected one
+        }
         FasterGuiModBase.blendBypass = blendBypass;
+    }
+    
+    public static void correctBlendMode() {
+        RenderSystem.enableBlend();
+        RenderSystem.blendFunc(GlStateManager.SourceFactor.SRC_ALPHA, GlStateManager.DestFactor.ONE_MINUS_SRC_ALPHA);
+        RenderSystem.blendFuncSeparate(GlStateManager.SourceFactor.SRC_ALPHA,
+                GlStateManager.DestFactor.ONE_MINUS_SRC_ALPHA, GlStateManager.SourceFactor.ONE,
+                GlStateManager.DestFactor.ONE_MINUS_SRC_ALPHA);
     }
     
 }
