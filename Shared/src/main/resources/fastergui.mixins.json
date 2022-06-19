@@ -11,7 +11,9 @@
     "DebugScreenOverlayMixin",
     "GameRendererMixinHigh",
     "GameRendererMixinLow",
-    "GlStateManagerMixin"
+    "GlStateManagerMixin",
+    "InventoryScreenMixin",
+    "ItemRendererMixin"
   ],
   "injectors": {
     "defaultRequire": 1
