@@ -21,6 +21,7 @@ public abstract class FasterGuiModBase {
 
     public static FasterGuiModBase instance;
     private static boolean forceBlend, blendBypass;
+    private static int bypassTurnoff;
 
     public Config config;
     private final File settingsFile = new File("config", "fastergui.json");
@@ -121,6 +122,14 @@ public abstract class FasterGuiModBase {
         FasterGuiModBase.blendBypass = blendBypass;
     }
     
+    public static int getBypassTurnoff() {
+        return bypassTurnoff;
+    }
+
+    public static void setBypassTurnoff(int bypassTurnoff) {
+        FasterGuiModBase.bypassTurnoff = bypassTurnoff;
+    }
+
     public static void correctBlendMode() {
         RenderSystem.enableBlend();
         RenderSystem.blendFunc(GlStateManager.SourceFactor.SRC_ALPHA, GlStateManager.DestFactor.ONE_MINUS_SRC_ALPHA);
