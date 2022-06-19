@@ -18,6 +18,7 @@ import net.minecraft.client.gui.screens.Screen;
 public abstract class FasterGuiModBase {
 
     public static FasterGuiModBase instance;
+    private static boolean forceBlend, blendBypass;
 
     public Config config;
     private final File settingsFile = new File("config", "fastergui.json");
@@ -58,7 +59,7 @@ public abstract class FasterGuiModBase {
     
     public BufferRenderer getScreenBufferRenderer() {
         if(screenBufferRenderer == null) {
-            screenBufferRenderer = new BufferRenderer();
+            screenBufferRenderer = new BufferRenderer(true);
         }
         return screenBufferRenderer;
     }
@@ -97,4 +98,21 @@ public abstract class FasterGuiModBase {
 
         return screen;
     }
+
+    public static boolean isForceBlend() {
+        return forceBlend;
+    }
+
+    public static void setForceBlend(boolean forceBlend) {
+        FasterGuiModBase.forceBlend = forceBlend;
+    }
+
+    public static boolean isBlendBypass() {
+        return blendBypass;
+    }
+
+    public static void setBlendBypass(boolean blendBypass) {
+        FasterGuiModBase.blendBypass = blendBypass;
+    }
+    
 }

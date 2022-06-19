@@ -11,6 +11,7 @@ import com.mojang.blaze3d.vertex.DefaultVertexFormat;
 import com.mojang.blaze3d.vertex.Tesselator;
 import com.mojang.blaze3d.vertex.VertexFormat;
 
+import dev.tr7zw.fastergui.FasterGuiModBase;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.GameRenderer;
 
@@ -20,6 +21,15 @@ public class BufferRenderer {
     private RenderTarget guiTarget = new TextureTarget(100, 100, true, false);
     private long nextFrame = System.currentTimeMillis();
     private boolean isRendering = false;
+    private boolean forceBlending = false;
+    
+    public BufferRenderer() {
+        this(false);
+    }
+    
+    public BufferRenderer(boolean forceBlending) {
+        this.forceBlending = forceBlending;
+    }
 
     public void render(CallbackInfo ci) {
         int screenWidth = minecraft.getWindow().getGuiScaledWidth();
@@ -40,11 +50,15 @@ public class BufferRenderer {
         guiTarget.bindWrite(false);
 
         RenderSystem.enableBlend();
-        RenderSystem.blendFunc(GlStateManager.SourceFactor.ONE, GlStateManager.DestFactor.ONE_MINUS_SRC_ALPHA);
+        RenderSystem.blendFunc(GlStateManager.SourceFactor.SRC_ALPHA, GlStateManager.DestFactor.ONE_MINUS_SRC_ALPHA);
         RenderSystem.blendFuncSeparate(GlStateManager.SourceFactor.SRC_ALPHA,
                 GlStateManager.DestFactor.ONE_MINUS_SRC_ALPHA, GlStateManager.SourceFactor.ONE,
-                GlStateManager.DestFactor.ONE);
+                GlStateManager.DestFactor.ONE_MINUS_SRC_ALPHA);
         isRendering = true;
+        if(forceBlending) {
+            FasterGuiModBase.setForceBlend(true);
+            FasterGuiModBase.setBlendBypass(false);
+        }
     }
 
     public void renderEnd(int cacheTime) {
@@ -52,6 +66,10 @@ public class BufferRenderer {
         Minecraft.getInstance().getMainRenderTarget().bindWrite(true);
         nextFrame = System.currentTimeMillis() + cacheTime;
         isRendering = false;
+        if(forceBlending) {
+            FasterGuiModBase.setBlendBypass(false);
+            FasterGuiModBase.setForceBlend(false);
+        }
     }
 
     private void renderTextureOverlay(int textureid, int screenWidth, int screenHeight) {

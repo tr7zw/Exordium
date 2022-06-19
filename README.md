@@ -27,7 +27,7 @@ __This is still work in progress software! There will be issues, please report t
 - AppleSkin
 - Better Ping Display
 - Chat Heads
-- Detail Armro Bar
+- Detail Armor Bar
 - wthit(What the hell is that?)
 - JourneyMap
 - ToroHealth Damage Indicator
