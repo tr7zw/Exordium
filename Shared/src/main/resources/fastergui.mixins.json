@@ -10,7 +10,8 @@
     "GuiMixin",
     "DebugScreenOverlayMixin",
     "GameRendererMixinHigh",
-    "GameRendererMixinLow"
+    "GameRendererMixinLow",
+    "GlStateManagerMixin"
   ],
   "injectors": {
     "defaultRequire": 1
