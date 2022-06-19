@@ -54,6 +54,7 @@ public class BufferRenderer {
         if(forceBlending) {
             FasterGuiModBase.setForceBlend(true);
             FasterGuiModBase.setBlendBypass(false);
+            FasterGuiModBase.setBypassTurnoff(0);
         }
     }
 
