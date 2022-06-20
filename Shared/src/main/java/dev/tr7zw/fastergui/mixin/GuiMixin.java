@@ -2,9 +2,11 @@ package dev.tr7zw.fastergui.mixin;
 
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.injection.At;
+import org.spongepowered.asm.mixin.injection.At.Shift;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 
+import com.mojang.blaze3d.systems.RenderSystem;
 import com.mojang.blaze3d.vertex.PoseStack;
 
 import dev.tr7zw.fastergui.FasterGuiModBase;
@@ -33,6 +35,31 @@ public class GuiMixin {
         bufferRenderer.renderEnd(1000/FasterGuiModBase.instance.config.targetFPSIngameGui);
     }
 
-
+    // Fix for AppleSkin
+    
+    @Inject(method = "renderPlayerHealth", at = @At("HEAD"))
+    private void renderPlayerHealth(PoseStack poseStack, CallbackInfo ci) {
+        FasterGuiModBase.correctBlendMode();
+        FasterGuiModBase.setForceBlend(true);
+    }
+    
+    @Inject(method = "renderPlayerHealth", at = @At("RETURN"))
+    private void renderPlayerHealthReturn(PoseStack poseStack, CallbackInfo ci) {
+        FasterGuiModBase.setForceBlend(false);
+    }
+    
+    // Fix for chat breaking the armor bar outline
+    
+    @Inject(method = "render", at = @At(value="INVOKE", target = "Lnet/minecraft/client/gui/components/ChatComponent;render(Lcom/mojang/blaze3d/vertex/PoseStack;I)V", shift = Shift.BEFORE))
+    public void renderChat(PoseStack arg, float g, CallbackInfo ci) {
+        FasterGuiModBase.correctBlendMode();
+        FasterGuiModBase.setForceBlend(true);
+    }
+    
+    @Inject(method = "render", at = @At(value="INVOKE", target = "Lnet/minecraft/client/gui/components/ChatComponent;render(Lcom/mojang/blaze3d/vertex/PoseStack;I)V", shift = Shift.AFTER))
+    public void renderChatEnd(PoseStack arg, float g, CallbackInfo ci) {
+        FasterGuiModBase.setForceBlend(false);
+        RenderSystem.defaultBlendFunc();
+    }
 
 }
