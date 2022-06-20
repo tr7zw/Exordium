@@ -40,8 +40,8 @@ public class BufferRenderer {
             guiTarget.resize(minecraft.getWindow().getWidth(), minecraft.getWindow().getHeight(), true);
             forceRender = true;
         }
-        renderTextureOverlay(guiTarget.getColorTextureId(), screenWidth, screenHeight);
         if (!forceRender && System.currentTimeMillis() < nextFrame) {
+            renderTextureOverlay(guiTarget.getColorTextureId(), screenWidth, screenHeight);
             ci.cancel();
             return;
         }
@@ -67,6 +67,9 @@ public class BufferRenderer {
             FasterGuiModBase.setBlendBypass(false);
             FasterGuiModBase.setForceBlend(false);
         }
+        int screenWidth = minecraft.getWindow().getGuiScaledWidth();
+        int screenHeight = minecraft.getWindow().getGuiScaledHeight();
+        renderTextureOverlay(guiTarget.getColorTextureId(), screenWidth, screenHeight);
     }
 
     private void renderTextureOverlay(int textureid, int screenWidth, int screenHeight) {
