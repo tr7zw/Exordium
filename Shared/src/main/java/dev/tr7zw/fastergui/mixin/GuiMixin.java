@@ -61,5 +61,19 @@ public class GuiMixin {
         FasterGuiModBase.setForceBlend(false);
         RenderSystem.defaultBlendFunc();
     }
+    
+    // Fix for tablist
+    
+    @Inject(method = "render", at = @At(value="INVOKE", target = "Lnet/minecraft/client/gui/components/PlayerTabOverlay;render(Lcom/mojang/blaze3d/vertex/PoseStack;ILnet/minecraft/world/scores/Scoreboard;Lnet/minecraft/world/scores/Objective;)V", shift = Shift.BEFORE))
+    public void renderTab(PoseStack arg, float g, CallbackInfo ci) {
+        FasterGuiModBase.correctBlendMode();
+        FasterGuiModBase.setForceBlend(true);
+    }
+    
+    @Inject(method = "render", at = @At(value="INVOKE", target = "Lnet/minecraft/client/gui/components/PlayerTabOverlay;render(Lcom/mojang/blaze3d/vertex/PoseStack;ILnet/minecraft/world/scores/Scoreboard;Lnet/minecraft/world/scores/Objective;)V", shift = Shift.AFTER))
+    public void renderTabEnd(PoseStack arg, float g, CallbackInfo ci) {
+        FasterGuiModBase.setForceBlend(false);
+        RenderSystem.defaultBlendFunc();
+    }
 
 }
