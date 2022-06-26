@@ -7,5 +7,6 @@ public class Config {
     public int targetFPSIngameGui = 20;
     public boolean enabledScreens = false;
     public int targetFPSIngameScreens = 60;
+    public boolean vanillaScale = false;
     
 }

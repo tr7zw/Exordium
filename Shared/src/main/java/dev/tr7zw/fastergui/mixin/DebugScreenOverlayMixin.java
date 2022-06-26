@@ -20,6 +20,7 @@ import com.mojang.blaze3d.vertex.VertexFormat;
 import com.mojang.math.Matrix4f;
 import com.mojang.math.Transformation;
 
+import dev.tr7zw.fastergui.FasterGuiModBase;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.Font;
 import net.minecraft.client.gui.GuiComponent;
@@ -71,6 +72,8 @@ public abstract class DebugScreenOverlayMixin extends GuiComponent {
         }
         t = this.minecraft.getWindow().getGuiScaledHeight();
         fill(poseStack, i, t - 60, i + p, t, -1873784752);
+        
+        boolean vanillaScale = FasterGuiModBase.instance.config.vanillaScale;
 
         RenderSystem.setShader(GameRenderer::getPositionColorShader);
 
@@ -86,8 +89,8 @@ public abstract class DebugScreenOverlayMixin extends GuiComponent {
         while (m != l) {
             float ms = ls[m] / 1000000f;
             ms -= minMs;
-            int v = (int) (ms/scaled *60f);//frameTimer.scaleSampleTo(ls[m], 30, 60); // 30 60
-            int w = 100; // 100
+            int v = vanillaScale ? frameTimer.scaleSampleTo(ls[m], 30, 60) : (int) (ms/scaled *60f);
+            int w = 100;
             int x = getSampleColor(Mth.clamp(v, 0, w), 0, w / 2, w);
 
             int y = x >> 24 & 0xFF;
@@ -108,12 +111,22 @@ public abstract class DebugScreenOverlayMixin extends GuiComponent {
         BufferUploader.end(bufferBuilder);
         RenderSystem.enableTexture();
         RenderSystem.disableBlend();
+        
+        if (vanillaScale) {
+            fill(poseStack, i + 1, t - 30 + 1, i + 14, t - 30 + 10, -1873784752);
+            this.font.draw(poseStack, "60 FPS", (i + 2), (t - 30 + 2), 14737632);
+            hLine(poseStack, i, i + p - 1, t - 30, -1);
+            fill(poseStack, i + 1, t - 60 + 1, i + 14, t - 60 + 10, -1873784752);
+            this.font.draw(poseStack, "30 FPS", (i + 2), (t - 60 + 2), 14737632);
+            hLine(poseStack, i, i + p - 1, t - 60, -1);
+        }
+        
         hLine(poseStack, i, i + p - 1, t - 1, -1);
         vLine(poseStack, i, t - 60, t, -1);
         vLine(poseStack, i + p - 1, t - 60, t, -1);
 
-        if (fpsGraph)
-            hLine(poseStack, i, i + p - 1, (int) (t - 1 - ((q / p)/scaled*60)), -16711681);
+        if(!vanillaScale)
+            hLine(poseStack, i, i + p - 1,  t - 1 - (int)(((q / p)-minMs)/scaled*60f), -16711681);
         
         String string = "" + df.format(minMs) + " ms min";
         String string2 = "" + df.format(q / p) + " ms avg";

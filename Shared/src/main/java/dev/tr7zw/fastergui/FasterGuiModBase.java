@@ -81,6 +81,8 @@ public abstract class FasterGuiModBase {
                 options.add(getOnOffOption("text.fastergui.enableScreen", () -> config.enabledScreens,
                         (b) -> config.enabledScreens = b));
                 options.add(getIntOption("text.fastergui.targetFramerateScreen", 20, 120, () -> config.targetFPSIngameScreens, (v) -> config.targetFPSIngameScreens = v));
+                options.add(getOnOffOption("text.fastergui.vanillaScale", () -> config.vanillaScale,
+                        (b) -> config.vanillaScale = b));
               
                 getOptions().addSmall(options.toArray(new Option[0]));
 
