@@ -58,14 +58,14 @@ public abstract class DebugScreenOverlayMixin extends GuiComponent {
 
         m = frameTimer.wrapIndex(m + o);
 
-        long q = 0L;
-        int r = Integer.MAX_VALUE;
-        int s = Integer.MIN_VALUE;
+        float q = 0f;
+        float minMs = Integer.MAX_VALUE;
+        float maxMs = Integer.MIN_VALUE;
         int t;
         for (t = 0; t < p; t++) {
-            int u = (int) (ls[frameTimer.wrapIndex(m + t)] / 1000000L);
-            r = Math.min(r, u);
-            s = Math.max(s, u);
+            float u = ls[frameTimer.wrapIndex(m + t)] / 1000000f;
+            minMs = Math.min(minMs, u);
+            maxMs = Math.max(maxMs, u);
             q += u;
 
         }
@@ -82,9 +82,12 @@ public abstract class DebugScreenOverlayMixin extends GuiComponent {
 
         Matrix4f matrix4f = Transformation.identity().getMatrix();
 
+        float scaled = maxMs - minMs;
         while (m != l) {
-            int v = frameTimer.scaleSampleTo(ls[m], 60, 120); // 30 60
-            int w = 200; // 100
+            float ms = ls[m] / 1000000f;
+            ms -= minMs;
+            int v = (int) (ms/scaled *60f);//frameTimer.scaleSampleTo(ls[m], 30, 60); // 30 60
+            int w = 100; // 100
             int x = getSampleColor(Mth.clamp(v, 0, w), 0, w / 2, w);
 
             int y = x >> 24 & 0xFF;
@@ -105,31 +108,16 @@ public abstract class DebugScreenOverlayMixin extends GuiComponent {
         BufferUploader.end(bufferBuilder);
         RenderSystem.enableTexture();
         RenderSystem.disableBlend();
-        // TODO fix
-//        if (fpsGraph) {
-//            fill(poseStack, i + 1, t - 30 + 1, i + 14, t - 30 + 10, -1873784752);
-//            this.font.draw(poseStack, "60 FPS", (i + 2), (t - 30 + 2), 14737632);
-//            hLine(poseStack, i, i + p - 1, t - 30, -1);
-//
-//            fill(poseStack, i + 1, t - 60 + 1, i + 14, t - 60 + 10, -1873784752);
-//            this.font.draw(poseStack, "30 FPS", (i + 2), (t - 60 + 2), 14737632);
-//            hLine(poseStack, i, i + p - 1, t - 60, -1);
-//        } else {
-//            fill(poseStack, i + 1, t - 60 + 1, i + 14, t - 60 + 10, -1873784752);
-//            this.font.draw(poseStack, "20 TPS", (i + 2), (t - 60 + 2), 14737632);
-//            hLine(poseStack, i, i + p - 1, t - 60, -1);
-//
-//        }
         hLine(poseStack, i, i + p - 1, t - 1, -1);
         vLine(poseStack, i, t - 60, t, -1);
         vLine(poseStack, i + p - 1, t - 60, t, -1);
 
-        if (fpsGraph && this.minecraft.options.framerateLimit > 0 && this.minecraft.options.framerateLimit <= 250)
-            hLine(poseStack, i, i + p - 1, t - 1 - (int) (1800.0D / this.minecraft.options.framerateLimit), -16711681);
-
-        String string = "" + r + " ms min";
-        String string2 = "" + df.format((float) q / p) + " ms avg";
-        String string3 = "" + s + " ms max";
+        if (fpsGraph)
+            hLine(poseStack, i, i + p - 1, (int) (t - 1 - ((q / p)/scaled*60)), -16711681);
+        
+        String string = "" + df.format(minMs) + " ms min";
+        String string2 = "" + df.format(q / p) + " ms avg";
+        String string3 = "" + df.format(maxMs) + " ms max";
         Objects.requireNonNull(this.font);
         this.font.drawShadow(poseStack, string, (i + 2), (t - 60 - 9), 14737632);
         Objects.requireNonNull(this.font);
