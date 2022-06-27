@@ -8,7 +8,6 @@
   ],
   "client": [
     "GuiMixin",
-    "DebugScreenOverlayMixin",
     "GameRendererMixinHigh",
     "GameRendererMixinLow",
     "GlStateManagerMixin",
