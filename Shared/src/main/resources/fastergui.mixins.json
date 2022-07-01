@@ -12,7 +12,9 @@
     "GameRendererMixinLow",
     "GlStateManagerMixin",
     "InventoryScreenMixin",
-    "ItemRendererMixin"
+    "ItemRendererMixin",
+    "SignRendererMixin",
+    "SignBlockEntityMixin"
   ],
   "injectors": {
     "defaultRequire": 1
