@@ -16,13 +16,14 @@ import net.minecraft.world.level.block.entity.SignBlockEntity;
 @Mixin(SignRenderer.class)
 public class SignRendererMixin {
 
-    @Inject(method = "render", at = @At(value = "INVOKE", target = "Lnet/minecraft/client/renderer/blockentity/SignRenderer;getDarkColor(Lnet/minecraft/world/level/block/entity/SignBlockEntity;)I", shift = Shift.BEFORE))
+    @Inject(method = "render", at = @At(value = "INVOKE", target = "Lnet/minecraft/client/renderer/blockentity/SignRenderer;getDarkColor(Lnet/minecraft/world/level/block/entity/SignBlockEntity;)I", shift = Shift.BEFORE), cancellable = true)
     public void render(SignBlockEntity signBlockEntity, float f, PoseStack poseStack,
             MultiBufferSource multiBufferSource, int i, int j, CallbackInfo info) {
         boolean cancel = ((SignBufferHolder)signBlockEntity).renderBuffered(poseStack, multiBufferSource);
-//        if(cancel) {
-//            info.cancel();
-//        }
+        if(cancel) {
+            poseStack.popPose();
+            info.cancel();
+        }
     }
     
 }

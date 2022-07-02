@@ -15,6 +15,7 @@ import com.mojang.blaze3d.vertex.Tesselator;
 import com.mojang.blaze3d.vertex.VertexFormat;
 import com.mojang.math.Matrix4f;
 
+import dev.tr7zw.fastergui.FasterGuiModBase;
 import net.minecraft.client.Camera;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.GameRenderer;
@@ -34,8 +35,8 @@ public class SignBufferRenderer {
     private RenderTarget guiTarget;
     
     public SignBufferRenderer(SignBlockEntity arg, MultiBufferSource arg3) {
-        guiTarget = new TextureTarget(260, 180, false, false);
-        guiTarget.resize(260, 180, false);
+        guiTarget = new TextureTarget((int)FasterGuiModBase.signSettings.bufferWidth, (int)FasterGuiModBase.signSettings.bufferHeight, false, false);
+        guiTarget.resize((int)FasterGuiModBase.signSettings.bufferWidth, (int)FasterGuiModBase.signSettings.bufferHeight, false);
         guiTarget.setClearColor(0, 0, 0, 0);
         guiTarget.clear(false);
         cleaner.register(this, new State(guiTarget));
@@ -44,6 +45,9 @@ public class SignBufferRenderer {
     }
     
     public void render(PoseStack poseStack) {
+        poseStack.pushPose();
+        float ratio = (float)minecraft.getWindow().getGuiScaledWidth() / (float)minecraft.getWindow().getGuiScaledHeight();
+        poseStack.translate(FasterGuiModBase.signSettings.offsetX * ratio, FasterGuiModBase.signSettings.offsetY, 0);
         RenderSystem.depthMask(true);
         RenderSystem.enableDepthTest();
         RenderSystem.enableBlend();
@@ -53,8 +57,8 @@ public class SignBufferRenderer {
         RenderSystem.setShaderTexture(0, guiTarget.getColorTextureId());
         Tesselator tesselator = RenderSystem.renderThreadTesselator();
         BufferBuilder bufferbuilder = tesselator.getBuilder();
-        float height = 260;
-        float width = 180;
+        float height = (int)FasterGuiModBase.signSettings.renderHeight;
+        float width = (int)FasterGuiModBase.signSettings.renderWidth;
         Matrix4f pose = poseStack.last().pose();
         bufferbuilder.begin(VertexFormat.Mode.QUADS, DefaultVertexFormat.POSITION_TEX);
         bufferbuilder.vertex(pose, 0.0f, height, 0.01F).uv(0.0F, 0.0F).endVertex(); // 1
@@ -63,6 +67,7 @@ public class SignBufferRenderer {
         bufferbuilder.vertex(pose, 0.0f, 0.0f, 0.01F).uv(0.0F, 1.0F).endVertex(); // 4
 //        BufferUploader.draw(bufferbuilder.end());
         tesselator.end();
+        poseStack.popPose();
     }
     
     private void renderSignToBuffer(SignBlockEntity arg, MultiBufferSource arg3) {
@@ -70,7 +75,8 @@ public class SignBufferRenderer {
         Matrix4f tmp = RenderSystem.getProjectionMatrix();
         // TODO: Burn this code and throw it into the depths of hell
         RenderSystem.setProjectionMatrix(minecraft.gameRenderer.getProjectionMatrix(getFov(minecraft.gameRenderer.getMainCamera(), minecraft.getDeltaFrameTime())));
-        Matrix4f matrix4f = Matrix4f.orthographic(100, -100, 1000.0F, 3000.0F);
+        float ratio = (float)minecraft.getWindow().getGuiScaledHeight() / (float)minecraft.getWindow().getGuiScaledWidth();
+        Matrix4f matrix4f = Matrix4f.orthographic((int)FasterGuiModBase.signSettings.ortoWidth * ratio, (int)FasterGuiModBase.signSettings.ortoHeight, 1000.0F, 3000.0F);
         int n;
         boolean bl;
         int o;

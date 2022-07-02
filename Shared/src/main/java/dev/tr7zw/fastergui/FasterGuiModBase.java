@@ -27,6 +27,7 @@ public abstract class FasterGuiModBase {
     private final File settingsFile = new File("config", "fastergui.json");
     private final Gson gson = new GsonBuilder().setPrettyPrinting().create();
     private BufferRenderer screenBufferRenderer;
+    public static SignSettings signSettings = new SignSettings();
 
     public void onInitialize() {
 		instance = this;
