@@ -8,6 +8,7 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 
 import com.mojang.blaze3d.vertex.PoseStack;
 
+import dev.tr7zw.fastergui.FasterGuiModBase;
 import dev.tr7zw.fastergui.access.SignBufferHolder;
 import net.minecraft.client.renderer.MultiBufferSource;
 import net.minecraft.client.renderer.blockentity.SignRenderer;
@@ -18,12 +19,15 @@ public class SignRendererMixin {
 
     @Inject(method = "render", at = @At(value = "INVOKE", target = "Lnet/minecraft/client/renderer/blockentity/SignRenderer;getDarkColor(Lnet/minecraft/world/level/block/entity/SignBlockEntity;)I", shift = Shift.BEFORE), cancellable = true)
     public void render(SignBlockEntity signBlockEntity, float f, PoseStack poseStack,
-            MultiBufferSource multiBufferSource, int i, int j, CallbackInfo info) {
-        boolean cancel = ((SignBufferHolder)signBlockEntity).renderBuffered(poseStack, multiBufferSource);
-        if(cancel) {
+            MultiBufferSource multiBufferSource, int light, int j, CallbackInfo info) {
+        if (!FasterGuiModBase.instance.config.enableSignBuffering) {
+            return;
+        }
+        boolean cancel = ((SignBufferHolder) signBlockEntity).renderBuffered(poseStack, multiBufferSource, light);
+        if (cancel) {
             poseStack.popPose();
             info.cancel();
         }
     }
-    
+
 }
