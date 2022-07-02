@@ -17,6 +17,7 @@ public class SignBlockEntityMixin implements SignBufferHolder {
     private SignBufferRenderer cachedBufferRenderer = null;
     private Component[] lines = new Component[4];
     
+    // TODO: hook the update methods instead of hot checking stuff. 
     @Override
     public boolean renderBuffered(PoseStack poseStack, MultiBufferSource multiBufferSource) {
         SignBlockEntity sign = (SignBlockEntity)(Object)this;
