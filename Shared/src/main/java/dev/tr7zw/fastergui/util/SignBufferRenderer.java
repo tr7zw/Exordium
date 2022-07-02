@@ -13,20 +13,17 @@ import com.mojang.blaze3d.vertex.DefaultVertexFormat;
 import com.mojang.blaze3d.vertex.PoseStack;
 import com.mojang.blaze3d.vertex.Tesselator;
 import com.mojang.blaze3d.vertex.VertexFormat;
+import com.mojang.math.Matrix3f;
 import com.mojang.math.Matrix4f;
 
 import dev.tr7zw.fastergui.FasterGuiModBase;
-import net.minecraft.client.Camera;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.GameRenderer;
 import net.minecraft.client.renderer.MultiBufferSource;
 import net.minecraft.client.renderer.RenderType;
 import net.minecraft.util.FormattedCharSequence;
-import net.minecraft.util.Mth;
-import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.item.DyeColor;
 import net.minecraft.world.level.block.entity.SignBlockEntity;
-import net.minecraft.world.level.material.FogType;
 
 public class SignBufferRenderer {
 
@@ -34,20 +31,22 @@ public class SignBufferRenderer {
     private static final Minecraft minecraft = Minecraft.getInstance();
     private RenderTarget guiTarget;
     
-    public SignBufferRenderer(SignBlockEntity arg, MultiBufferSource arg3) {
+    public SignBufferRenderer(SignBlockEntity arg, MultiBufferSource arg3, int light) {
         guiTarget = new TextureTarget((int)FasterGuiModBase.signSettings.bufferWidth, (int)FasterGuiModBase.signSettings.bufferHeight, false, false);
-        guiTarget.resize((int)FasterGuiModBase.signSettings.bufferWidth, (int)FasterGuiModBase.signSettings.bufferHeight, false);
+//        guiTarget.resize((int)FasterGuiModBase.signSettings.bufferWidth, (int)FasterGuiModBase.signSettings.bufferHeight, false);
         guiTarget.setClearColor(0, 0, 0, 0);
         guiTarget.clear(false);
         cleaner.register(this, new State(guiTarget));
-        renderSignToBuffer(arg, arg3);
-        System.out.println("Rendered to " + guiTarget.frameBufferId);
     }
     
-    public void render(PoseStack poseStack) {
+    public void refreshImage(SignBlockEntity arg, MultiBufferSource arg3, int light) {
+        guiTarget.clear(false);
+        renderSignToBuffer(arg, arg3, light);
+    }
+    
+    public void render(PoseStack poseStack, int light) {
         poseStack.pushPose();
-        float ratio = (float)minecraft.getWindow().getGuiScaledWidth() / (float)minecraft.getWindow().getGuiScaledHeight();
-        poseStack.translate(FasterGuiModBase.signSettings.offsetX * ratio, FasterGuiModBase.signSettings.offsetY, 0);
+        poseStack.translate(FasterGuiModBase.signSettings.offsetX , FasterGuiModBase.signSettings.offsetY, 0);
         RenderSystem.depthMask(true);
         RenderSystem.enableDepthTest();
         RenderSystem.enableBlend();
@@ -61,22 +60,26 @@ public class SignBufferRenderer {
         float width = (int)FasterGuiModBase.signSettings.renderWidth;
         Matrix4f pose = poseStack.last().pose();
         bufferbuilder.begin(VertexFormat.Mode.QUADS, DefaultVertexFormat.POSITION_TEX);
-        bufferbuilder.vertex(pose, 0.0f, height, 0.01F).uv(0.0F, 0.0F).endVertex(); // 1
-        bufferbuilder.vertex(pose, width, height, 0.01F).uv(1.0F, 0.0F).endVertex(); // 2
-        bufferbuilder.vertex(pose, width, 0.0f, 0.01F).uv(1.0F, 1.0F).endVertex(); // 3
-        bufferbuilder.vertex(pose, 0.0f, 0.0f, 0.01F).uv(0.0F, 1.0F).endVertex(); // 4
-//        BufferUploader.draw(bufferbuilder.end());
+        bufferbuilder.vertex(pose, 0.0f, height, 0.01F).uv(0.0F, 0.0F).uv2(light).endVertex(); // 1
+        bufferbuilder.vertex(pose, width, height, 0.01F).uv(1.0F, 0.0F).uv2(light).endVertex(); // 2
+        bufferbuilder.vertex(pose, width, 0.0f, 0.01F).uv(1.0F, 1.0F).uv2(light).endVertex(); // 3
+        bufferbuilder.vertex(pose, 0.0f, 0.0f, 0.01F).uv(0.0F, 1.0F).uv2(light).endVertex(); // 4
         tesselator.end();
         poseStack.popPose();
     }
     
-    private void renderSignToBuffer(SignBlockEntity arg, MultiBufferSource arg3) {
+    private void renderSignToBuffer(SignBlockEntity arg, MultiBufferSource arg3, int light) {
         guiTarget.bindWrite(false);
+        // cache the current render state
         Matrix4f tmp = RenderSystem.getProjectionMatrix();
-        // TODO: Burn this code and throw it into the depths of hell
-        RenderSystem.setProjectionMatrix(minecraft.gameRenderer.getProjectionMatrix(getFov(minecraft.gameRenderer.getMainCamera(), minecraft.getDeltaFrameTime())));
-        float ratio = (float)minecraft.getWindow().getGuiScaledHeight() / (float)minecraft.getWindow().getGuiScaledWidth();
-        Matrix4f matrix4f = Matrix4f.orthographic((int)FasterGuiModBase.signSettings.ortoWidth * ratio, (int)FasterGuiModBase.signSettings.ortoHeight, 1000.0F, 3000.0F);
+        Matrix3f tmpI = RenderSystem.getInverseViewRotationMatrix();
+        // set the renderstate to identity matrices
+        RenderSystem.disableCull();
+        RenderSystem.setInverseViewRotationMatrix(Matrix3f.createScaleMatrix(1, 1, 1));
+        RenderSystem.setProjectionMatrix(Matrix4f.createTranslateMatrix(0, 0, 0));
+        float scale = 1/FasterGuiModBase.signSettings.scaleSize;
+        // matrix used for the text
+        Matrix4f matrix4f = Matrix4f.createScaleMatrix(scale, -scale, scale);
         int n;
         boolean bl;
         int o;
@@ -93,7 +96,7 @@ public class SignBufferRenderer {
         } else {
             n = l;
             bl = false;
-            o = 15728880;//i;
+            o = light;
         }
         for (int p = 0; p < 4; p++) {
             FormattedCharSequence formattedCharSequence = formattedCharSequences[p];
@@ -102,13 +105,15 @@ public class SignBufferRenderer {
                 minecraft.font.drawInBatch8xOutline(formattedCharSequence,-28 +  q, (p * 10 - 20), n, l, matrix4f, arg3,
                         o);
             } else {
-                minecraft.font.drawInBatch(formattedCharSequence, -28 + q, (p * 10 - 20), n, false, matrix4f, arg3,
+                minecraft.font.drawInBatch(formattedCharSequence, (-28 + q), (p * 10 - 20), n, false, matrix4f, arg3,
                         false, 0, o);
             }
         }
-        arg3.getBuffer(RenderType.armorGlint()); // force clear the buffer
+        arg3.getBuffer(RenderType.armorGlint()); // force clear the vertex consumer
+        // restore renderlogic
         Minecraft.getInstance().getMainRenderTarget().bindWrite(true);
         RenderSystem.setProjectionMatrix(tmp);
+        RenderSystem.setInverseViewRotationMatrix(tmpI);
     }
     
     private static int getDarkColor(SignBlockEntity arg) {
@@ -121,20 +126,7 @@ public class SignBufferRenderer {
             return -988212;
         return NativeImage.combine(0, l, k, j);
     }
-    
-    private double getFov(Camera camera, float f) {
-        double d = 70.0D;
-        if (camera.getEntity() instanceof LivingEntity && ((LivingEntity) camera.getEntity()).isDeadOrDying()) {
-            float g = Math.min(((LivingEntity) camera.getEntity()).deathTime + f, 20.0F);
-            d /= ((1.0F - 500.0F / (g + 500.0F)) * 2.0F + 1.0F);
-        }
-        FogType fogType = camera.getFluidInCamera();
-        if (fogType == FogType.LAVA || fogType == FogType.WATER)
-            d *= Mth.lerp((minecraft.options.fovEffectScale().get()).doubleValue(), 1.0D,
-                    0.8571428656578064D);
-        return d;
-    }
-    
+
     static class State implements Runnable {
 
         private RenderTarget cleanableRenderTarget;
