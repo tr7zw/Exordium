@@ -23,7 +23,7 @@ public class FasterGuiMod extends FasterGuiModBase implements ClientModInitializ
         ClientTickEvents.START_CLIENT_TICK.register(e ->
         {
             if(keybind.isDown()) {
-                Minecraft.getInstance().setScreen(DebugScreen.createDebugGui(null, () -> FasterGuiModBase.signSettings));
+                Minecraft.getInstance().setScreen(DebugScreen.createDebugGui(null, () -> FasterGuiModBase.nametagSettings));
             }
         });
     }

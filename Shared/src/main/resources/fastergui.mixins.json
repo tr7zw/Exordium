@@ -14,7 +14,9 @@
     "InventoryScreenMixin",
     "ItemRendererMixin",
     "SignRendererMixin",
-    "SignBlockEntityMixin"
+    "SignBlockEntityMixin",
+    "EntityRendererMixin",
+    "EntityMixin"
   ],
   "injectors": {
     "defaultRequire": 1
