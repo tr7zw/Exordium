@@ -5,7 +5,7 @@ import dev.tr7zw.animatedfirstperson.config.debug.FloatSetting;
 public class NametagSettings {
 
     @FloatSetting(min = 1, max = 20, step = 0.1f)
-    public float bufferWidth = 4.9f;
+    public float bufferWidth = 10f;
     @FloatSetting(min = 1, max = 500, step = 1)
     public float bufferHeight = 100;
     @FloatSetting(min = 1, max = 500, step = 1)

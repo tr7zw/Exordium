@@ -32,6 +32,7 @@ public class SignBufferRenderer {
     private RenderTarget guiTarget;
     
     public SignBufferRenderer(SignBlockEntity arg, MultiBufferSource arg3, int light) {
+        arg3.getBuffer(RenderType.endGateway()); // force clear the vertex consumer
         guiTarget = new TextureTarget((int)FasterGuiModBase.signSettings.bufferWidth, (int)FasterGuiModBase.signSettings.bufferHeight, false, false);
 //        guiTarget.resize((int)FasterGuiModBase.signSettings.bufferWidth, (int)FasterGuiModBase.signSettings.bufferHeight, false);
         guiTarget.setClearColor(0, 0, 0, 0);
@@ -40,6 +41,7 @@ public class SignBufferRenderer {
     }
     
     public void refreshImage(SignBlockEntity arg, MultiBufferSource arg3, int light) {
+        arg3.getBuffer(RenderType.endGateway()); // force clear the vertex consumer
         guiTarget.clear(false);
         renderSignToBuffer(arg, arg3, light);
     }
@@ -109,7 +111,7 @@ public class SignBufferRenderer {
                         false, 0, o);
             }
         }
-        arg3.getBuffer(RenderType.armorGlint()); // force clear the vertex consumer
+        arg3.getBuffer(RenderType.endGateway()); // force clear the vertex consumer
         // restore renderlogic
         Minecraft.getInstance().getMainRenderTarget().bindWrite(true);
         RenderSystem.setProjectionMatrix(tmp);
