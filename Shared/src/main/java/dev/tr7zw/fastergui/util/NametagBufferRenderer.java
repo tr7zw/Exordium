@@ -33,6 +33,7 @@ public class NametagBufferRenderer {
     }
     
     public void refreshImage(Component text, MultiBufferSource arg3, int light, boolean discrete) {
+        arg3.getBuffer(RenderType.endGateway()); // force clear the vertex consumer
         int width = (int)(minecraft.font.width(text) * FasterGuiModBase.nametagSettings.bufferWidth);
         width = Math.max(300, width);
         int height = width;
@@ -79,6 +80,7 @@ public class NametagBufferRenderer {
     }
     
     private void renderNametagToBuffer(Component text, MultiBufferSource mbs, int light, boolean discrete) {
+        mbs.getBuffer(RenderType.endGateway()); // force clear the vertex consumer
         renderTarget.bindWrite(false);
         // cache the current render state
         Matrix4f tmp = RenderSystem.getProjectionMatrix();
@@ -97,7 +99,7 @@ public class NametagBufferRenderer {
         font.drawInBatch(text, f2, 0, 553648127, false, matrix4f, mbs, discrete, j, light);
         if (discrete)
             font.drawInBatch(text, f2, 0, -1, false, matrix4f, mbs, false, 0, light);
-        mbs.getBuffer(RenderType.armorGlint()); // force clear the vertex consumer
+        mbs.getBuffer(RenderType.endGateway()); // force clear the vertex consumer
         // restore render state
         Minecraft.getInstance().getMainRenderTarget().bindWrite(true);
         RenderSystem.setProjectionMatrix(tmp);
