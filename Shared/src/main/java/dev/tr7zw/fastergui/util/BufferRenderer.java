@@ -18,7 +18,7 @@ import net.minecraft.client.renderer.GameRenderer;
 public class BufferRenderer {
 
     private static final Minecraft minecraft = Minecraft.getInstance();
-    private RenderTarget guiTarget = new TextureTarget(100, 100, false, false);
+    private RenderTarget guiTarget = new TextureTarget(100, 100, true, false);
     private long nextFrame = System.currentTimeMillis();
     private boolean isRendering = false;
     private boolean forceBlending = false;
