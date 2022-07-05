@@ -26,41 +26,52 @@ public class NametagBufferRenderer {
 
     private static final Cleaner cleaner = Cleaner.create();
     private static final Minecraft minecraft = Minecraft.getInstance();
-    private RenderTarget renderTarget;
+    private RenderTarget renderTargetHidden;
+    private RenderTarget renderTargetVisible;
     
     public NametagBufferRenderer() {
 
     }
     
-    public void refreshImage(Component text, MultiBufferSource arg3, int light, boolean discrete) {
+    public void refreshImage(Component text, MultiBufferSource arg3, int light) {
         arg3.getBuffer(RenderType.endGateway()); // force clear the vertex consumer
         int width = (int)(minecraft.font.width(text) * FasterGuiModBase.nametagSettings.bufferWidth);
         width = Math.max(300, width);
         int height = width;
 
-        if(renderTarget == null) {
-            renderTarget = new TextureTarget(width, height, false, false);
-            renderTarget.setClearColor(0, 0, 0, 0);
-            renderTarget.clear(false);
-            cleaner.register(this, new State(renderTarget));
+        if(renderTargetHidden == null) {
+            renderTargetHidden = setupTexture(width, height);
+            renderTargetVisible = setupTexture(width, height);
         }
-        if(renderTarget.width != width || renderTarget.height != height) {
-            renderTarget.resize(width, height, false);
+        if(renderTargetHidden.width != width || renderTargetHidden.height != height) {
+            renderTargetHidden.resize(width, height, false);
+            renderTargetVisible.resize(width, height, false);
         }
-        System.out.println("Size: " + width);
-        System.out.println(text + " " + discrete);
-        renderTarget.clear(false);
-        renderNametagToBuffer(text, arg3, light, discrete);
+//        System.out.println("Size: " + width);
+        renderTargetHidden.clear(false);
+        renderTargetVisible.clear(false);
+        renderNametagToBuffer(renderTargetVisible, text, arg3, light, false);
+        renderNametagToBuffer(renderTargetHidden, text, arg3, light, true);
         Minecraft.getInstance().getMainRenderTarget().bindWrite(true);
     }
     
-    public void render(PoseStack poseStack, int light, boolean sneaking) {
+    private RenderTarget setupTexture(int width, int height) {
+        RenderTarget target = new TextureTarget(width, height, false, false);
+        target.setClearColor(0, 0, 0, 0);
+        target.clear(false);
+        cleaner.register(this, new State(target));
+        return target;
+    }
+    
+    public void render(PoseStack poseStack, int light, boolean hidden, boolean depthTest) {
+        RenderTarget renderTarget = hidden ? renderTargetHidden : renderTargetVisible;
         poseStack.pushPose();
         poseStack.translate(FasterGuiModBase.nametagSettings.offsetX , FasterGuiModBase.nametagSettings.offsetY, 0);
         RenderSystem.enableBlend();
-        RenderSystem.blendFuncSeparate(GlStateManager.SourceFactor.SRC_ALPHA, GlStateManager.DestFactor.ONE_MINUS_SRC_ALPHA, GlStateManager.SourceFactor.ONE, GlStateManager.DestFactor.ONE_MINUS_SRC_ALPHA);
+//        RenderSystem.blendFuncSeparate(GlStateManager.SourceFactor.SRC_ALPHA, GlStateManager.DestFactor.ONE_MINUS_SRC_ALPHA, GlStateManager.SourceFactor.ONE, GlStateManager.DestFactor.ONE_MINUS_SRC_ALPHA);
+        FasterGuiModBase.correctBlendMode();
         RenderSystem.setShader(GameRenderer::getPositionTexShader);
-        if(sneaking) {
+        if(depthTest) {
             RenderSystem.enableDepthTest();
         } else {
             RenderSystem.disableDepthTest();
@@ -80,31 +91,36 @@ public class NametagBufferRenderer {
         tesselator.end();
         poseStack.popPose();
         FasterGuiModBase.correctBlendMode();
+        RenderSystem.enableDepthTest();
     }
     
-    private void renderNametagToBuffer(Component text, MultiBufferSource mbs, int light, boolean discrete) {
+    private void renderNametagToBuffer(RenderTarget renderTarget, Component text, MultiBufferSource mbs, int light, boolean sneaking) {
         mbs.getBuffer(RenderType.endGateway()); // force clear the vertex consumer
         renderTarget.bindWrite(false);
         // cache the current render state
         Matrix4f tmp = RenderSystem.getProjectionMatrix();
         Matrix3f tmpI = RenderSystem.getInverseViewRotationMatrix();
         // set the renderstate to identity matrices
-        RenderSystem.disableCull();
         RenderSystem.setInverseViewRotationMatrix(Matrix3f.createScaleMatrix(1, 1, 1));
         RenderSystem.setProjectionMatrix(Matrix4f.createTranslateMatrix(0, 0, 0));
+        // other setup
+        RenderSystem.disableCull();
+        RenderSystem.enableBlend();
+        RenderSystem.blendFuncSeparate(GlStateManager.SourceFactor.SRC_ALPHA, GlStateManager.DestFactor.ONE_MINUS_SRC_ALPHA, GlStateManager.SourceFactor.ONE, GlStateManager.DestFactor.ONE_MINUS_SRC_ALPHA);
         float scale = 1/FasterGuiModBase.nametagSettings.scaleSize;
         // matrix used for the text
         Matrix4f matrix4f = Matrix4f.createScaleMatrix(scale, -scale, scale);
         float f1 = minecraft.options.getBackgroundOpacity(0.25F);
-        int j = (int) (f1 * 255.0F) << 24;
+        int j = (int) (f1 * 255f) << 24;
         Font font = minecraft.font;
         float f2 = (-font.width(text) / 2);
-        font.drawInBatch(text, f2, 0, 553648127, false, matrix4f, mbs, discrete, j, light);
-        if (discrete)
-            font.drawInBatch(text, f2, 0, -1, false, matrix4f, mbs, false, 0, light);
+        if(sneaking) {
+            font.drawInBatch(text, f2, 0, 1627389951, false, matrix4f, mbs, true, j, light);
+        }else {
+            font.drawInBatch(text, f2, 0, -1, false, matrix4f, mbs, false, j, light);
+        }
         mbs.getBuffer(RenderType.endGateway()); // force clear the vertex consumer
         // restore render state
-        Minecraft.getInstance().getMainRenderTarget().bindWrite(true);
         RenderSystem.setProjectionMatrix(tmp);
         RenderSystem.setInverseViewRotationMatrix(tmpI);
         RenderSystem.enableCull();
