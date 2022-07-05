@@ -30,7 +30,7 @@ __This is still work in progress software! There will be issues, please report t
 - Better Ping Display
 - Chat Heads
 - Detail Armor Bar
-- WTHIT( What the hell is that?)
+- WTHIT (What the hell is that?)
 - JourneyMap
 - ToroHealth Damage Indicator
 - BetterF3
