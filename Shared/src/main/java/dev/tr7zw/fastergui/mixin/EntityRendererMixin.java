@@ -36,13 +36,13 @@ public class EntityRendererMixin {
         if(!FasterGuiModBase.instance.config.enableNametagBuffering) {
             return;
         }
-        boolean flag = !arg.isDiscrete();
+        boolean sneaking = arg.isDiscrete();
         float f = arg.getBbHeight() + 0.5F;
         poseStack.pushPose();
         poseStack.translate(0.0D, f, 0.0D);
         poseStack.mulPose(this.entityRenderDispatcher.cameraOrientation());
         poseStack.scale(-0.025F, -0.025F, 0.025F);
-        boolean cancel = ((NametagBufferHolder)arg).renderBuffered(arg2, poseStack, arg4, k, flag);
+        boolean cancel = ((NametagBufferHolder)arg).renderBuffered(arg2, poseStack, arg4, k, sneaking);
         poseStack.popPose();
         if(cancel)
             ci.cancel();

@@ -48,20 +48,23 @@ public class NametagBufferRenderer {
             renderTarget.resize(width, height, false);
         }
         System.out.println("Size: " + width);
+        System.out.println(text + " " + discrete);
         renderTarget.clear(false);
         renderNametagToBuffer(text, arg3, light, discrete);
         Minecraft.getInstance().getMainRenderTarget().bindWrite(true);
     }
     
-    public void render(PoseStack poseStack, int light) {
+    public void render(PoseStack poseStack, int light, boolean sneaking) {
         poseStack.pushPose();
         poseStack.translate(FasterGuiModBase.nametagSettings.offsetX , FasterGuiModBase.nametagSettings.offsetY, 0);
-        //RenderSystem.enableDepthTest();
-        RenderSystem.disableDepthTest();
         RenderSystem.enableBlend();
-//        FasterGuiModBase.correctBlendMode();
-        RenderSystem.blendFunc(GlStateManager.SourceFactor.ONE, GlStateManager.DestFactor.ONE_MINUS_SRC_ALPHA);
+        RenderSystem.blendFuncSeparate(GlStateManager.SourceFactor.SRC_ALPHA, GlStateManager.DestFactor.ONE_MINUS_SRC_ALPHA, GlStateManager.SourceFactor.ONE, GlStateManager.DestFactor.ONE_MINUS_SRC_ALPHA);
         RenderSystem.setShader(GameRenderer::getPositionTexShader);
+        if(sneaking) {
+            RenderSystem.enableDepthTest();
+        } else {
+            RenderSystem.disableDepthTest();
+        }
         RenderSystem.setShaderColor(1.0F, 1.0F, 1.0F, 1.0F);
         RenderSystem.setShaderTexture(0, renderTarget.getColorTextureId());
         Tesselator tesselator = RenderSystem.renderThreadTesselator();
