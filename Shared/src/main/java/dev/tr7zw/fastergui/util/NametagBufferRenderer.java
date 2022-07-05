@@ -28,6 +28,7 @@ public class NametagBufferRenderer {
     private static final Minecraft minecraft = Minecraft.getInstance();
     private RenderTarget renderTargetHidden;
     private RenderTarget renderTargetVisible;
+    private int textwidth = 0;
     
     public NametagBufferRenderer() {
 
@@ -35,9 +36,9 @@ public class NametagBufferRenderer {
     
     public void refreshImage(Component text, MultiBufferSource arg3, int light) {
         arg3.getBuffer(RenderType.endGateway()); // force clear the vertex consumer
-        int width = (int)(minecraft.font.width(text) * FasterGuiModBase.nametagSettings.bufferWidth);
-        width = Math.max(300, width);
-        int height = width;
+        textwidth = minecraft.font.width(text);
+        int width = (int)(textwidth * FasterGuiModBase.nametagSettings.bufferWidth);
+        int height = (int) FasterGuiModBase.nametagSettings.bufferHeight;
 
         if(renderTargetHidden == null) {
             renderTargetHidden = setupTexture(width, height);
@@ -47,7 +48,7 @@ public class NametagBufferRenderer {
             renderTargetHidden.resize(width, height, false);
             renderTargetVisible.resize(width, height, false);
         }
-//        System.out.println("Size: " + width);
+
         renderTargetHidden.clear(false);
         renderTargetVisible.clear(false);
         renderNametagToBuffer(renderTargetVisible, text, arg3, light, false);
@@ -66,7 +67,7 @@ public class NametagBufferRenderer {
     public void render(PoseStack poseStack, int light, boolean hidden, boolean depthTest) {
         RenderTarget renderTarget = hidden ? renderTargetHidden : renderTargetVisible;
         poseStack.pushPose();
-        poseStack.translate(FasterGuiModBase.nametagSettings.offsetX , FasterGuiModBase.nametagSettings.offsetY, 0);
+        poseStack.translate(-textwidth/2f, 0, 0);
         RenderSystem.enableBlend();
 //        RenderSystem.blendFuncSeparate(GlStateManager.SourceFactor.SRC_ALPHA, GlStateManager.DestFactor.ONE_MINUS_SRC_ALPHA, GlStateManager.SourceFactor.ONE, GlStateManager.DestFactor.ONE_MINUS_SRC_ALPHA);
         FasterGuiModBase.correctBlendMode();
@@ -81,7 +82,7 @@ public class NametagBufferRenderer {
         Tesselator tesselator = RenderSystem.renderThreadTesselator();
         BufferBuilder bufferbuilder = tesselator.getBuilder();
         float height = (int)FasterGuiModBase.nametagSettings.renderHeight;
-        float width = (int)FasterGuiModBase.nametagSettings.renderWidth;
+        float width = textwidth;
         Matrix4f pose = poseStack.last().pose();
         bufferbuilder.begin(VertexFormat.Mode.QUADS, DefaultVertexFormat.POSITION_TEX);
         bufferbuilder.vertex(pose, 0.0f, height, 0.01F).uv(0.0F, 0.0F).uv2(light).endVertex(); // 1
@@ -109,7 +110,7 @@ public class NametagBufferRenderer {
         RenderSystem.blendFuncSeparate(GlStateManager.SourceFactor.SRC_ALPHA, GlStateManager.DestFactor.ONE_MINUS_SRC_ALPHA, GlStateManager.SourceFactor.ONE, GlStateManager.DestFactor.ONE_MINUS_SRC_ALPHA);
         float scale = 1/FasterGuiModBase.nametagSettings.scaleSize;
         // matrix used for the text
-        Matrix4f matrix4f = Matrix4f.createScaleMatrix(scale, -scale, scale);
+        Matrix4f matrix4f = Matrix4f.createScaleMatrix(FasterGuiModBase.nametagSettings.scaleSize/renderTarget.width, FasterGuiModBase.nametagSettings.heightscale, scale);
         float f1 = minecraft.options.getBackgroundOpacity(0.25F);
         int j = (int) (f1 * 255f) << 24;
         Font font = minecraft.font;
