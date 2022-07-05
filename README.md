@@ -1,8 +1,10 @@
+<img src="https://raw.githubusercontent.com/tr7zw/FasterGUI/1.19/Shared/src/main/resources/assets/fastergui/icon.png" align="right" width=200>
+
 # FasterGUI
 
 __Render the HUD and screens at a lower framerate to speed up what's really important: the worldrendering.__
 
-Renders the HUD at a lower fixed Framerate(configurable in the settings), freeing up cpu and gpu time for the world rendering. There is no good reason to render the hotbar at 100+ fps.
+Renders the HUD at a lower fixed framerate (configurable in the settings), freeing up CPU and GPU time for the world rendering. There is no good reason to render the hotbar at 100+ FPS.
 
 ## Compatibility
 
@@ -10,11 +12,11 @@ __This is still work in progress software! There will be issues, please report t
 
 ### Affected vanilla features
 
-- Overlays except Vignette(Pumpkin, freezing, spyglass, portal...)
-- Hotbar(all parts of it)
+- Overlays except Vignette (Pumpkin, freezing, spyglass, portal...)
+- Hotbar (all parts of it)
 - Crosshair
 - Bossbars
-- Debug Screen(F3)
+- Debug Screen (F3 Menu)
 - Titles
 - Scoreboard
 - Chat
@@ -28,7 +30,7 @@ __This is still work in progress software! There will be issues, please report t
 - Better Ping Display
 - Chat Heads
 - Detail Armor Bar
-- wthit(What the hell is that?)
+- WTHIT (What the hell is that?)
 - JourneyMap
 - ToroHealth Damage Indicator
 - BetterF3
@@ -39,7 +41,7 @@ __This is still work in progress software! There will be issues, please report t
 
 ### Screen setting notice
 
-This feature is still not done(disabled by default) and has mainly transparency issues. It heavily speeds up mods like REI(Roughly Enough Items), but with visual issues.
+This feature is still not done (disabled by default) and has mainly transparency issues. It heavily speeds up mods like REI (Roughly Enough Items), but with visual issues.
 
 ## License
 
