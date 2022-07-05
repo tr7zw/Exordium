@@ -2,7 +2,6 @@ package dev.tr7zw.fastergui.mixin;
 
 import org.spongepowered.asm.mixin.Mixin;
 
-import com.google.common.base.Objects;
 import com.mojang.blaze3d.vertex.PoseStack;
 
 import dev.tr7zw.fastergui.access.NametagBufferHolder;
@@ -16,12 +15,12 @@ import net.minecraft.world.entity.Entity;
 public class EntityMixin implements NametagBufferHolder {
 
     private Component lastNametag = null;
-    private Boolean lastDiscrete = null;
+    private boolean lastSneaking = false;
     
     private NametagBufferRenderer nametagBuffer = null;
     
     @Override
-    public boolean renderBuffered(Component text, PoseStack arg3, MultiBufferSource arg4, int light, boolean discrete) {
+    public boolean renderBuffered(Component text, PoseStack arg3, MultiBufferSource arg4, int light, boolean sneaking) {
         if(nametagBuffer == null) { // lazy init
             int size = Minecraft.getInstance().font.width(text);
             if(size <= 0) {
@@ -30,13 +29,13 @@ public class EntityMixin implements NametagBufferHolder {
             nametagBuffer = new NametagBufferRenderer();
             System.out.println("new buffer");
         }
-        if(lastNametag == null || (!lastNametag.getString().equals(text.getString())) || this.lastDiscrete != discrete) {
-            nametagBuffer.refreshImage(text, arg4, light, discrete);
+        if(lastNametag == null || (!lastNametag.getString().equals(text.getString())) || this.lastSneaking != sneaking) {
+            nametagBuffer.refreshImage(text, arg4, light, !sneaking);
             lastNametag = text;
-            this.lastDiscrete = discrete;
+            this.lastSneaking = sneaking;
             System.out.println("refresh");
         }
-        nametagBuffer.render(arg3, light);
+        nametagBuffer.render(arg3, light, sneaking);
         return true;
     }
 
