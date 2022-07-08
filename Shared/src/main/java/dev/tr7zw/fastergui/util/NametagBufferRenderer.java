@@ -35,8 +35,16 @@ public class NametagBufferRenderer {
     }
     
     public void refreshImage(Component text, MultiBufferSource arg3, int light) {
-        arg3.getBuffer(RenderType.endGateway()); // force clear the vertex consumer
         textwidth = minecraft.font.width(text);
+        if(textwidth <= 0) { // fail save and quickly
+            // the cleaner will handle this
+            renderTargetHidden = null;
+            renderTargetVisible = null;
+            return;
+        }
+        
+        arg3.getBuffer(RenderType.endGateway()); // force clear the vertex consumer
+
         int width = (int)(textwidth * FasterGuiModBase.nametagSettings.bufferWidth);
         int height = (int) FasterGuiModBase.nametagSettings.bufferHeight;
 
@@ -65,6 +73,7 @@ public class NametagBufferRenderer {
     }
     
     public void render(PoseStack poseStack, int light, boolean hidden, boolean depthTest) {
+        if(textwidth <= 0 || renderTargetHidden == null || renderTargetVisible == null)return; // no need to render 0 width
         RenderTarget renderTarget = hidden ? renderTargetHidden : renderTargetVisible;
         poseStack.pushPose();
         poseStack.translate(-textwidth/2f, 0, 0);

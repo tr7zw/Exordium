@@ -4,5 +4,6 @@
     "text.fastergui.targetFramerateGui": "Framerate Gui",
     "text.fastergui.targetFramerateScreen": "Framerate Screens",
     "text.fastergui.enableScreen": "Enabled Screens",
-    "text.fastergui.enableSignBuffering": "Sign Buffering"
+    "text.fastergui.enableSignBuffering": "Sign Buffering",
+    "text.fastergui.enableNametagBuffering": "[Broken] Nametag Buffering"
   }

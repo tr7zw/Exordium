@@ -14,7 +14,7 @@ import net.minecraft.world.entity.Entity;
 @Mixin(Entity.class)
 public class EntityMixin implements NametagBufferHolder {
 
-    private Component lastNametag = null;
+    private String lastNametag = null;
     
     private NametagBufferRenderer nametagBuffer = null;
     
@@ -26,12 +26,10 @@ public class EntityMixin implements NametagBufferHolder {
                 return false;
             }
             nametagBuffer = new NametagBufferRenderer();
-//            System.out.println("new buffer");
         }
-        if(lastNametag == null || (!lastNametag.getString().equals(text.getString()))) {
+        if(lastNametag == null || (!lastNametag.equals(text.toString()))) {
             nametagBuffer.refreshImage(text, arg4, light);
-            lastNametag = text;
-//            System.out.println("refresh");
+            lastNametag = text.toString();
         }
         if(sneaking) {
             nametagBuffer.render(arg3, light, true, true);
