@@ -8,6 +8,6 @@ public class Config {
     public boolean enabledScreens = true;
     public int targetFPSIngameScreens = 60;
     public boolean enableSignBuffering = true;
-    public boolean enableNametagBuffering = true;
+    public boolean enableNametagBuffering = false;
     
 }
