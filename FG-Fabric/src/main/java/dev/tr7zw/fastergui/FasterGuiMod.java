@@ -19,13 +19,13 @@ public class FasterGuiMod extends FasterGuiModBase implements ClientModInitializ
 
     @Override
     public void initModloader() {
-        KeyBindingHelper.registerKeyBinding(keybind);
-        ClientTickEvents.START_CLIENT_TICK.register(e ->
-        {
-            if(keybind.isDown()) {
-                Minecraft.getInstance().setScreen(DebugScreen.createDebugGui(null, () -> FasterGuiModBase.nametagSettings));
-            }
-        });
+//        KeyBindingHelper.registerKeyBinding(keybind);
+//        ClientTickEvents.START_CLIENT_TICK.register(e ->
+//        {
+//            if(keybind.isDown()) {
+//                Minecraft.getInstance().setScreen(DebugScreen.createDebugGui(null, () -> FasterGuiModBase.nametagSettings));
+//            }
+//        });
     }
 
 }
