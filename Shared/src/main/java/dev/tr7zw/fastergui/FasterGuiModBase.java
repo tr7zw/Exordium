@@ -27,6 +27,8 @@ public abstract class FasterGuiModBase {
     private final File settingsFile = new File("config", "fastergui.json");
     private final Gson gson = new GsonBuilder().setPrettyPrinting().create();
     private BufferRenderer screenBufferRenderer;
+    public static SignSettings signSettings = new SignSettings();
+    public static NametagSettings nametagSettings = new NametagSettings();
 
     public void onInitialize() {
 		instance = this;
@@ -81,11 +83,13 @@ public abstract class FasterGuiModBase {
                 options.add(getOnOffOption("text.fastergui.enableScreen", () -> config.enabledScreens,
                         (b) -> config.enabledScreens = b));
                 options.add(getIntOption("text.fastergui.targetFramerateScreen", 20, 120, () -> config.targetFPSIngameScreens, (v) -> config.targetFPSIngameScreens = v));
-                options.add(getOnOffOption("text.fastergui.vanillaScale", () -> config.vanillaScale,
-                        (b) -> config.vanillaScale = b));
+                options.add(getOnOffOption("text.fastergui.enableSignBuffering", () -> config.enableSignBuffering,
+                        (b) -> config.enableSignBuffering = b));
+                options.add(getOnOffOption("text.fastergui.enableNametagBuffering", () -> config.enableNametagBuffering,
+                        (b) -> config.enableNametagBuffering = b));
               
                 getOptions().addSmall(options.toArray(new OptionInstance[0]));
-
+                
             }
 
             @Override

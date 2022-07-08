@@ -5,8 +5,9 @@ public class Config {
     public int configVersion = 1;
     public boolean enabledGui = true;
     public int targetFPSIngameGui = 20;
-    public boolean enabledScreens = false;
+    public boolean enabledScreens = true;
     public int targetFPSIngameScreens = 60;
-    public boolean vanillaScale = false;
+    public boolean enableSignBuffering = true;
+    public boolean enableNametagBuffering = false;
     
 }
