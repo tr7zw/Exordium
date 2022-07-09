@@ -9,6 +9,7 @@ import dev.tr7zw.fastergui.util.SignBufferRenderer;
 import net.minecraft.client.renderer.MultiBufferSource;
 import net.minecraft.network.chat.CommonComponents;
 import net.minecraft.network.chat.Component;
+import net.minecraft.network.chat.TextComponent;
 import net.minecraft.world.level.block.entity.SignBlockEntity;
 
 @Mixin(SignBlockEntity.class)
@@ -44,7 +45,7 @@ public class SignBlockEntityMixin implements SignBufferHolder {
 
     private boolean isSignEmpty(SignBlockEntity sign) {
         for (int i = 0; i < 4; i++) {
-            if (sign.getMessage(i, false) != CommonComponents.EMPTY)
+            if (sign.getMessage(i, false) != TextComponent.EMPTY)
                 return false;
         }
         return true;
