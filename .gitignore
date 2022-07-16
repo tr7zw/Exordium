@@ -34,7 +34,5 @@ run/
 
 # compose
 
-*.gradle
-*.properties
 gradle/wrapper
 VersionShared
