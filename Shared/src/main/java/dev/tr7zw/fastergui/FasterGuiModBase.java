@@ -9,6 +9,7 @@ import java.util.List;
 
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
+import com.mojang.blaze3d.pipeline.RenderTarget;
 import com.mojang.blaze3d.platform.GlStateManager;
 import com.mojang.blaze3d.systems.RenderSystem;
 
@@ -27,6 +28,7 @@ public abstract class FasterGuiModBase {
     private final File settingsFile = new File("config", "fastergui.json");
     private final Gson gson = new GsonBuilder().setPrettyPrinting().create();
     private BufferRenderer screenBufferRenderer;
+    private RenderTarget temporaryScreenOverwrite = null;
     public static SignSettings signSettings = new SignSettings();
     public static NametagSettings nametagSettings = new NametagSettings();
 
@@ -142,6 +144,14 @@ public abstract class FasterGuiModBase {
         RenderSystem.blendFuncSeparate(GlStateManager.SourceFactor.SRC_ALPHA,
                 GlStateManager.DestFactor.ONE_MINUS_SRC_ALPHA, GlStateManager.SourceFactor.ONE,
                 GlStateManager.DestFactor.ONE_MINUS_SRC_ALPHA);
+    }
+
+    public RenderTarget getTemporaryScreenOverwrite() {
+        return temporaryScreenOverwrite;
+    }
+
+    public void setTemporaryScreenOverwrite(RenderTarget temporaryScreenOverwrite) {
+        this.temporaryScreenOverwrite = temporaryScreenOverwrite;
     }
     
 }

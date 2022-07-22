@@ -51,6 +51,7 @@ public class BufferRenderer {
 
         FasterGuiModBase.correctBlendMode();
         isRendering = true;
+        FasterGuiModBase.instance.setTemporaryScreenOverwrite(guiTarget);
         if(forceBlending) {
             FasterGuiModBase.setForceBlend(true);
             FasterGuiModBase.setBlendBypass(false);
@@ -60,6 +61,7 @@ public class BufferRenderer {
 
     public void renderEnd(int cacheTime) {
         guiTarget.unbindWrite();
+        FasterGuiModBase.instance.setTemporaryScreenOverwrite(null);
         Minecraft.getInstance().getMainRenderTarget().bindWrite(true);
         nextFrame = System.currentTimeMillis() + cacheTime;
         isRendering = false;
