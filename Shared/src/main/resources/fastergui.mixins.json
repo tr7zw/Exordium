@@ -16,7 +16,8 @@
     "SignRendererMixin",
     "SignBlockEntityMixin",
     "EntityRendererMixin",
-    "EntityMixin"
+    "EntityMixin",
+    "MinecraftMixin"
   ],
   "injectors": {
     "defaultRequire": 1
