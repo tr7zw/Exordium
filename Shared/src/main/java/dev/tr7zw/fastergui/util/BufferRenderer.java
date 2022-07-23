@@ -6,17 +6,18 @@ import com.mojang.blaze3d.pipeline.RenderTarget;
 import com.mojang.blaze3d.pipeline.TextureTarget;
 import com.mojang.blaze3d.platform.GlStateManager;
 import com.mojang.blaze3d.systems.RenderSystem;
-import com.mojang.math.Vector3f;
+import com.mojang.blaze3d.vertex.BufferBuilder;
+import com.mojang.blaze3d.vertex.DefaultVertexFormat;
+import com.mojang.blaze3d.vertex.Tesselator;
+import com.mojang.blaze3d.vertex.VertexFormat;
 
 import dev.tr7zw.fastergui.FasterGuiModBase;
-import dev.tr7zw.fastergui.util.Model.Vector2f;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.GameRenderer;
 
 public class BufferRenderer {
 
     private static final Minecraft minecraft = Minecraft.getInstance();
-    private static Model model = null;
     private RenderTarget guiTarget = new TextureTarget(100, 100, true, false);
     private long nextFrame = System.currentTimeMillis();
     private boolean isRendering = false;
@@ -30,26 +31,6 @@ public class BufferRenderer {
         this.forceBlending = forceBlending;
     }
 
-    private static void refreshModel(int screenWidth, int screenHeight){
-        if(model != null) {
-            model.close();
-        }
-
-        Vector3f[] modelData = new Vector3f[]{
-            new Vector3f(0.0f, screenHeight, -90.0f),
-            new Vector3f(screenWidth, screenHeight, -90.0F),
-            new Vector3f(screenWidth, 0.0F, -90.0F),
-            new Vector3f(0.0F, 0.0F, -90.0F),
-        };
-        Vector2f[] uvData = new Vector2f[]{
-            new Vector2f(0.0f, 0.0f),
-            new Vector2f(1.0f, 0.0f),
-            new Vector2f(1.0f, 1.0f),
-            new Vector2f(0.0f, 1.0f),
-        };
-        model = new Model(modelData, uvData);
-    }
-    
     public void render(CallbackInfo ci) {
         int screenWidth = minecraft.getWindow().getGuiScaledWidth();
         int screenHeight = minecraft.getWindow().getGuiScaledHeight();
@@ -57,11 +38,7 @@ public class BufferRenderer {
         if (guiTarget.width != minecraft.getWindow().getWidth()
                 || guiTarget.height != minecraft.getWindow().getHeight()) {
             guiTarget.resize(minecraft.getWindow().getWidth(), minecraft.getWindow().getHeight(), true);
-            refreshModel(screenWidth, screenHeight);
             forceRender = true;
-        }
-        if(model == null) {
-            refreshModel(screenWidth, screenHeight);
         }
         if (!forceRender && System.currentTimeMillis() < nextFrame) {
             renderTextureOverlay(guiTarget.getColorTextureId(), screenWidth, screenHeight);
@@ -105,7 +82,14 @@ public class BufferRenderer {
         RenderSystem.setShader(GameRenderer::getPositionTexShader);
         RenderSystem.setShaderColor(1.0F, 1.0F, 1.0F, 1.0F);
         RenderSystem.setShaderTexture(0, textureid);
-        model.draw(RenderSystem.getModelViewMatrix());
+        Tesselator tesselator = Tesselator.getInstance();
+        BufferBuilder bufferbuilder = tesselator.getBuilder();
+        bufferbuilder.begin(VertexFormat.Mode.QUADS, DefaultVertexFormat.POSITION_TEX);
+        bufferbuilder.vertex(0.0D, screenHeight, -90.0D).uv(0.0F, 0.0F).endVertex(); // 1
+        bufferbuilder.vertex(screenWidth, screenHeight, -90.0D).uv(1.0F, 0.0F).endVertex(); // 2
+        bufferbuilder.vertex(screenWidth, 0.0D, -90.0D).uv(1.0F, 1.0F).endVertex(); // 3
+        bufferbuilder.vertex(0.0D, 0.0D, -90.0D).uv(0.0F, 1.0F).endVertex(); // 4
+        tesselator.end();
         RenderSystem.depthMask(true);
         RenderSystem.enableDepthTest();
         RenderSystem.setShaderColor(1.0F, 1.0F, 1.0F, 1.0F);

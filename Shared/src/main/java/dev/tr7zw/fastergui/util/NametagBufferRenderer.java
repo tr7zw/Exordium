@@ -6,13 +6,15 @@ import com.mojang.blaze3d.pipeline.RenderTarget;
 import com.mojang.blaze3d.pipeline.TextureTarget;
 import com.mojang.blaze3d.platform.GlStateManager;
 import com.mojang.blaze3d.systems.RenderSystem;
+import com.mojang.blaze3d.vertex.BufferBuilder;
+import com.mojang.blaze3d.vertex.DefaultVertexFormat;
 import com.mojang.blaze3d.vertex.PoseStack;
+import com.mojang.blaze3d.vertex.Tesselator;
+import com.mojang.blaze3d.vertex.VertexFormat;
 import com.mojang.math.Matrix3f;
 import com.mojang.math.Matrix4f;
-import com.mojang.math.Vector3f;
 
 import dev.tr7zw.fastergui.FasterGuiModBase;
-import dev.tr7zw.fastergui.util.Model.Vector2f;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.Font;
 import net.minecraft.client.renderer.GameRenderer;
@@ -26,31 +28,11 @@ public class NametagBufferRenderer {
     private static final Minecraft minecraft = Minecraft.getInstance();
     private RenderTarget renderTargetHidden;
     private RenderTarget renderTargetVisible;
-    private Model model;
     private int textwidth = 0;
+    
+    public NametagBufferRenderer() {
 
-    private void initializeModel() {
-        if(model != null) {
-            model.close();
-        }
-        float height = (int)FasterGuiModBase.nametagSettings.renderHeight;
-        
-        Vector3f[] modelData = new Vector3f[]{
-            new Vector3f(0.0f, height, 0.01F),
-            new Vector3f(textwidth, height, 0.01F),
-            new Vector3f(textwidth, 0.0f, 0.01F),
-            new Vector3f(0.0f, 0.0f, 0.01F),
-        };
-        Vector2f[] uvData = new Vector2f[]{
-            new Vector2f(0.0f, 0.0f),
-            new Vector2f(1.0f, 0.0f),
-            new Vector2f(1.0f, 1.0f),
-            new Vector2f(0.0f, 1.0f),
-        };
-        model = new Model(modelData, uvData);
-        cleaner.register(this, new ModelCleaner(model));
     }
-
     
     public void refreshImage(Component text, MultiBufferSource arg3, int light) {
         textwidth = minecraft.font.width(text);
@@ -69,12 +51,10 @@ public class NametagBufferRenderer {
         if(renderTargetHidden == null) {
             renderTargetHidden = setupTexture(width, height);
             renderTargetVisible = setupTexture(width, height);
-            initializeModel();
         }
         if(renderTargetHidden.width != width || renderTargetHidden.height != height) {
             renderTargetHidden.resize(width, height, false);
             renderTargetVisible.resize(width, height, false);
-            initializeModel();
         }
 
         renderTargetHidden.clear(false);
@@ -88,7 +68,7 @@ public class NametagBufferRenderer {
         RenderTarget target = new TextureTarget(width, height, false, false);
         target.setClearColor(0, 0, 0, 0);
         target.clear(false);
-        cleaner.register(this, new RenderTargetCleaner(target));
+        cleaner.register(this, new State(target));
         return target;
     }
     
@@ -98,6 +78,7 @@ public class NametagBufferRenderer {
         poseStack.pushPose();
         poseStack.translate(-textwidth/2f, 0, 0);
         RenderSystem.enableBlend();
+//        RenderSystem.blendFuncSeparate(GlStateManager.SourceFactor.SRC_ALPHA, GlStateManager.DestFactor.ONE_MINUS_SRC_ALPHA, GlStateManager.SourceFactor.ONE, GlStateManager.DestFactor.ONE_MINUS_SRC_ALPHA);
         FasterGuiModBase.correctBlendMode();
         RenderSystem.setShader(GameRenderer::getPositionTexShader);
         if(depthTest) {
@@ -107,7 +88,17 @@ public class NametagBufferRenderer {
         }
         RenderSystem.setShaderColor(1.0F, 1.0F, 1.0F, 1.0F);
         RenderSystem.setShaderTexture(0, renderTarget.getColorTextureId());
-        model.draw(poseStack.last().pose());
+        Tesselator tesselator = RenderSystem.renderThreadTesselator();
+        BufferBuilder bufferbuilder = tesselator.getBuilder();
+        float height = (int)FasterGuiModBase.nametagSettings.renderHeight;
+        float width = textwidth;
+        Matrix4f pose = poseStack.last().pose();
+        bufferbuilder.begin(VertexFormat.Mode.QUADS, DefaultVertexFormat.POSITION_TEX);
+        bufferbuilder.vertex(pose, 0.0f, height, 0.01F).uv(0.0F, 0.0F).uv2(light).endVertex(); // 1
+        bufferbuilder.vertex(pose, width, height, 0.01F).uv(1.0F, 0.0F).uv2(light).endVertex(); // 2
+        bufferbuilder.vertex(pose, width, 0.0f, 0.01F).uv(1.0F, 1.0F).uv2(light).endVertex(); // 3
+        bufferbuilder.vertex(pose, 0.0f, 0.0f, 0.01F).uv(0.0F, 1.0F).uv2(light).endVertex(); // 4
+        tesselator.end();
         poseStack.popPose();
         FasterGuiModBase.correctBlendMode();
         RenderSystem.enableDepthTest();
@@ -145,32 +136,17 @@ public class NametagBufferRenderer {
         RenderSystem.enableCull();
     }
 
-    static class RenderTargetCleaner implements Runnable {
+    static class State implements Runnable {
 
         private RenderTarget cleanableRenderTarget;
         
-        RenderTargetCleaner(RenderTarget renderTarget) {
-            this.cleanableRenderTarget = renderTarget;
+        State(RenderTarget guiTarget) {
+            this.cleanableRenderTarget = guiTarget;
         }
 
         public void run() {
             RenderSystem.recordRenderCall(() -> {
                 cleanableRenderTarget.destroyBuffers();
-            });
-        }
-    }
-    
-    static class ModelCleaner implements Runnable {
-
-        private Model cleanableModel;
-        
-        ModelCleaner(Model model) {
-            this.cleanableModel = model;
-        }
-
-        public void run() {
-            RenderSystem.recordRenderCall(() -> {
-                cleanableModel.close();
             });
         }
     }
