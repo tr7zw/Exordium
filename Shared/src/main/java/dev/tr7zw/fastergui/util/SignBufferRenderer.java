@@ -2,21 +2,18 @@ package dev.tr7zw.fastergui.util;
 
 import java.lang.ref.Cleaner;
 import java.util.List;
-
 import com.mojang.blaze3d.pipeline.RenderTarget;
 import com.mojang.blaze3d.pipeline.TextureTarget;
 import com.mojang.blaze3d.platform.GlStateManager;
 import com.mojang.blaze3d.platform.NativeImage;
 import com.mojang.blaze3d.systems.RenderSystem;
-import com.mojang.blaze3d.vertex.BufferBuilder;
-import com.mojang.blaze3d.vertex.DefaultVertexFormat;
 import com.mojang.blaze3d.vertex.PoseStack;
-import com.mojang.blaze3d.vertex.Tesselator;
-import com.mojang.blaze3d.vertex.VertexFormat;
 import com.mojang.math.Matrix3f;
 import com.mojang.math.Matrix4f;
+import com.mojang.math.Vector3f;
 
 import dev.tr7zw.fastergui.FasterGuiModBase;
+import dev.tr7zw.fastergui.util.Model.Vector2f;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.GameRenderer;
 import net.minecraft.client.renderer.MultiBufferSource;
@@ -29,15 +26,17 @@ public class SignBufferRenderer {
 
     private static final Cleaner cleaner = Cleaner.create();
     private static final Minecraft minecraft = Minecraft.getInstance();
+    private static Model model = null;
     private RenderTarget guiTarget;
     
     public SignBufferRenderer(SignBlockEntity arg, MultiBufferSource arg3, int light) {
         arg3.getBuffer(RenderType.endGateway()); // force clear the vertex consumer
         guiTarget = new TextureTarget((int)FasterGuiModBase.signSettings.bufferWidth, (int)FasterGuiModBase.signSettings.bufferHeight, false, false);
-//        guiTarget.resize((int)FasterGuiModBase.signSettings.bufferWidth, (int)FasterGuiModBase.signSettings.bufferHeight, false);
         guiTarget.setClearColor(0, 0, 0, 0);
         guiTarget.clear(false);
         cleaner.register(this, new State(guiTarget));
+        if(model == null)
+            initializeModel();
     }
     
     public void refreshImage(SignBlockEntity arg, MultiBufferSource arg3, int light) {
@@ -46,6 +45,25 @@ public class SignBufferRenderer {
         renderSignToBuffer(arg, arg3, light);
     }
     
+    private static void initializeModel(){
+        float height = (int)FasterGuiModBase.signSettings.renderHeight;
+        float width = (int)FasterGuiModBase.signSettings.renderWidth;
+
+        Vector3f[] modelData = new Vector3f[]{
+            new Vector3f(0.0f, height, 0.01F),
+            new Vector3f(width, height, 0.01F),
+            new Vector3f(width, 0.0f, 0.01F),
+            new Vector3f(0.0f, 0.0f, 0.01F),
+        };
+        Vector2f[] uvData = new Vector2f[]{
+            new Vector2f(0.0f, 0.0f),
+            new Vector2f(1.0f, 0.0f),
+            new Vector2f(1.0f, 1.0f),
+            new Vector2f(0.0f, 1.0f),
+        };
+        model = new Model(modelData, uvData);
+    }
+
     public void render(PoseStack poseStack, int light) {
         poseStack.pushPose();
         poseStack.translate(FasterGuiModBase.signSettings.offsetX , FasterGuiModBase.signSettings.offsetY, 0);
@@ -56,17 +74,11 @@ public class SignBufferRenderer {
         RenderSystem.setShader(GameRenderer::getPositionTexShader);
         RenderSystem.setShaderColor(1.0F, 1.0F, 1.0F, 1.0F);
         RenderSystem.setShaderTexture(0, guiTarget.getColorTextureId());
-        Tesselator tesselator = RenderSystem.renderThreadTesselator();
-        BufferBuilder bufferbuilder = tesselator.getBuilder();
-        float height = (int)FasterGuiModBase.signSettings.renderHeight;
-        float width = (int)FasterGuiModBase.signSettings.renderWidth;
+
         Matrix4f pose = poseStack.last().pose();
-        bufferbuilder.begin(VertexFormat.Mode.QUADS, DefaultVertexFormat.POSITION_TEX);
-        bufferbuilder.vertex(pose, 0.0f, height, 0.01F).uv(0.0F, 0.0F).uv2(light).endVertex(); // 1
-        bufferbuilder.vertex(pose, width, height, 0.01F).uv(1.0F, 0.0F).uv2(light).endVertex(); // 2
-        bufferbuilder.vertex(pose, width, 0.0f, 0.01F).uv(1.0F, 1.0F).uv2(light).endVertex(); // 3
-        bufferbuilder.vertex(pose, 0.0f, 0.0f, 0.01F).uv(0.0F, 1.0F).uv2(light).endVertex(); // 4
-        tesselator.end();
+        
+        model.draw(pose); // TODO: is light required here, since it's baked into the texture?
+
         poseStack.popPose();
     }
     
