@@ -13,66 +13,77 @@ import dev.tr7zw.fastergui.FasterGuiModBase;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.GameRenderer;
 
-public class BufferRenderer {
+public class NametagScreenBuffer {
 
     private static final Minecraft minecraft = Minecraft.getInstance();
     private RenderTarget guiTarget = new TextureTarget(100, 100, true, false);
-    private long nextFrame = System.currentTimeMillis();
+    private boolean containsTags = false;
+    private boolean acceptsTags = true;
     private boolean isRendering = false;
-    private boolean forceBlending = false;
+    private long nextFrame = System.currentTimeMillis();
     
-    public BufferRenderer() {
-        this(false);
+    public NametagScreenBuffer(int cacheTime) {
+        reset(cacheTime);
     }
     
-    public BufferRenderer(boolean forceBlending) {
-        this.forceBlending = forceBlending;
-    }
+    /**
+     * Prepares the buffer for a new frame if the old one is too old or the size changed.
+     * 
+     * @param cacheTime
+     */
+    public void reset(int cacheTime) {
 
-    public boolean render() {
-        int screenWidth = minecraft.getWindow().getGuiScaledWidth();
-        int screenHeight = minecraft.getWindow().getGuiScaledHeight();
         boolean forceRender = false;
         if (guiTarget.width != minecraft.getWindow().getWidth()
                 || guiTarget.height != minecraft.getWindow().getHeight()) {
             guiTarget.resize(minecraft.getWindow().getWidth(), minecraft.getWindow().getHeight(), true);
             forceRender = true;
         }
-        if (!forceRender && System.currentTimeMillis() < nextFrame) {
-            renderTextureOverlay(guiTarget.getColorTextureId(), screenWidth, screenHeight);
-            return true;
+        if (forceRender || System.currentTimeMillis() > nextFrame) {
+            if(forceRender || containsTags) { // only refresh the buffer if there was something in it
+                guiTarget.setClearColor(0, 0, 0, 0);
+                guiTarget.clear(false);
+            }
+            nextFrame = System.currentTimeMillis() + cacheTime;
+            acceptsTags = true;
+            containsTags = false;
         }
-        guiTarget.setClearColor(0, 0, 0, 0);
-        guiTarget.clear(false);
+    }
+    
+    /**
+     * @return true if ready for rendering
+     */
+    public boolean bind() {
+        if(!acceptsTags) {
+            return false;
+        }
+        containsTags = true;
         guiTarget.bindWrite(false);
 
-        FasterGuiModBase.correctBlendMode();
         isRendering = true;
         FasterGuiModBase.instance.setTemporaryScreenOverwrite(guiTarget);
-        if(forceBlending) {
-            FasterGuiModBase.setForceBlend(true);
-            FasterGuiModBase.setBlendBypass(false);
-            FasterGuiModBase.setBypassTurnoff(0);
-        }
-        return false;
+        return true;
     }
 
-    public void renderEnd(int cacheTime) {
-        guiTarget.unbindWrite();
+    public void bindEnd() {
+        if(!isRendering)return;
         FasterGuiModBase.instance.setTemporaryScreenOverwrite(null);
+        guiTarget.unbindWrite();
         Minecraft.getInstance().getMainRenderTarget().bindWrite(true);
-        nextFrame = System.currentTimeMillis() + cacheTime;
         isRendering = false;
-        if(forceBlending) {
-            FasterGuiModBase.setBlendBypass(false);
-            FasterGuiModBase.setForceBlend(false);
-        }
+    }
+
+    public void renderOverlay() {
         int screenWidth = minecraft.getWindow().getGuiScaledWidth();
         int screenHeight = minecraft.getWindow().getGuiScaledHeight();
         renderTextureOverlay(guiTarget.getColorTextureId(), screenWidth, screenHeight);
     }
-
+    
     private void renderTextureOverlay(int textureid, int screenWidth, int screenHeight) {
+        if(!containsTags) {
+            return; // never was bound, nothing to render
+        }
+        acceptsTags = false;
         RenderSystem.disableDepthTest();
         RenderSystem.depthMask(false);
         RenderSystem.enableBlend();
@@ -88,13 +99,13 @@ public class BufferRenderer {
         bufferbuilder.vertex(screenWidth, 0.0D, -90.0D).uv(1.0F, 1.0F).endVertex(); // 3
         bufferbuilder.vertex(0.0D, 0.0D, -90.0D).uv(0.0F, 1.0F).endVertex(); // 4
         tesselator.end();
-        RenderSystem.depthMask(true);
-        RenderSystem.enableDepthTest();
-        RenderSystem.setShaderColor(1.0F, 1.0F, 1.0F, 1.0F);
+//        RenderSystem.depthMask(true);
+//        RenderSystem.enableDepthTest();
+
     }
 
     public boolean isRendering() {
         return isRendering;
     }
-
+    
 }

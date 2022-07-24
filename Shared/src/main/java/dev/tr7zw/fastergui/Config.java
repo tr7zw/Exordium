@@ -9,5 +9,7 @@ public class Config {
     public int targetFPSIngameScreens = 60;
     public boolean enableSignBuffering = true;
     public boolean enableNametagBuffering = false;
+    public int targetFPSNameTags = 60;
+    public boolean enableNametagScreenBuffering = false;
     
 }
