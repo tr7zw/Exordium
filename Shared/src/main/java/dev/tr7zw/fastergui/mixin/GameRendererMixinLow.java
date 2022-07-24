@@ -4,10 +4,12 @@ import org.spongepowered.asm.mixin.Final;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Shadow;
 import org.spongepowered.asm.mixin.injection.At;
+import org.spongepowered.asm.mixin.injection.At.Shift;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 
 import dev.tr7zw.fastergui.FasterGuiModBase;
+import dev.tr7zw.fastergui.util.NametagScreenBuffer;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.GameRenderer;
 
@@ -24,7 +26,17 @@ public class GameRendererMixinLow {
             return;
         }
 
-        FasterGuiModBase.instance.getScreenBufferRenderer().render(ci);
+        boolean cancel = FasterGuiModBase.instance.getScreenBufferRenderer().render();
+        if(cancel)
+            ci.cancel();
+    }
+    
+    @Inject(method = "render(FJZ)V", at = @At(value = "INVOKE", target = "Lcom/mojang/blaze3d/platform/Lighting;setupFor3DItems()V", ordinal = 0, shift = Shift.AFTER))
+    public void renderLevel(float tickDelta, long startTime, boolean tick, CallbackInfo info) {
+        NametagScreenBuffer buffer = FasterGuiModBase.instance.getNameTagScreenBuffer();
+        buffer.renderOverlay();
+        buffer.reset(1000/FasterGuiModBase.instance.config.targetFPSNameTags);
+        Minecraft.getInstance().getMainRenderTarget().bindWrite(true);
     }
     
 }

@@ -16,6 +16,7 @@ import com.mojang.blaze3d.systems.RenderSystem;
 import dev.tr7zw.config.CustomConfigScreen;
 import dev.tr7zw.fastergui.util.BufferRenderer;
 import net.minecraft.client.OptionInstance;
+import dev.tr7zw.fastergui.util.NametagScreenBuffer;
 import net.minecraft.client.gui.screens.Screen;
 
 public abstract class FasterGuiModBase {
@@ -28,6 +29,7 @@ public abstract class FasterGuiModBase {
     private final File settingsFile = new File("config", "fastergui.json");
     private final Gson gson = new GsonBuilder().setPrettyPrinting().create();
     private BufferRenderer screenBufferRenderer;
+    private NametagScreenBuffer nametagScreenBuffer;
     private RenderTarget temporaryScreenOverwrite = null;
     public static SignSettings signSettings = new SignSettings();
     public static NametagSettings nametagSettings = new NametagSettings();
@@ -71,6 +73,13 @@ public abstract class FasterGuiModBase {
         return screenBufferRenderer;
     }
     
+    public NametagScreenBuffer getNameTagScreenBuffer() {
+        if(nametagScreenBuffer == null) {
+            nametagScreenBuffer = new NametagScreenBuffer(1000/config.targetFPSNameTags);
+        }
+        return nametagScreenBuffer;
+    }
+    
     public abstract void initModloader();
 
     public Screen createConfigScreen(Screen parent) {
@@ -89,6 +98,10 @@ public abstract class FasterGuiModBase {
                         (b) -> config.enableSignBuffering = b));
                 options.add(getOnOffOption("text.fastergui.enableNametagBuffering", () -> config.enableNametagBuffering,
                         (b) -> config.enableNametagBuffering = b));
+                
+                options.add(getIntOption("text.fastergui.targetFPSNameTags", 30, 60, () -> config.targetFPSNameTags, (v) -> config.targetFPSNameTags = v));
+                options.add(getOnOffOption("text.fastergui.enableNametagScreenBuffering", () -> config.enableNametagScreenBuffering,
+                        (b) -> config.enableNametagScreenBuffering = b));
               
                 getOptions().addSmall(options.toArray(new OptionInstance[0]));
                 

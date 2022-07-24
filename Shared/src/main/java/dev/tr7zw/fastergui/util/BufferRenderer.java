@@ -1,7 +1,5 @@
 package dev.tr7zw.fastergui.util;
 
-import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
-
 import com.mojang.blaze3d.pipeline.RenderTarget;
 import com.mojang.blaze3d.pipeline.TextureTarget;
 import com.mojang.blaze3d.platform.GlStateManager;
@@ -50,7 +48,7 @@ public class BufferRenderer {
         model = new Model(modelData, uvData);
     }
     
-    public void render(CallbackInfo ci) {
+    public boolean render() {
         int screenWidth = minecraft.getWindow().getGuiScaledWidth();
         int screenHeight = minecraft.getWindow().getGuiScaledHeight();
         boolean forceRender = false;
@@ -65,8 +63,7 @@ public class BufferRenderer {
         }
         if (!forceRender && System.currentTimeMillis() < nextFrame) {
             renderTextureOverlay(guiTarget.getColorTextureId(), screenWidth, screenHeight);
-            ci.cancel();
-            return;
+            return true;
         }
         guiTarget.setClearColor(0, 0, 0, 0);
         guiTarget.clear(false);
@@ -80,6 +77,7 @@ public class BufferRenderer {
             FasterGuiModBase.setBlendBypass(false);
             FasterGuiModBase.setBypassTurnoff(0);
         }
+        return false;
     }
 
     public void renderEnd(int cacheTime) {

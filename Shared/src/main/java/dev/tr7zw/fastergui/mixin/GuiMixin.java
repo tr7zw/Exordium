@@ -24,7 +24,9 @@ public class GuiMixin {
         if(!FasterGuiModBase.instance.config.enabledGui) {
             return;
         }
-        bufferRenderer.render(ci);
+        boolean cancel = bufferRenderer.render();
+        if(cancel)
+            ci.cancel();
     }
     
     @Inject(method = "render", at = @At("RETURN"))
