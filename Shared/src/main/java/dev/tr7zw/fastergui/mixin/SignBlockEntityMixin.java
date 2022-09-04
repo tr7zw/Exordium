@@ -7,7 +7,6 @@ import com.mojang.blaze3d.vertex.PoseStack;
 import dev.tr7zw.fastergui.access.SignBufferHolder;
 import dev.tr7zw.fastergui.util.SignBufferRenderer;
 import net.minecraft.client.renderer.MultiBufferSource;
-import net.minecraft.network.chat.CommonComponents;
 import net.minecraft.network.chat.Component;
 import net.minecraft.world.level.block.entity.SignBlockEntity;
 
@@ -29,9 +28,9 @@ public class SignBlockEntityMixin implements SignBufferHolder {
                 || lines[0] != sign.getMessage(0, false) || lines[1] != sign.getMessage(1, false)
                 || lines[2] != sign.getMessage(2, false) || lines[3] != sign.getMessage(3, false)) {
             if (cachedBufferRenderer == null) {
-                cachedBufferRenderer = new SignBufferRenderer(sign, multiBufferSource, light);
+                cachedBufferRenderer = new SignBufferRenderer(sign, light);
             }
-            cachedBufferRenderer.refreshImage(sign, multiBufferSource, light);
+            cachedBufferRenderer.refreshImage(sign, light);
             lines[0] = sign.getMessage(0, false);
             lines[1] = sign.getMessage(1, false);
             lines[2] = sign.getMessage(2, false);

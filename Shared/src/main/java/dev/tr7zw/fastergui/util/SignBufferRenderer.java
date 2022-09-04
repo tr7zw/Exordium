@@ -17,7 +17,6 @@ import dev.tr7zw.fastergui.util.Model.Vector2f;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.GameRenderer;
 import net.minecraft.client.renderer.MultiBufferSource;
-import net.minecraft.client.renderer.RenderType;
 import net.minecraft.util.FormattedCharSequence;
 import net.minecraft.world.item.DyeColor;
 import net.minecraft.world.level.block.entity.SignBlockEntity;
@@ -29,8 +28,7 @@ public class SignBufferRenderer {
     private static Model model = null;
     private RenderTarget guiTarget;
     
-    public SignBufferRenderer(SignBlockEntity arg, MultiBufferSource arg3, int light) {
-        arg3.getBuffer(RenderType.endGateway()); // force clear the vertex consumer
+    public SignBufferRenderer(SignBlockEntity arg, int light) {
         guiTarget = new TextureTarget((int)FasterGuiModBase.signSettings.bufferWidth, (int)FasterGuiModBase.signSettings.bufferHeight, false, false);
         guiTarget.setClearColor(0, 0, 0, 0);
         guiTarget.clear(false);
@@ -39,10 +37,12 @@ public class SignBufferRenderer {
             initializeModel();
     }
     
-    public void refreshImage(SignBlockEntity arg, MultiBufferSource arg3, int light) {
-        arg3.getBuffer(RenderType.endGateway()); // force clear the vertex consumer
-        guiTarget.clear(false);
-        renderSignToBuffer(arg, arg3, light);
+    public void refreshImage(SignBlockEntity arg, int light) {
+        FasterGuiModBase.instance.getDelayedRenderCallManager().addRenderCall(() -> {
+            guiTarget.bindWrite(false);
+            guiTarget.clear(false);
+            renderSignToBuffer(arg, light);
+        });
     }
     
     private static void initializeModel(){
@@ -82,7 +82,9 @@ public class SignBufferRenderer {
         poseStack.popPose();
     }
     
-    private void renderSignToBuffer(SignBlockEntity arg, MultiBufferSource arg3, int light) {
+    private void renderSignToBuffer(SignBlockEntity arg, int light) {
+        MultiBufferSource.BufferSource bufferSource = MultiBufferSource
+                .immediate(Tesselator.getInstance().getBuilder());
         guiTarget.bindWrite(false);
         // cache the current render state
         Matrix4f tmp = RenderSystem.getProjectionMatrix();
@@ -116,14 +118,14 @@ public class SignBufferRenderer {
             FormattedCharSequence formattedCharSequence = formattedCharSequences[p];
             float q = (-minecraft.font.width(formattedCharSequence) / 2);
             if (bl) {
-                minecraft.font.drawInBatch8xOutline(formattedCharSequence,-28 +  q, (p * 10 - 20), n, l, matrix4f, arg3,
+                minecraft.font.drawInBatch8xOutline(formattedCharSequence,-28 +  q, (p * 10 - 20), n, l, matrix4f, bufferSource,
                         o);
             } else {
-                minecraft.font.drawInBatch(formattedCharSequence, (-28 + q), (p * 10 - 20), n, false, matrix4f, arg3,
+                minecraft.font.drawInBatch(formattedCharSequence, (-28 + q), (p * 10 - 20), n, false, matrix4f, bufferSource,
                         false, 0, o);
             }
-        }
-        arg3.getBuffer(RenderType.endGateway()); // force clear the vertex consumer
+        }   
+        bufferSource.endBatch(); // force clear the vertex consumer
         // restore renderlogic
         Minecraft.getInstance().getMainRenderTarget().bindWrite(true);
         RenderSystem.setProjectionMatrix(tmp);

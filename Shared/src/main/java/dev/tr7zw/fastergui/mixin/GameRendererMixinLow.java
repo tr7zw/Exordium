@@ -39,4 +39,9 @@ public class GameRendererMixinLow {
         Minecraft.getInstance().getMainRenderTarget().bindWrite(true);
     }
     
+    @Inject(method = "render(FJZ)V", at = @At(value = "INVOKE", target = "Lnet/minecraft/client/renderer/GameRenderer;renderLevel(FJLcom/mojang/blaze3d/vertex/PoseStack;)V", ordinal = 0, shift = Shift.AFTER))
+    public void postWorldRender(float tickDelta, long startTime, boolean tick, CallbackInfo ci) {
+        FasterGuiModBase.instance.getDelayedRenderCallManager().execRenderCalls();
+    }
+    
 }

@@ -16,7 +16,6 @@
     "SignRendererMixin",
     "SignBlockEntityMixin",
     "EntityRendererMixin",
-    "EntityMixin",
     "MinecraftMixin"
   ],
   "injectors": {
