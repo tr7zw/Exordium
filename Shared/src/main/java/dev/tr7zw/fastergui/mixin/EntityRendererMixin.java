@@ -7,15 +7,15 @@ import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 
 import com.mojang.blaze3d.vertex.PoseStack;
+import com.mojang.blaze3d.vertex.Tesselator;
 import com.mojang.math.Matrix4f;
+import com.mojang.math.Vector3f;
 
 import dev.tr7zw.fastergui.FasterGuiModBase;
-import dev.tr7zw.fastergui.access.NametagBufferHolder;
 import dev.tr7zw.fastergui.util.NametagScreenBuffer;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.Font;
 import net.minecraft.client.renderer.MultiBufferSource;
-import net.minecraft.client.renderer.RenderType;
 import net.minecraft.client.renderer.entity.EntityRenderDispatcher;
 import net.minecraft.client.renderer.entity.EntityRenderer;
 import net.minecraft.network.chat.Component;
@@ -37,59 +37,42 @@ public class EntityRendererMixin {
      */
     @SuppressWarnings("resource")
     @Inject(method = "renderNameTag", at = @At("HEAD"), cancellable = true)
-    protected void renderNameTag(Entity entity, Component component, PoseStack poseStack, MultiBufferSource mbs, int i, CallbackInfo ci) {
+    protected void renderNameTag(Entity entity, Component component, PoseStack tmpPoseStack, MultiBufferSource unusedBuffer, int i, CallbackInfo ci) {
         NametagScreenBuffer buffer = null;
         FasterGuiModBase inst = FasterGuiModBase.instance;
         if(inst.config.enableNametagScreenBuffering) {
             buffer = inst.getNameTagScreenBuffer();
-            mbs.getBuffer(RenderType.endGateway()); // force clear the vertex consumer
-            if(!entity.isDiscrete() && !buffer.bind()) {
+            if(!entity.isDiscrete() && !buffer.isReady()) {
                 ci.cancel(); // the buffer is not ready, so the last frame will be used instead
                 return;
             }
-            if(!inst.config.enableNametagBuffering) {
+            Matrix4f matrix4f = tmpPoseStack.last().pose();
+            float f = entity.getBbHeight() + 0.5F;
+            matrix4f.translate(new Vector3f(0.0f, f, 0.0f));
+            matrix4f.multiply(this.entityRenderDispatcher.cameraOrientation());
+            matrix4f.multiply(Matrix4f.createScaleMatrix(-0.025F, -0.025F, 0.025F));
+            FasterGuiModBase.instance.getDelayedRenderCallManager().addNametagRenderCall(() -> {
                 // partial copy of the method to remove the "behind walls" part
-                float f = entity.getBbHeight() + 0.5F;
-                poseStack.pushPose();
-                poseStack.translate(0.0D, f, 0.0D);
-                poseStack.mulPose(this.entityRenderDispatcher.cameraOrientation());
-                poseStack.scale(-0.025F, -0.025F, 0.025F);
-                Matrix4f matrix4f = poseStack.last().pose();
+                MultiBufferSource.BufferSource bufferSource = MultiBufferSource
+                        .immediate(Tesselator.getInstance().getBuilder());
                 float h = (-font.width(component) / 2);
                 float g = (Minecraft.getInstance()).options.getBackgroundOpacity(0.25F);
                 int k = (int) (g * 255.0F) << 24;
-                font.drawInBatch(component, h, 0, -1, false, matrix4f, mbs, true, k, i);
-                poseStack.popPose();
-                mbs.getBuffer(RenderType.endGateway()); // force clear the vertex consumer
-                buffer.bindEnd();
-                ci.cancel();
-                return;
-            }
-        }
-        if(inst.config.enableNametagBuffering) {
-            boolean sneaking = entity.isDiscrete();
-            float f = entity.getBbHeight() + 0.5F;
-            poseStack.pushPose();
-            poseStack.translate(0.0D, f, 0.0D);
-            poseStack.mulPose(this.entityRenderDispatcher.cameraOrientation());
-            poseStack.scale(-0.025F, -0.025F, 0.025F);
-            boolean cancel = ((NametagBufferHolder)entity).renderBuffered(component, poseStack, mbs, i, sneaking);
-            poseStack.popPose();
-            if(cancel) {
-                ci.cancel();
-                if(buffer != null)
-                    buffer.bindEnd();
-            }
+                font.drawInBatch(component, h, 0, -1, false, matrix4f, bufferSource, true, k, i);
+                bufferSource.endBatch();
+
+            });
+            ci.cancel();
         }
     }
-    
-    @Inject(method = "renderNameTag", at = @At("TAIL"), cancellable = true)
-    protected void renderNameTagEnd(Entity arg, Component arg2, PoseStack poseStack, MultiBufferSource mbs, int k, CallbackInfo ci) {
-        if(FasterGuiModBase.instance.config.enableNametagScreenBuffering) {
-            mbs.getBuffer(RenderType.endGateway()); // force clear the vertex consumer
-            NametagScreenBuffer buffer = FasterGuiModBase.instance.getNameTagScreenBuffer();
-            buffer.bindEnd();
-        }
-    }
+//    
+//    @Inject(method = "renderNameTag", at = @At("TAIL"), cancellable = true)
+//    protected void renderNameTagEnd(Entity arg, Component arg2, PoseStack poseStack, MultiBufferSource mbs, int k, CallbackInfo ci) {
+//        if(FasterGuiModBase.instance.config.enableNametagScreenBuffering) {
+//            mbs.getBuffer(RenderType.endGateway()); // force clear the vertex consumer
+//            NametagScreenBuffer buffer = FasterGuiModBase.instance.getNameTagScreenBuffer();
+//            buffer.bindEnd();
+//        }
+//    }
     
 }

@@ -64,6 +64,10 @@ public class NametagScreenBuffer {
         FasterGuiModBase.instance.setTemporaryScreenOverwrite(guiTarget);
         return true;
     }
+    
+    public boolean isReady() {
+        return acceptsTags;
+    }
 
     public void bindEnd() {
         if(!isRendering)return;
