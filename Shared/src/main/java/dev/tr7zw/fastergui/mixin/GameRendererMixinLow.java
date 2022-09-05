@@ -8,6 +8,8 @@ import org.spongepowered.asm.mixin.injection.At.Shift;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 
+import com.mojang.math.Matrix4f;
+
 import dev.tr7zw.fastergui.FasterGuiModBase;
 import dev.tr7zw.fastergui.util.NametagScreenBuffer;
 import net.minecraft.client.Minecraft;
@@ -35,13 +37,17 @@ public class GameRendererMixinLow {
     public void renderLevel(float tickDelta, long startTime, boolean tick, CallbackInfo info) {
         NametagScreenBuffer buffer = FasterGuiModBase.instance.getNameTagScreenBuffer();
         buffer.renderOverlay();
-        buffer.reset(1000/FasterGuiModBase.instance.config.targetFPSNameTags);
         Minecraft.getInstance().getMainRenderTarget().bindWrite(true);
     }
     
-    @Inject(method = "render(FJZ)V", at = @At(value = "INVOKE", target = "Lnet/minecraft/client/renderer/GameRenderer;renderLevel(FJLcom/mojang/blaze3d/vertex/PoseStack;)V", ordinal = 0, shift = Shift.AFTER))
+    @Inject(method = "render(FJZ)V", at = @At(value = "INVOKE", target = "Lnet/minecraft/client/Minecraft;getWindow()Lcom/mojang/blaze3d/platform/Window;", ordinal = 0, shift = Shift.AFTER))
     public void postWorldRender(float tickDelta, long startTime, boolean tick, CallbackInfo ci) {
         FasterGuiModBase.instance.getDelayedRenderCallManager().execRenderCalls();
+    }
+    
+    @Inject(method = "resetProjectionMatrix", at = @At("HEAD"))
+    public void resetProjectionMatrix(Matrix4f matrix4f, CallbackInfo ci) {
+        FasterGuiModBase.instance.getDelayedRenderCallManager().setProjectionMatrix(matrix4f);
     }
     
 }

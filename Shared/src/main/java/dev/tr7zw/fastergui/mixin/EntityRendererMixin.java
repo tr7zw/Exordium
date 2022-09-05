@@ -42,7 +42,7 @@ public class EntityRendererMixin {
         FasterGuiModBase inst = FasterGuiModBase.instance;
         if(inst.config.enableNametagScreenBuffering) {
             buffer = inst.getNameTagScreenBuffer();
-            if(!entity.isDiscrete() && !buffer.isReady()) {
+            if(!entity.isDiscrete() && !buffer.acceptsData()) {
                 ci.cancel(); // the buffer is not ready, so the last frame will be used instead
                 return;
             }
