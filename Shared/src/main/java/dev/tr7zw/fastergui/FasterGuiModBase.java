@@ -105,7 +105,7 @@ public abstract class FasterGuiModBase {
 
                 options.add(getOnOffOption("text.fastergui.enableNametagScreenBuffering", () -> config.enableNametagScreenBuffering,
                         (b) -> config.enableNametagScreenBuffering = b));
-                options.add(getIntOption("text.fastergui.targetFPSNameTags", 30, 60, () -> config.targetFPSNameTags, (v) -> config.targetFPSNameTags = v));
+                options.add(getIntOption("text.fastergui.targetFPSNameTags", 30, 80, () -> config.targetFPSNameTags, (v) -> config.targetFPSNameTags = v));
 
               
                 getOptions().addSmall(options.toArray(new OptionInstance[0]));
