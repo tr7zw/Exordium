@@ -13,11 +13,13 @@ import dev.tr7zw.fastergui.FasterGuiModBase;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.GameRenderer;
 
+// TODO: Bit of a spaghetti logic. Should be cleaned up at some point
 public class NametagScreenBuffer {
 
     private static final Minecraft minecraft = Minecraft.getInstance();
     private RenderTarget guiTarget = new TextureTarget(100, 100, true, false);
     private boolean needsNewData = true;
+    private int requestedNewData = 0;
     private long nextFrame = System.currentTimeMillis();
     
     public NametagScreenBuffer(int cacheTime) {
@@ -58,6 +60,11 @@ public class NametagScreenBuffer {
             forceRender = true;
         }
         needsNewData = forceRender || System.currentTimeMillis() > nextFrame;
+        if(needsNewData) {
+            requestedNewData++;
+        }else {
+            requestedNewData = 0;
+        }
     }
 
     public void bindEnd() {
@@ -68,6 +75,7 @@ public class NametagScreenBuffer {
     }
 
     public void renderOverlay() {
+        if(needsNewData && requestedNewData >= 2)return;
         int screenWidth = minecraft.getWindow().getGuiScaledWidth();
         int screenHeight = minecraft.getWindow().getGuiScaledHeight();
         renderTextureOverlay(guiTarget.getColorTextureId(), screenWidth, screenHeight);
