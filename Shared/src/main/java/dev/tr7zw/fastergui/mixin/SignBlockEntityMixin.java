@@ -43,7 +43,7 @@ public class SignBlockEntityMixin implements SignBufferHolder {
 
     private boolean isSignEmpty(SignBlockEntity sign) {
         for (int i = 0; i < 4; i++) {
-            if (sign.getMessage(i, false) != CommonComponents.EMPTY)
+            if (sign.getMessage(i, false) != Component.EMPTY)
                 return false;
         }
         return true;
