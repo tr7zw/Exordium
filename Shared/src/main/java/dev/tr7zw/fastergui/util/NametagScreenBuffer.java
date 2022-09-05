@@ -17,9 +17,7 @@ public class NametagScreenBuffer {
 
     private static final Minecraft minecraft = Minecraft.getInstance();
     private RenderTarget guiTarget = new TextureTarget(100, 100, true, false);
-    private boolean containsTags = false;
-    private boolean acceptsTags = true;
-    private boolean isRendering = false;
+    private boolean needsNewData = true;
     private long nextFrame = System.currentTimeMillis();
     
     public NametagScreenBuffer(int cacheTime) {
@@ -31,63 +29,52 @@ public class NametagScreenBuffer {
      * 
      * @param cacheTime
      */
-    public void reset(int cacheTime) {
-
-        boolean forceRender = false;
-        if (guiTarget.width != minecraft.getWindow().getWidth()
-                || guiTarget.height != minecraft.getWindow().getHeight()) {
-            guiTarget.resize(minecraft.getWindow().getWidth(), minecraft.getWindow().getHeight(), true);
-            forceRender = true;
-        }
-        if (forceRender || System.currentTimeMillis() > nextFrame) {
-            if(forceRender || containsTags) { // only refresh the buffer if there was something in it
-                guiTarget.setClearColor(0, 0, 0, 0);
-                guiTarget.clear(false);
-            }
-            nextFrame = System.currentTimeMillis() + cacheTime;
-            acceptsTags = true;
-            containsTags = false;
-        }
+    private void reset(int cacheTime) {
+        guiTarget.setClearColor(0, 0, 0, 0);
+        guiTarget.clear(false);
+        nextFrame = System.currentTimeMillis() + cacheTime;
     }
     
     /**
      * @return true if ready for rendering
      */
     public boolean bind() {
-        if(!acceptsTags) {
-            return false;
-        }
-        containsTags = true;
+        reset(1000/FasterGuiModBase.instance.config.targetFPSNameTags);
         guiTarget.bindWrite(false);
 
-        isRendering = true;
         FasterGuiModBase.instance.setTemporaryScreenOverwrite(guiTarget);
         return true;
     }
     
-    public boolean isReady() {
-        return acceptsTags;
+    public boolean acceptsData() {
+        return needsNewData;
+    }
+    
+    private void updateNeeds() {
+        boolean forceRender = false;
+        if (guiTarget.width != minecraft.getWindow().getWidth()
+                || guiTarget.height != minecraft.getWindow().getHeight()) {
+            guiTarget.resize(minecraft.getWindow().getWidth(), minecraft.getWindow().getHeight(), true);
+            forceRender = true;
+        }
+        needsNewData = forceRender || System.currentTimeMillis() > nextFrame;
     }
 
     public void bindEnd() {
-        if(!isRendering)return;
         FasterGuiModBase.instance.setTemporaryScreenOverwrite(null);
         guiTarget.unbindWrite();
         Minecraft.getInstance().getMainRenderTarget().bindWrite(true);
-        isRendering = false;
+        needsNewData = false;
     }
 
     public void renderOverlay() {
         int screenWidth = minecraft.getWindow().getGuiScaledWidth();
         int screenHeight = minecraft.getWindow().getGuiScaledHeight();
         renderTextureOverlay(guiTarget.getColorTextureId(), screenWidth, screenHeight);
+        updateNeeds();
     }
     
     private void renderTextureOverlay(int textureid, int screenWidth, int screenHeight) {
-        if(!containsTags) {
-            return; // never was bound, nothing to render
-        }
-        acceptsTags = false;
         RenderSystem.disableDepthTest();
         RenderSystem.depthMask(false);
         RenderSystem.enableBlend();
@@ -106,10 +93,6 @@ public class NametagScreenBuffer {
 //        RenderSystem.depthMask(true);
 //        RenderSystem.enableDepthTest();
 
-    }
-
-    public boolean isRendering() {
-        return isRendering;
     }
     
 }
