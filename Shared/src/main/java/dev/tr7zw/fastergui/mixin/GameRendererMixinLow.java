@@ -6,8 +6,11 @@ import org.spongepowered.asm.mixin.Shadow;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.At.Shift;
 import org.spongepowered.asm.mixin.injection.Inject;
+import org.spongepowered.asm.mixin.injection.Redirect;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 
+import com.mojang.blaze3d.vertex.PoseStack;
+import com.mojang.math.Matrix3f;
 import com.mojang.math.Matrix4f;
 
 import dev.tr7zw.fastergui.FasterGuiModBase;
@@ -16,7 +19,7 @@ import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.GameRenderer;
 
 @Mixin(value = GameRenderer.class, priority = 500) //needs to be lower to cancel Architectury for REI
-public class GameRendererMixinLow {
+public abstract class GameRendererMixinLow {
 
     @Shadow
     @Final
@@ -45,9 +48,13 @@ public class GameRendererMixinLow {
         FasterGuiModBase.instance.getDelayedRenderCallManager().execRenderCalls();
     }
     
-    @Inject(method = "resetProjectionMatrix", at = @At("HEAD"))
-    public void resetProjectionMatrix(Matrix4f matrix4f, CallbackInfo ci) {
+    @Redirect(method = "renderLevel", at = @At(value = "INVOKE", target = "Lnet/minecraft/client/renderer/GameRenderer;resetProjectionMatrix(Lcom/mojang/math/Matrix4f;)V"))
+    public void renderLevel(GameRenderer gr, Matrix4f matrix4f, float f, long l, PoseStack poseStack) {
         FasterGuiModBase.instance.getDelayedRenderCallManager().setProjectionMatrix(matrix4f);
+        resetProjectionMatrix(matrix4f);
     }
+    
+    @Shadow
+    public abstract void resetProjectionMatrix(Matrix4f matrix4f);
     
 }
