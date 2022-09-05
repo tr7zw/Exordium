@@ -46,7 +46,7 @@ public class EntityRendererMixin {
                 ci.cancel(); // the buffer is not ready, so the last frame will be used instead
                 return;
             }
-            Matrix4f matrix4f = tmpPoseStack.last().pose();
+            Matrix4f matrix4f = tmpPoseStack.last().pose().copy();
             float f = entity.getBbHeight() + 0.5F;
             matrix4f.translate(new Vector3f(0.0f, f, 0.0f));
             matrix4f.multiply(this.entityRenderDispatcher.cameraOrientation());
