@@ -77,5 +77,19 @@ public class GuiMixin {
         FasterGuiModBase.setForceBlend(false);
         RenderSystem.defaultBlendFunc();
     }
+    
+    // Fix Scoreboard overlapping with overlays like spyglass
+    
+    @Inject(method = "render", at = @At(value="INVOKE", target = "Lnet/minecraft/client/gui/Gui;displayScoreboardSidebar(Lcom/mojang/blaze3d/vertex/PoseStack;Lnet/minecraft/world/scores/Objective;)V", shift = Shift.BEFORE))
+    private void displayScoreboardSidebarBefore(PoseStack arg, float g, CallbackInfo ci) {
+        FasterGuiModBase.correctBlendMode();
+        FasterGuiModBase.setForceBlend(true);
+    }
+    
+    @Inject(method = "render", at = @At(value="INVOKE", target = "Lnet/minecraft/client/gui/Gui;displayScoreboardSidebar(Lcom/mojang/blaze3d/vertex/PoseStack;Lnet/minecraft/world/scores/Objective;)V", shift = Shift.AFTER))
+    private void displayScoreboardSidebarAfter(PoseStack arg, float g, CallbackInfo ci) {
+        FasterGuiModBase.setForceBlend(false);
+        RenderSystem.defaultBlendFunc();
+    }
 
 }
