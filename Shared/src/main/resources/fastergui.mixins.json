@@ -16,7 +16,8 @@
     "SignRendererMixin",
     "SignBlockEntityMixin",
     "EntityRendererMixin",
-    "MinecraftMixin"
+    "MinecraftMixin",
+    "DebugScreenOverlayMixin"
   ],
   "injectors": {
     "defaultRequire": 1
