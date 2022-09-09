@@ -116,6 +116,8 @@ public class GuiMixin {
     
     @Inject(method = "render", at = @At(value="INVOKE", target = "Lnet/minecraft/client/gui/components/BossHealthOverlay;render(Lcom/mojang/blaze3d/vertex/PoseStack;)V", shift = Shift.BEFORE))
     public void renderBossbar(PoseStack arg, float g, CallbackInfo ci) {
+        if(!FasterGuiModBase.instance.config.enabledGui)
+            return;
         FasterGuiModBase.correctBlendMode();
         FasterGuiModBase.setForceBlend(true);
     }
@@ -131,6 +133,8 @@ public class GuiMixin {
     
     @Inject(method = "renderPlayerHealth", at = @At("HEAD"))
     private void renderPlayerHealth(PoseStack poseStack, CallbackInfo ci) {
+        if(!FasterGuiModBase.instance.config.enabledGui)
+            return;
         FasterGuiModBase.correctBlendMode();
         FasterGuiModBase.setForceBlend(true);
     }
@@ -144,6 +148,8 @@ public class GuiMixin {
     
     @Inject(method = "render", at = @At(value="INVOKE", target = "Lnet/minecraft/client/gui/components/ChatComponent;render(Lcom/mojang/blaze3d/vertex/PoseStack;I)V", shift = Shift.BEFORE))
     public void renderChat(PoseStack arg, float g, CallbackInfo ci) {
+        if(!FasterGuiModBase.instance.config.enabledGui)
+            return;
         FasterGuiModBase.correctBlendMode();
         FasterGuiModBase.setForceBlend(true);
     }
@@ -158,6 +164,8 @@ public class GuiMixin {
     
     @Inject(method = "render", at = @At(value="INVOKE", target = "Lnet/minecraft/client/gui/components/PlayerTabOverlay;render(Lcom/mojang/blaze3d/vertex/PoseStack;ILnet/minecraft/world/scores/Scoreboard;Lnet/minecraft/world/scores/Objective;)V", shift = Shift.BEFORE))
     public void renderTab(PoseStack arg, float g, CallbackInfo ci) {
+        if(!FasterGuiModBase.instance.config.enabledGui)
+            return;
         FasterGuiModBase.correctBlendMode();
         FasterGuiModBase.setForceBlend(true);
     }
@@ -172,6 +180,8 @@ public class GuiMixin {
     
     @Inject(method = "render", at = @At(value="INVOKE", target = "Lnet/minecraft/client/gui/Gui;displayScoreboardSidebar(Lcom/mojang/blaze3d/vertex/PoseStack;Lnet/minecraft/world/scores/Objective;)V", shift = Shift.BEFORE))
     private void displayScoreboardSidebarBefore(PoseStack arg, float g, CallbackInfo ci) {
+        if(!FasterGuiModBase.instance.config.enabledGui)
+            return;
         FasterGuiModBase.correctBlendMode();
         FasterGuiModBase.setForceBlend(true);
     }
