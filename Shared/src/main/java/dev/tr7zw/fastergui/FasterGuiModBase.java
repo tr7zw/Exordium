@@ -97,9 +97,14 @@ public abstract class FasterGuiModBase {
                 options.add(getOnOffOption("text.fastergui.enableGui", () -> config.enabledGui,
                         (b) -> config.enabledGui = b));
                 options.add(getIntOption("text.fastergui.targetFramerateGui", 5, 60, () -> config.targetFPSIngameGui, (v) -> config.targetFPSIngameGui = v));
+                options.add(getOnOffOption("text.fastergui.enabledGuiAnimationSpeedup", () -> config.enabledGuiAnimationSpeedup,
+                        (b) -> config.enabledGuiAnimationSpeedup = b));
+                options.add(getIntOption("text.fastergui.targetFPSIngameGuiAnimated", 30, 120, () -> config.targetFPSIngameGuiAnimated, (v) -> config.targetFPSIngameGuiAnimated = v));
+                
                 options.add(getOnOffOption("text.fastergui.enableScreen", () -> config.enabledScreens,
                         (b) -> config.enabledScreens = b));
                 options.add(getIntOption("text.fastergui.targetFramerateScreen", 20, 120, () -> config.targetFPSIngameScreens, (v) -> config.targetFPSIngameScreens = v));
+                
                 options.add(getOnOffOption("text.fastergui.enableSignBuffering", () -> config.enableSignBuffering,
                         (b) -> config.enableSignBuffering = b));
 
