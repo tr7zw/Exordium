@@ -85,7 +85,7 @@ public class GuiMixin {
                 }
             }
             // Attack indicator
-            if (this.minecraft.options.attackIndicator().get() == AttackIndicatorStatus.CROSSHAIR) {
+            if (this.minecraft.options.attackIndicator == AttackIndicatorStatus.CROSSHAIR) {
                 float j = this.minecraft.player.getAttackStrengthScale(0.0F);
                 if(j < 1.0F) {
                     targetFps = FasterGuiModBase.instance.config.targetFPSIngameGuiAnimated;
