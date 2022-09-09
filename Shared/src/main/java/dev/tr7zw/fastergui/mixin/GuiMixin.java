@@ -121,7 +121,7 @@ public class GuiMixin {
     }
     
     @Inject(method = "render", at = @At(value="INVOKE", target = "Lnet/minecraft/client/gui/components/BossHealthOverlay;render(Lcom/mojang/blaze3d/vertex/PoseStack;)V", shift = Shift.AFTER))
-    public void renderBossbarReturn(PoseStack arg, float g, CallbackInfo ci) {
+    public void renderBossbarEnd(PoseStack arg, float g, CallbackInfo ci) {
         FasterGuiModBase.setForceBlend(false);
         RenderSystem.defaultBlendFunc();
     }
