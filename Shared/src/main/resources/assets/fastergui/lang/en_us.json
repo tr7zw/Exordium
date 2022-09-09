@@ -6,5 +6,7 @@
     "text.fastergui.enableScreen": "Enabled Screens",
     "text.fastergui.enableSignBuffering": "Sign Buffering",
     "text.fastergui.enableNametagScreenBuffering": "Enable Nametag Buffering",
-    "text.fastergui.targetFPSNameTags": "Framerate Nametags"
+    "text.fastergui.targetFPSNameTags": "Framerate Nametags",
+    "text.fastergui.enabledGuiAnimationSpeedup": "Speedup On Gui Animations",
+    "text.fastergui.targetFPSIngameGuiAnimated": "Framerate Gui Animations"
   }
