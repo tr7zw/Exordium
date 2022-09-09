@@ -45,6 +45,8 @@ public class GuiMixin {
     private Component overlayMessageString;
     @Shadow
     private int overlayMessageTime;
+    @Shadow
+    private int toolHighlightTimer;
     
     @Inject(method = "render", at = @At(value="INVOKE", target = "Lnet/minecraft/client/Minecraft;getDeltaFrameTime()F"), cancellable = true)
     public void render(PoseStack arg, float g, CallbackInfo ci) {
@@ -63,6 +65,10 @@ public class GuiMixin {
         }
         int targetFps = FasterGuiModBase.instance.config.targetFPSIngameGui;
         if(FasterGuiModBase.instance.config.enabledGuiAnimationSpeedup) {
+            // Item name tooltip
+            if(toolHighlightTimer > 0 && toolHighlightTimer < 15) {
+                targetFps = FasterGuiModBase.instance.config.targetFPSIngameGuiAnimated;
+            }
             // title/subtitle
             if (this.title != null && this.titleTime > 0) {
                 int m = 255;
