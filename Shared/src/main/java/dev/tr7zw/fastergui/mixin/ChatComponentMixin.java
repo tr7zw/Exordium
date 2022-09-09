@@ -9,7 +9,6 @@ import dev.tr7zw.fastergui.access.ChatAccess;
 import net.minecraft.client.GuiMessage;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.components.ChatComponent;
-import net.minecraft.util.FormattedCharSequence;
 
 @Mixin(ChatComponent.class)
 public abstract class ChatComponentMixin implements ChatAccess {
@@ -17,7 +16,7 @@ public abstract class ChatComponentMixin implements ChatAccess {
     @Shadow
     private Minecraft minecraft;
     @Shadow
-    private List<GuiMessage<FormattedCharSequence>> trimmedMessages;
+    private List<GuiMessage.Line> trimmedMessages;
     @Shadow
     private int chatScrollbarPos;
     
@@ -29,9 +28,9 @@ public abstract class ChatComponentMixin implements ChatAccess {
             return false;
         int j = getLinesPerPage();
         for (int o = 0; o + this.chatScrollbarPos < this.trimmedMessages.size() && o < j; o++) {
-            GuiMessage<FormattedCharSequence> guiMessage = this.trimmedMessages.get(o + this.chatScrollbarPos);
+            GuiMessage.Line guiMessage = this.trimmedMessages.get(o + this.chatScrollbarPos);
             if (guiMessage != null) {
-                int p = i - guiMessage.getAddedTime();
+                int p = i - guiMessage.addedTime();
                 if (p > 170 && p < 200) { // 180 is correct, add a tiny buffer for the frame to catch up
                         return true;
                 }
