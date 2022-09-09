@@ -111,6 +111,21 @@ public class GuiMixin {
         }
         bufferRenderer.renderEnd(1000/targetFps);
     }
+   
+    // Fix for Bossbar
+    
+    @Inject(method = "render", at = @At(value="INVOKE", target = "Lnet/minecraft/client/gui/components/BossHealthOverlay;render(Lcom/mojang/blaze3d/vertex/PoseStack;)V", shift = Shift.BEFORE))
+    public void renderBossbar(PoseStack arg, float g, CallbackInfo ci) {
+        FasterGuiModBase.correctBlendMode();
+        FasterGuiModBase.setForceBlend(true);
+    }
+    
+    @Inject(method = "render", at = @At(value="INVOKE", target = "Lnet/minecraft/client/gui/components/BossHealthOverlay;render(Lcom/mojang/blaze3d/vertex/PoseStack;)V", shift = Shift.AFTER))
+    public void renderBossbarReturn(PoseStack arg, float g, CallbackInfo ci) {
+        FasterGuiModBase.setForceBlend(false);
+        RenderSystem.defaultBlendFunc();
+    }
+    
     
     // Fix for AppleSkin
     
