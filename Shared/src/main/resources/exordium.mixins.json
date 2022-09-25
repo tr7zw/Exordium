@@ -1,0 +1,26 @@
+{
+  "required": true,
+  "minVersion": "0.8",
+  "package": "dev.tr7zw.exordium.mixin",
+  "compatibilityLevel": "JAVA_16",
+  "refmap": "exordium.refmap.mixins.json",
+  "mixins": [
+  ],
+  "client": [
+    "GuiMixin",
+    "GameRendererMixinHigh",
+    "GameRendererMixinLow",
+    "GlStateManagerMixin",
+    "InventoryScreenMixin",
+    "ItemRendererMixin",
+    "SignRendererMixin",
+    "SignBlockEntityMixin",
+    "EntityRendererMixin",
+    "MinecraftMixin",
+    "DebugScreenOverlayMixin",
+    "ChatComponentMixin"
+  ],
+  "injectors": {
+    "defaultRequire": 1
+  }
+}
