@@ -17,6 +17,7 @@ public class BufferRenderer {
     private static Model model = null;
     private RenderTarget guiTarget = new TextureTarget(100, 100, true, false);
     private long nextFrame = System.currentTimeMillis();
+    private int guiScale = 0;
     private boolean isRendering = false;
     private boolean forceBlending = false;
     
@@ -53,9 +54,10 @@ public class BufferRenderer {
         int screenHeight = minecraft.getWindow().getGuiScaledHeight();
         boolean forceRender = false;
         if (guiTarget.width != minecraft.getWindow().getWidth()
-                || guiTarget.height != minecraft.getWindow().getHeight()) {
+                || guiTarget.height != minecraft.getWindow().getHeight() || minecraft.options.guiScale().get() != guiScale) {
             guiTarget.resize(minecraft.getWindow().getWidth(), minecraft.getWindow().getHeight(), true);
             refreshModel(screenWidth, screenHeight);
+            guiScale = minecraft.options.guiScale().get();
             forceRender = true;
         }
         if(model == null) {

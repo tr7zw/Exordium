@@ -3,7 +3,7 @@
   "id": "exordium",
   "version": "${version}",
 
-  "name": "Exordium-Fabric",
+  "name": "Exordium",
   "description": "Render the ingame gui on its own FPS limiter",
   "authors": [
     "tr7zw"
