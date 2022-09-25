@@ -2,12 +2,12 @@ version: '0.0.1'
 source: "https://github.com/tr7zw/ForgeFabricComposeTemplate/tree/1.19.2/"
 replacements:
   group: "dev.tr7zw"
-  name: "FasterGUI"
-  id: "fastergui"
+  name: "Exordium"
+  id: "exordium"
   version: "1.0.0"
   author: "tr7zw"
   dependencies: ""
-  relocationpackage: "dev.tr7zw.fastergui"
+  relocationpackage: "dev.tr7zw.exordium"
   licensename: "LICENSE"
 rootProject:
   template: "."

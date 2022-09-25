@@ -1,0 +1,12 @@
+{
+    "text.exordium.title": "Exordium",
+    "text.exordium.enableGui": "Enabled Gui",
+    "text.exordium.targetFramerateGui": "Framerate Gui",
+    "text.exordium.targetFramerateScreen": "Framerate Screens",
+    "text.exordium.enableScreen": "Enabled Screens",
+    "text.exordium.enableSignBuffering": "Sign Buffering",
+    "text.exordium.enableNametagScreenBuffering": "Enable Nametag Buffering",
+    "text.exordium.targetFPSNameTags": "Framerate Nametags",
+    "text.exordium.enabledGuiAnimationSpeedup": "Speedup On Gui Animations",
+    "text.exordium.targetFPSIngameGuiAnimated": "Framerate Gui Animations"
+  }
