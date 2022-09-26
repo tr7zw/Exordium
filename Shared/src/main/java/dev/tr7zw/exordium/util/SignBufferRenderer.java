@@ -36,6 +36,8 @@ public class SignBufferRenderer {
         cleaner.register(this, new State(guiTarget));
         if(model == null)
             initializeModel();
+        // restore renderlogic
+        Minecraft.getInstance().getMainRenderTarget().bindWrite(true);
     }
     
     public void refreshImage(SignBlockEntity arg, int light) {
