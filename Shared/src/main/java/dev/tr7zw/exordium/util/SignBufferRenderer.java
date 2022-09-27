@@ -80,7 +80,7 @@ public class SignBufferRenderer {
         Matrix4f tmp = RenderSystem.getProjectionMatrix();
         Matrix3f tmpI = RenderSystem.getInverseViewRotationMatrix();
         // set the renderstate to identity matrices
-        RenderSystem.disableCull();
+//        RenderSystem.disableCull();
         RenderSystem.setInverseViewRotationMatrix(Matrix3f.createScaleMatrix(1, 1, 1));
         RenderSystem.setProjectionMatrix(Matrix4f.createTranslateMatrix(0, 0, 0));
         float scale = 1/ExordiumModBase.signSettings.scaleSize;
