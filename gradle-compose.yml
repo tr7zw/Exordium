@@ -4,7 +4,7 @@ replacements:
   group: "dev.tr7zw"
   name: "Exordium"
   id: "exordium"
-  version: "1.0.0"
+  version: "1.0.1"
   author: "tr7zw"
   dependencies: ""
   relocationpackage: "dev.tr7zw.exordium"
