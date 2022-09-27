@@ -40,6 +40,7 @@ public class DelayedRenderCallManager {
         }
         renderCalls.clear();
         if(!nametagRenderCalls.isEmpty()) {
+            Matrix4f backupProjectionMatrix = RenderSystem.getProjectionMatrix();
             NametagScreenBuffer buffer = ExordiumModBase.instance.getNameTagScreenBuffer();
             buffer.bind();
             RenderSystem.setProjectionMatrix(usedProjectionMatrix);
@@ -48,6 +49,7 @@ public class DelayedRenderCallManager {
             }
             buffer.bindEnd();
             nametagRenderCalls.clear();
+            RenderSystem.setProjectionMatrix(backupProjectionMatrix);
         }
     }
     
