@@ -43,4 +43,4 @@ jobs:
 #          curseforge-id: $curseforgeid$
 #          curseforge-token: ${{ secrets.CURSEFORGE_TOKEN }}  
           loaders: fabric
-          files: *Fabric/build/libs/!(*-@(dev|sources|javadoc|all)).jar
+          files: '*Fabric/build/libs/!(*-@(dev|sources|javadoc|all)).jar'
