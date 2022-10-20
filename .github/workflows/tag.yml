@@ -1,6 +1,8 @@
 name: Create Release
 
-on: create
+on: 
+  create:
+    - 'refs/tags/**'
 
 jobs:
   build:
