@@ -35,7 +35,7 @@ jobs:
             FG-Forge/build/libs/*
 
       - name: Publish-Fabric
-      - uses: Kir-Antipov/mc-publish@v3.2
+        uses: Kir-Antipov/mc-publish@v3.2
         with:
           modrinth-id: DynYZEae
           modrinth-token: ${{ secrets.MODRINTH_TOKEN }}
