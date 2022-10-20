@@ -2,21 +2,21 @@ modLoader="javafml"
 loaderVersion="[35,)"
 license="tr7zw Protective License"
 [[mods]]
-modId="entityculling"
-version="1.5.1"
-displayName="EntityCulling"
+modId="exordium"
+version="1.1.0"
+displayName="Exordium"
 authors="tr7zw"
 description='''
-Using async raytracing to hide Tile-/Entities that are hidden behind solid blocks.
+
 '''
-[[dependencies.entityculling]] #optional
+[[dependencies.exordium]] #optional
     modId="forge"
     mandatory=true
     versionRange="[35,)"
     ordering="NONE"
     side="CLIENT"
 # Here's another dependency
-[[dependencies.entityculling]]
+[[dependencies.exordium]]
     modId="minecraft"
     mandatory=true
     versionRange="[1.19,)"
