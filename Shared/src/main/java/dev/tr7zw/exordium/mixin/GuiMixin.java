@@ -16,14 +16,17 @@ import dev.tr7zw.exordium.util.BufferRenderer;
 import net.minecraft.client.AttackIndicatorStatus;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.Gui;
+import net.minecraft.client.gui.GuiComponent;
 import net.minecraft.client.gui.components.ChatComponent;
+import net.minecraft.client.renderer.GameRenderer;
 import net.minecraft.network.chat.Component;
 import net.minecraft.util.Mth;
 
 @Mixin(value= Gui.class, priority = 1500) // higher priority, so it also captures rendering happening at RETURN
-public class GuiMixin {
+public class GuiMixin extends GuiComponent {
     
     private BufferRenderer bufferRenderer = new BufferRenderer();
+    private boolean reRenderCrosshair = false;
     
     @Shadow
     private Minecraft minecraft;
@@ -54,8 +57,15 @@ public class GuiMixin {
             return;
         }
         boolean cancel = bufferRenderer.render();
-        if(cancel)
+        if(cancel) {
+            RenderSystem.setShaderColor(1.0F, 1.0F, 1.0F, 1.0F);
+            RenderSystem.setShader(GameRenderer::getPositionTexShader);
+            RenderSystem.setShaderTexture(0, GUI_ICONS_LOCATION);
+            RenderSystem.enableBlend();
+            renderCrosshair(arg);
+            RenderSystem.defaultBlendFunc();
             ci.cancel();
+        }
     }
     
     @Inject(method = "render", at = @At("RETURN"))
@@ -110,8 +120,30 @@ public class GuiMixin {
             }
         }
         bufferRenderer.renderEnd(1000/targetFps);
+        if(reRenderCrosshair) {
+            reRenderCrosshair = false;
+            RenderSystem.setShaderColor(1.0F, 1.0F, 1.0F, 1.0F);
+            RenderSystem.setShader(GameRenderer::getPositionTexShader);
+            RenderSystem.setShaderTexture(0, GUI_ICONS_LOCATION);
+            RenderSystem.enableBlend();
+            renderCrosshair(arg);
+            RenderSystem.defaultBlendFunc();
+        }
     }
    
+    @Shadow
+    private void renderCrosshair(PoseStack poseStack) {
+        
+    }
+    
+    @Inject(method = "renderCrosshair", at = @At("HEAD"), cancellable = true)
+    private void renderCrosshair(PoseStack poseStack, CallbackInfo ci) {
+        if(ExordiumModBase.instance.config.enabledGui && bufferRenderer.isRendering()) {
+            reRenderCrosshair = true;
+            ci.cancel();
+        }
+    }
+    
     // Fix for Bossbar
     
     @Inject(method = "render", at = @At(value="INVOKE", target = "Lnet/minecraft/client/gui/components/BossHealthOverlay;render(Lcom/mojang/blaze3d/vertex/PoseStack;)V", shift = Shift.BEFORE))
