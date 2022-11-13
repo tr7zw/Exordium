@@ -31,4 +31,3 @@ jobs:
         with:
           files: |
             FG-Fabric/build/libs/*
-            FG-Forge/build/libs/*

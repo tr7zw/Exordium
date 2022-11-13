@@ -14,5 +14,3 @@ rootProject:
 subProjects:
   FG-Fabric:
     template: "Fabric"
-  FG-Forge:
-    template: "Forge"
