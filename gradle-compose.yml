@@ -1,5 +1,5 @@
 version: '0.0.1'
-source: "https://github.com/tr7zw/ForgeFabricComposeTemplate/tree/1.19.2-mcpublish/"
+source: "https://github.com/tr7zw/ForgeFabricComposeTemplate/tree/1.19.2-fabriconly-mcpublish/"
 replacements:
   group: "dev.tr7zw"
   name: "Exordium"
