@@ -101,10 +101,6 @@ public abstract class ExordiumModBase {
                         (b) -> config.enabledGuiAnimationSpeedup = b));
                 options.add(getIntOption("text.exordium.targetFPSIngameGuiAnimated", 30, 120, () -> config.targetFPSIngameGuiAnimated, (v) -> config.targetFPSIngameGuiAnimated = v));
                 
-                options.add(getOnOffOption("text.exordium.enableScreen", () -> config.enabledScreens,
-                        (b) -> config.enabledScreens = b));
-                options.add(getIntOption("text.exordium.targetFramerateScreen", 20, 120, () -> config.targetFPSIngameScreens, (v) -> config.targetFPSIngameScreens = v));
-                
                 options.add(getOnOffOption("text.exordium.enableSignBuffering", () -> config.enableSignBuffering,
                         (b) -> config.enableSignBuffering = b));
 

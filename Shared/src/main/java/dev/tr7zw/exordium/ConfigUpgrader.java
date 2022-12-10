@@ -6,8 +6,14 @@ public class ConfigUpgrader {
         boolean changed = false;
 
         if(config.configVersion <= 1) {
-            config.enabledScreens = false;
             config.configVersion = 2;
+            // set screenBuffering to false
+            changed = true;
+        }
+        
+        if(config.configVersion <= 2) {
+            config.configVersion = 3;
+            // remove screenBuffering
             changed = true;
         }
         

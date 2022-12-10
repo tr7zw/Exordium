@@ -7,7 +7,7 @@ public class Config {
     public int targetFPSIngameGui = 20;
     public boolean enabledGuiAnimationSpeedup = true;
     public int targetFPSIngameGuiAnimated = 60;
-    public boolean enabledScreens = false;
+    public boolean enabledScreensLegacy = false;
     public int targetFPSIngameScreens = 60;
     public boolean enableSignBuffering = true;
     public int targetFPSNameTags = 60;
