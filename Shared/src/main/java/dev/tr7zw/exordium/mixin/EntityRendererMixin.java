@@ -1,5 +1,7 @@
 package dev.tr7zw.exordium.mixin;
 
+import org.joml.Matrix4f;
+import org.joml.Vector3f;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Shadow;
 import org.spongepowered.asm.mixin.injection.At;
@@ -8,8 +10,6 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 
 import com.mojang.blaze3d.vertex.PoseStack;
 import com.mojang.blaze3d.vertex.Tesselator;
-import com.mojang.math.Matrix4f;
-import com.mojang.math.Vector3f;
 
 import dev.tr7zw.exordium.ExordiumModBase;
 import dev.tr7zw.exordium.util.NametagScreenBuffer;
@@ -46,11 +46,11 @@ public class EntityRendererMixin {
                 ci.cancel(); // the buffer is not ready, so the last frame will be used instead
                 return;
             }
-            Matrix4f matrix4f = tmpPoseStack.last().pose().copy();
+            Matrix4f matrix4f = new Matrix4f(tmpPoseStack.last().pose());
             float f = entity.getBbHeight() + 0.5F;
             matrix4f.translate(new Vector3f(0.0f, f, 0.0f));
-            matrix4f.multiply(this.entityRenderDispatcher.cameraOrientation());
-            matrix4f.multiply(Matrix4f.createScaleMatrix(-0.025F, -0.025F, 0.025F));
+            matrix4f.rotate(this.entityRenderDispatcher.cameraOrientation());
+            matrix4f.scale(-0.025F, -0.025F, 0.025F);
             ExordiumModBase.instance.getDelayedRenderCallManager().addNametagRenderCall(() -> {
                 // partial copy of the method to remove the "behind walls" part
                 MultiBufferSource.BufferSource bufferSource = MultiBufferSource

@@ -18,7 +18,7 @@ public class GameRendererMixinHigh {
     @Final
     private Minecraft minecraft;
 
-    @Inject(method = "render(FJZ)V", at = @At(value = "INVOKE", target = "Lnet/minecraft/client/gui/screens/Screen;render(Lcom/mojang/blaze3d/vertex/PoseStack;IIF)V", shift = At.Shift.AFTER, ordinal = 0))
+    @Inject(method = "render(FJZ)V", at = @At(value = "INVOKE", target = "Lnet/minecraft/client/gui/screens/Screen;renderWithTooltip(Lcom/mojang/blaze3d/vertex/PoseStack;IIF)V", shift = At.Shift.AFTER, ordinal = 0))
     public void renderScreenPost(float tickDelta, long startTime, boolean tick, CallbackInfo ci) {
         if(!ExordiumModBase.instance.config.enabledScreens || minecraft.level == null) {
             return;

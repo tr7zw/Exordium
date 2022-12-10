@@ -178,7 +178,7 @@ public class GuiMixin extends GuiComponent {
     
     // Fix for chat breaking the armor bar outline
     
-    @Inject(method = "render", at = @At(value="INVOKE", target = "Lnet/minecraft/client/gui/components/ChatComponent;render(Lcom/mojang/blaze3d/vertex/PoseStack;I)V", shift = Shift.BEFORE))
+    @Inject(method = "render", at = @At(value="INVOKE", target = "Lnet/minecraft/client/gui/components/ChatComponent;render(Lcom/mojang/blaze3d/vertex/PoseStack;III)V", shift = Shift.BEFORE))
     public void renderChat(PoseStack arg, float g, CallbackInfo ci) {
         if(!ExordiumModBase.instance.config.enabledGui)
             return;
@@ -186,7 +186,7 @@ public class GuiMixin extends GuiComponent {
         ExordiumModBase.setForceBlend(true);
     }
     
-    @Inject(method = "render", at = @At(value="INVOKE", target = "Lnet/minecraft/client/gui/components/ChatComponent;render(Lcom/mojang/blaze3d/vertex/PoseStack;I)V", shift = Shift.AFTER))
+    @Inject(method = "render", at = @At(value="INVOKE", target = "Lnet/minecraft/client/gui/components/ChatComponent;render(Lcom/mojang/blaze3d/vertex/PoseStack;III)V", shift = Shift.AFTER))
     public void renderChatEnd(PoseStack arg, float g, CallbackInfo ci) {
         ExordiumModBase.setForceBlend(false);
         RenderSystem.defaultBlendFunc();

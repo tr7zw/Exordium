@@ -1,10 +1,11 @@
 package dev.tr7zw.exordium.util;
 
+import org.joml.Vector3f;
+
 import com.mojang.blaze3d.pipeline.RenderTarget;
 import com.mojang.blaze3d.pipeline.TextureTarget;
 import com.mojang.blaze3d.platform.GlStateManager;
 import com.mojang.blaze3d.systems.RenderSystem;
-import com.mojang.math.Vector3f;
 
 import dev.tr7zw.exordium.ExordiumModBase;
 import dev.tr7zw.exordium.util.Model.Vector2f;

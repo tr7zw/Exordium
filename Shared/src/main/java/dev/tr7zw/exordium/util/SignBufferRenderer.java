@@ -2,6 +2,11 @@ package dev.tr7zw.exordium.util;
 
 import java.lang.ref.Cleaner;
 import java.util.List;
+
+import org.joml.Matrix3f;
+import org.joml.Matrix4f;
+import org.joml.Vector3f;
+
 import com.mojang.blaze3d.pipeline.RenderTarget;
 import com.mojang.blaze3d.pipeline.TextureTarget;
 import com.mojang.blaze3d.platform.GlStateManager;
@@ -9,9 +14,6 @@ import com.mojang.blaze3d.platform.NativeImage;
 import com.mojang.blaze3d.systems.RenderSystem;
 import com.mojang.blaze3d.vertex.PoseStack;
 import com.mojang.blaze3d.vertex.Tesselator;
-import com.mojang.math.Matrix3f;
-import com.mojang.math.Matrix4f;
-import com.mojang.math.Vector3f;
 
 import dev.tr7zw.exordium.ExordiumModBase;
 import dev.tr7zw.exordium.util.Model.Vector2f;
@@ -21,6 +23,7 @@ import net.minecraft.client.renderer.MultiBufferSource;
 import net.minecraft.util.FormattedCharSequence;
 import net.minecraft.world.item.DyeColor;
 import net.minecraft.world.level.block.entity.SignBlockEntity;
+import net.minecraft.world.phys.Vec3;
 
 public class SignBufferRenderer {
 
@@ -67,8 +70,16 @@ public class SignBufferRenderer {
         model = new Model(modelData, uvData);
     }
 
+    Vec3 getTextOffset(float f) {
+        return new Vec3(0.0D, (0.5F * f), (0.07F * f));
+    }
+    
     public void render(PoseStack poseStack, int light) {
         poseStack.pushPose();
+        float g = 0.015625F * 0.6666667F;
+        Vec3 vec3 = getTextOffset(0.6666667F);
+        poseStack.translate(vec3.x, vec3.y, vec3.z);
+        poseStack.scale(g, -g, g);
         poseStack.translate(ExordiumModBase.signSettings.offsetX , ExordiumModBase.signSettings.offsetY, 0);
         RenderSystem.depthMask(true);
         RenderSystem.enableDepthTest();
@@ -93,11 +104,11 @@ public class SignBufferRenderer {
         Matrix3f tmpI = RenderSystem.getInverseViewRotationMatrix();
         // set the renderstate to identity matrices
 //        RenderSystem.disableCull();
-        RenderSystem.setInverseViewRotationMatrix(Matrix3f.createScaleMatrix(1, 1, 1));
-        RenderSystem.setProjectionMatrix(Matrix4f.createTranslateMatrix(0, 0, 0));
+        RenderSystem.setInverseViewRotationMatrix(new Matrix3f());
+        RenderSystem.setProjectionMatrix(new Matrix4f());
         float scale = 1/ExordiumModBase.signSettings.scaleSize;
         // matrix used for the text
-        Matrix4f matrix4f = Matrix4f.createScaleMatrix(scale, -scale, scale);
+        Matrix4f matrix4f = new Matrix4f().m00(scale).m11(-scale).m22(scale).m33(1);//Matrix4f.createScaleMatrix(scale, -scale, scale);
         int n;
         boolean bl;
         int o;
