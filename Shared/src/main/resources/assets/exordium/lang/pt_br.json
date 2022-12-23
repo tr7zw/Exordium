@@ -1,0 +1,12 @@
+{
+    "text.exordium.title": "Exordium",
+    "text.exordium.enableGui": "GUI ativado",
+    "text.exordium.targetFramerateGui": "GUI de taxa de quadros",
+    "text.exordium.targetFramerateScreen": "Taxa de quadros nas telas",
+    "text.exordium.enableScreen": "Telas habilitadas",
+    "text.exordium.enableSignBuffering": "Buffer de Placa",
+    "text.exordium.enableNametagScreenBuffering": "Habilitar Nometags Buffering",
+    "text.exordium.targetFPSNameTags": "Nometags FPS",
+    "text.exordium.enabledGuiAnimationSpeedup": "Aceleração nas animações na GUI",
+    "text.exordium.targetFPSIngameGuiAnimated": "Animações da GUI FPS"
+  }
