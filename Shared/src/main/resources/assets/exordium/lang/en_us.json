@@ -1,12 +1,17 @@
 {
     "text.exordium.title": "Exordium",
     "text.exordium.enableGui": "Enabled Gui",
+    "text.exordium.enableGui.tooltip": "Enable/Disable buffering the ingame gui/hud",
     "text.exordium.targetFramerateGui": "Framerate Gui",
-    "text.exordium.targetFramerateScreen": "Framerate Screens",
-    "text.exordium.enableScreen": "Enabled Screens",
+    "text.exordium.targetFramerateGui.tooltip": "The target framerate for the ingame gui/hud",
     "text.exordium.enableSignBuffering": "Sign Buffering",
+    "text.exordium.enableSignBuffering.tooltip": "Enable/Disable buffering sign text",
     "text.exordium.enableNametagScreenBuffering": "Enable Nametag Buffering",
+    "text.exordium.enableNametagScreenBuffering.tooltip": "Enable/Disable buffering nametags on the screen",
     "text.exordium.targetFPSNameTags": "Framerate Nametags",
+    "text.exordium.targetFPSNameTags.tooltip": "The target framerate for nametags on the screen",
     "text.exordium.enabledGuiAnimationSpeedup": "Speedup On Gui Animations",
-    "text.exordium.targetFPSIngameGuiAnimated": "Framerate Gui Animations"
+    "text.exordium.enabledGuiAnimationSpeedup.tooltip": "Enable/Disable speeding up during gui animations",
+    "text.exordium.targetFPSIngameGuiAnimated": "Framerate Gui Animations",
+    "text.exordium.targetFPSIngameGuiAnimated.tooltip": "The target framerate for gui animations"
   }
