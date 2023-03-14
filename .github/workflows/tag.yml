@@ -1,9 +1,7 @@
 name: Create Release
-
 on:
   release:
     types: [published]
-
 jobs:
   build:
     runs-on: ubuntu-latest
@@ -23,14 +21,30 @@ jobs:
         with:
           files: |
             FG-Fabric/build/libs/*
-
+      - name: Publish-Forge-Curseforge
+        uses: Kir-Antipov/mc-publish@v3.2
+        with:
+          curseforge-id: $curseforgeid$
+          curseforge-token: ${{ secrets.CURSEFORGE_TOKEN }}  
+          loaders: forge
+          name: ${{github.ref_name}} - Forge
+          version-type: beta
+          files: '*Forge/build/libs/!(*-@(dev|sources|javadoc|all)).jar'
+      - name: Publish-Forge-Modrinth
+        uses: Kir-Antipov/mc-publish@v3.2
+        with:
+          modrinth-id: DynYZEae
+          modrinth-token: ${{ secrets.MODRINTH_TOKEN }}
+          loaders: forge
+          name: ${{github.ref_name}} - Forge
+          files: '*Forge/build/libs/!(*-@(dev|sources|javadoc|all)).jar'
       - name: Publish-Fabric
         uses: Kir-Antipov/mc-publish@v3.2
         with:
           modrinth-id: DynYZEae
           modrinth-token: ${{ secrets.MODRINTH_TOKEN }}
-
           curseforge-id: $curseforgeid$
           curseforge-token: ${{ secrets.CURSEFORGE_TOKEN }}  
           loaders: fabric
+          name: ${{github.ref_name}} - Fabric
           files: '*Fabric/build/libs/!(*-@(dev|sources|javadoc|all)).jar'
