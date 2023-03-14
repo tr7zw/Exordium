@@ -13,7 +13,6 @@ replacements:
 enabledFlags:
   - autopublish
   - publishFabric
-  - publishForge
   - modrinth
   - curseforge
 rootProject:
