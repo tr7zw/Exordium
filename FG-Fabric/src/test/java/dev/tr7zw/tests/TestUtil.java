@@ -91,6 +91,10 @@ public class TestUtil {
                 return null;
             }
 
+            @Override
+            public String getOrDefault(String paramString1, String paramString2) {
+                return (String) storage.getOrDefault(paramString1, paramString2);
+            }
         };
     }
     

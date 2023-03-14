@@ -10,7 +10,6 @@ import org.joml.Vector3f;
 import com.mojang.blaze3d.pipeline.RenderTarget;
 import com.mojang.blaze3d.pipeline.TextureTarget;
 import com.mojang.blaze3d.platform.GlStateManager;
-import com.mojang.blaze3d.platform.NativeImage;
 import com.mojang.blaze3d.systems.RenderSystem;
 import com.mojang.blaze3d.vertex.PoseStack;
 import com.mojang.blaze3d.vertex.Tesselator;
@@ -18,8 +17,10 @@ import com.mojang.blaze3d.vertex.Tesselator;
 import dev.tr7zw.exordium.ExordiumModBase;
 import dev.tr7zw.exordium.util.Model.Vector2f;
 import net.minecraft.client.Minecraft;
+import net.minecraft.client.gui.Font;
 import net.minecraft.client.renderer.GameRenderer;
 import net.minecraft.client.renderer.MultiBufferSource;
+import net.minecraft.util.FastColor;
 import net.minecraft.util.FormattedCharSequence;
 import net.minecraft.world.item.DyeColor;
 import net.minecraft.world.level.block.entity.SignBlockEntity;
@@ -135,7 +136,7 @@ public class SignBufferRenderer {
                         o);
             } else {
                 minecraft.font.drawInBatch(formattedCharSequence, (-28 + q), (p * 10 - 20), n, false, matrix4f, bufferSource,
-                        false, 0, o);
+                        Font.DisplayMode.NORMAL, 0, o);
             }
         }   
         bufferSource.endBatch(); // force clear the vertex consumer
@@ -145,15 +146,14 @@ public class SignBufferRenderer {
         RenderSystem.setInverseViewRotationMatrix(tmpI);
     }
     
-    private static int getDarkColor(SignBlockEntity arg) {
-        int i = arg.getColor().getTextColor();
-        double d = 0.4D;
-        int j = (int) (NativeImage.getR(i) * d);
-        int k = (int) (NativeImage.getG(i) * d);
-        int l = (int) (NativeImage.getB(i) * d);
-        if (i == DyeColor.BLACK.getTextColor() && arg.hasGlowingText())
+    private static int getDarkColor(SignBlockEntity signBlockEntity) {
+        int i = signBlockEntity.getColor().getTextColor();
+        if (i == DyeColor.BLACK.getTextColor() && signBlockEntity.hasGlowingText())
             return -988212;
-        return NativeImage.combine(0, l, k, j);
+        int j = (int) (FastColor.ARGB32.red(i) * 0.4D);
+        int k = (int) (FastColor.ARGB32.green(i) * 0.4D);
+        int l = (int) (FastColor.ARGB32.blue(i) * 0.4D);
+        return FastColor.ARGB32.color(0, j, k, l);
     }
 
     static class State implements Runnable {

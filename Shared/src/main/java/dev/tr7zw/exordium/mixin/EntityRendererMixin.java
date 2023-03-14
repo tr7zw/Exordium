@@ -58,7 +58,7 @@ public class EntityRendererMixin {
                 float h = (-font.width(component) / 2);
                 float g = (Minecraft.getInstance()).options.getBackgroundOpacity(0.25F);
                 int k = (int) (g * 255.0F) << 24;
-                font.drawInBatch(component, h, 0, -1, false, matrix4f, bufferSource, true, k, i);
+                font.drawInBatch(component, h, 0, -1, false, matrix4f, bufferSource, Font.DisplayMode.NORMAL, k, i);
                 bufferSource.endBatch();
 
             });

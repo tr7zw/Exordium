@@ -1,5 +1,5 @@
 version: '0.0.2'
-source: "https://github.com/tr7zw/ModComposeTemplate/tree/1.19.3"
+source: "https://github.com/tr7zw/ModComposeTemplate/tree/1.19.4"
 replacements:
   group: "dev.tr7zw"
   name: "Exordium"
