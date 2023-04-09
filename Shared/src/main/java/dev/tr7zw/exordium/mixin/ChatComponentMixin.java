@@ -72,7 +72,6 @@ public abstract class ChatComponentMixin {
             ci.cancel();
             return;
         }
-        System.out.println("Rendering chat");
     }
     
     @Inject(method = "render", at = @At("RETURN"))
