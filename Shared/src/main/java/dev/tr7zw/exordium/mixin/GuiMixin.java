@@ -11,7 +11,6 @@ import com.mojang.blaze3d.systems.RenderSystem;
 import com.mojang.blaze3d.vertex.PoseStack;
 
 import dev.tr7zw.exordium.ExordiumModBase;
-import dev.tr7zw.exordium.access.ChatAccess;
 import dev.tr7zw.exordium.util.BufferRenderer;
 import net.minecraft.client.AttackIndicatorStatus;
 import net.minecraft.client.Minecraft;
@@ -102,10 +101,10 @@ public class GuiMixin extends GuiComponent {
                 }
             }
             // Chat
-            ChatAccess chatAccess = (ChatAccess) chat;
-            if(chatAccess.hasActiveAnimations(tickCount)) {
-                targetFps = ExordiumModBase.instance.config.targetFPSIngameGuiAnimated;
-            }
+//            ChatAccess chatAccess = (ChatAccess) chat;
+//            if(chatAccess.hasActiveAnimations(tickCount)) {
+//                targetFps = ExordiumModBase.instance.config.targetFPSIngameGuiAnimated;
+//            }
             // Overlaymessage "Actionbar"
             if (this.overlayMessageString != null && this.overlayMessageTime > 0) {
                 this.minecraft.getProfiler().push("overlayMessage");

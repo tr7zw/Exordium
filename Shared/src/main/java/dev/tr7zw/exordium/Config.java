@@ -12,5 +12,11 @@ public class Config {
     public boolean enableSignBuffering = true;
     public int targetFPSNameTags = 60;
     public boolean enableNametagScreenBuffering = false;
+    public ComponentSettings chatSettings = new ComponentSettings();
+    
+    public class ComponentSettings {
+        public boolean enabled = true;
+        public int maxFps = 20;
+    }
     
 }

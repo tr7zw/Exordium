@@ -4,14 +4,20 @@ import java.util.List;
 
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Shadow;
+import org.spongepowered.asm.mixin.injection.At;
+import org.spongepowered.asm.mixin.injection.Inject;
+import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 
-import dev.tr7zw.exordium.access.ChatAccess;
+import com.mojang.blaze3d.vertex.PoseStack;
+
+import dev.tr7zw.exordium.ExordiumModBase;
+import dev.tr7zw.exordium.util.BufferedComponent;
 import net.minecraft.client.GuiMessage;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.components.ChatComponent;
 
 @Mixin(ChatComponent.class)
-public abstract class ChatComponentMixin implements ChatAccess {
+public abstract class ChatComponentMixin {
 
     @Shadow
     private Minecraft minecraft;
@@ -20,12 +26,32 @@ public abstract class ChatComponentMixin implements ChatAccess {
     @Shadow
     private int chatScrollbarPos;
     
-    @Override
-    public boolean hasActiveAnimations(int i) {
-        if (isChatHidden())
-            return false;
-        if(isChatFocused())
-            return false;
+    private int lastScrollbarPos = 0;
+    private int messageCount = 0;
+    private boolean wasFocused = false;
+    
+    boolean outdated = false;
+    
+    private BufferedComponent bufferedComponent = new BufferedComponent(ExordiumModBase.instance.config.chatSettings) {
+        
+        @Override
+        public boolean needsRender() {
+            return outdated;
+        }
+
+        @Override
+        public void captureState() {
+            lastScrollbarPos = chatScrollbarPos;
+            messageCount = trimmedMessages.size();
+            wasFocused = isChatFocused();
+        }
+    };
+    
+    public boolean hasChanged(int i) {
+        boolean changed = chatScrollbarPos != lastScrollbarPos || messageCount != trimmedMessages.size() || isChatFocused() != wasFocused;
+        if(changed) {
+            return true;
+        }
         int j = getLinesPerPage();
         for (int o = 0; o + this.chatScrollbarPos < this.trimmedMessages.size() && o < j; o++) {
             GuiMessage.Line guiMessage = this.trimmedMessages.get(o + this.chatScrollbarPos);
@@ -37,6 +63,21 @@ public abstract class ChatComponentMixin implements ChatAccess {
             }
         }
         return false;
+    }
+    
+    @Inject(method = "render", at = @At("HEAD"), cancellable = true)
+    public void render(PoseStack poseStack, int tickCount, int j, int k, CallbackInfo ci) {
+        outdated = hasChanged(tickCount);
+        if(bufferedComponent.render()) {
+            ci.cancel();
+            return;
+        }
+        System.out.println("Rendering chat");
+    }
+    
+    @Inject(method = "render", at = @At("RETURN"))
+    public void renderEnd(PoseStack poseStack, int tickCount, int j, int k, CallbackInfo ci) {
+        bufferedComponent.renderEnd();
     }
 
     @Shadow
