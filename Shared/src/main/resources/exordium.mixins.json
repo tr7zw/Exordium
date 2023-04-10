@@ -18,7 +18,8 @@
     "EntityRendererMixin",
     "MinecraftMixin",
     "DebugScreenOverlayMixin",
-    "ChatComponentMixin"
+    "ChatComponentMixin",
+    "GuiHotbarMixin"
   ],
   "injectors": {
     "defaultRequire": 1

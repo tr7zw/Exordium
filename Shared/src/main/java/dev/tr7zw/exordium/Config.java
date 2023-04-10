@@ -14,6 +14,7 @@ public class Config {
     public boolean enableNametagScreenBuffering = false;
     public ComponentSettings chatSettings = new ComponentSettings(true, 20);
     public ComponentSettings debugScreenSettings = new ComponentSettings(true, 10);
+    public ComponentSettings hotbarSettings = new ComponentSettings(true, 20);
     
     public class ComponentSettings {
         public boolean enabled = true;

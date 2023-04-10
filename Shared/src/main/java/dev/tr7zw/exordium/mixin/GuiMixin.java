@@ -50,26 +50,26 @@ public class GuiMixin extends GuiComponent {
     @Shadow
     private int toolHighlightTimer;
     
-    @Inject(method = "render", at = @At(value="INVOKE", target = "Lnet/minecraft/client/Minecraft;getDeltaFrameTime()F"), cancellable = true)
-    public void render(PoseStack arg, float g, CallbackInfo ci) {
-        if(!ExordiumModBase.instance.config.enabledGui) {
-            return;
-        }
-        boolean cancel = bufferRenderer.render();
-        if(cancel) {
-            RenderSystem.setShaderColor(1.0F, 1.0F, 1.0F, 1.0F);
-            RenderSystem.setShader(GameRenderer::getPositionTexShader);
-            RenderSystem.setShaderTexture(0, GUI_ICONS_LOCATION);
-            RenderSystem.enableBlend();
-            renderCrosshair(arg);
-            RenderSystem.defaultBlendFunc();
-            ci.cancel();
-        }
-    }
+//    @Inject(method = "render", at = @At(value="INVOKE", target = "Lnet/minecraft/client/Minecraft;getDeltaFrameTime()F"), cancellable = true)
+//    public void render(PoseStack arg, float g, CallbackInfo ci) {
+//        if(!ExordiumModBase.instance.config.enabledGui) {
+//            return;
+//        }
+//        boolean cancel = bufferRenderer.render();
+//        if(cancel) {
+//            RenderSystem.setShaderColor(1.0F, 1.0F, 1.0F, 1.0F);
+//            RenderSystem.setShader(GameRenderer::getPositionTexShader);
+//            RenderSystem.setShaderTexture(0, GUI_ICONS_LOCATION);
+//            RenderSystem.enableBlend();
+//            renderCrosshair(arg);
+//            RenderSystem.defaultBlendFunc();
+//            ci.cancel();
+//        }
+//    }
     
     @Inject(method = "render", at = @At("RETURN"))
     public void renderEnd(PoseStack arg, float f, CallbackInfo ci) {
-        if(!ExordiumModBase.instance.config.enabledGui) {
+        if(true){//!ExordiumModBase.instance.config.enabledGui) {
             return;
         }
         int targetFps = ExordiumModBase.instance.config.targetFPSIngameGui;
