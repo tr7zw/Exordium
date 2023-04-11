@@ -19,7 +19,8 @@
     "MinecraftMixin",
     "DebugScreenOverlayMixin",
     "ChatComponentMixin",
-    "GuiHotbarMixin"
+    "GuiHotbarMixin",
+    "ExperienceMixin"
   ],
   "injectors": {
     "defaultRequire": 1

@@ -110,7 +110,6 @@ public class GuiHotbarMixin {
         outdated = hasChanged();
         if (bufferedComponent.render()) {
             ci.cancel();
-            return;
         }
     }
 

@@ -67,160 +67,160 @@ public class GuiMixin extends GuiComponent {
 //        }
 //    }
     
-    @Inject(method = "render", at = @At("RETURN"))
-    public void renderEnd(PoseStack arg, float f, CallbackInfo ci) {
-        if(true){//!ExordiumModBase.instance.config.enabledGui) {
-            return;
-        }
-        int targetFps = ExordiumModBase.instance.config.targetFPSIngameGui;
-        if(ExordiumModBase.instance.config.enabledGuiAnimationSpeedup) {
-            // Item name tooltip
-            if(toolHighlightTimer > 0 && toolHighlightTimer < 15) {
-                targetFps = ExordiumModBase.instance.config.targetFPSIngameGuiAnimated;
-            }
-            // title/subtitle
-            if (this.title != null && this.titleTime > 0) {
-                int m = 255;
-                float j = this.titleTime - f;
-                if (this.titleTime > this.titleFadeOutTime + this.titleStayTime) {
-                    float p = (this.titleFadeInTime + this.titleStayTime + this.titleFadeOutTime) - j;
-                    m = (int) (p * 255.0F / this.titleFadeInTime);
-                }
-                if (this.titleTime <= this.titleFadeOutTime)
-                    m = (int) (j * 255.0F / this.titleFadeOutTime);
-                m = Mth.clamp(m, 0, 255);
-                if (m != 255) {
-                    targetFps = ExordiumModBase.instance.config.targetFPSIngameGuiAnimated;
-                }
-            }
-            // Attack indicator
-            if (this.minecraft.options.attackIndicator().get() == AttackIndicatorStatus.CROSSHAIR) {
-                float j = this.minecraft.player.getAttackStrengthScale(0.0F);
-                if(j < 1.0F) {
-                    targetFps = ExordiumModBase.instance.config.targetFPSIngameGuiAnimated;
-                }
-            }
-            // Chat
-//            ChatAccess chatAccess = (ChatAccess) chat;
-//            if(chatAccess.hasActiveAnimations(tickCount)) {
+//    @Inject(method = "render", at = @At("RETURN"))
+//    public void renderEnd(PoseStack arg, float f, CallbackInfo ci) {
+//        if(true){//!ExordiumModBase.instance.config.enabledGui) {
+//            return;
+//        }
+//        int targetFps = ExordiumModBase.instance.config.targetFPSIngameGui;
+//        if(ExordiumModBase.instance.config.enabledGuiAnimationSpeedup) {
+//            // Item name tooltip
+//            if(toolHighlightTimer > 0 && toolHighlightTimer < 15) {
 //                targetFps = ExordiumModBase.instance.config.targetFPSIngameGuiAnimated;
 //            }
-            // Overlaymessage "Actionbar"
-            if (this.overlayMessageString != null && this.overlayMessageTime > 0) {
-                this.minecraft.getProfiler().push("overlayMessage");
-                float timerj = this.overlayMessageTime - f;
-                int m = (int) (timerj * 255.0F / 20.0F);
-                if (m > 255)
-                    m = 255;
-                if (m > 8 && m != 255) {
-                    targetFps = ExordiumModBase.instance.config.targetFPSIngameGuiAnimated;
-                }
-                this.minecraft.getProfiler().pop();
-            }
-        }
-        bufferRenderer.renderEnd(1000/targetFps);
-        if(reRenderCrosshair) {
-            reRenderCrosshair = false;
-            RenderSystem.setShaderColor(1.0F, 1.0F, 1.0F, 1.0F);
-            RenderSystem.setShader(GameRenderer::getPositionTexShader);
-            RenderSystem.setShaderTexture(0, GUI_ICONS_LOCATION);
-            RenderSystem.enableBlend();
-            renderCrosshair(arg);
-            RenderSystem.defaultBlendFunc();
-        }
-    }
-   
-    @Shadow
-    private void renderCrosshair(PoseStack poseStack) {
-        
-    }
-    
-    @Inject(method = "renderCrosshair", at = @At("HEAD"), cancellable = true)
-    private void renderCrosshair(PoseStack poseStack, CallbackInfo ci) {
-        if(ExordiumModBase.instance.config.enabledGui && bufferRenderer.isRendering()) {
-            reRenderCrosshair = true;
-            ci.cancel();
-        }
-    }
-    
-    // Fix for Bossbar
-    
-    @Inject(method = "render", at = @At(value="INVOKE", target = "Lnet/minecraft/client/gui/components/BossHealthOverlay;render(Lcom/mojang/blaze3d/vertex/PoseStack;)V", shift = Shift.BEFORE))
-    public void renderBossbar(PoseStack arg, float g, CallbackInfo ci) {
-        if(!ExordiumModBase.instance.config.enabledGui)
-            return;
-        ExordiumModBase.correctBlendMode();
-        ExordiumModBase.setForceBlend(true);
-    }
-    
-    @Inject(method = "render", at = @At(value="INVOKE", target = "Lnet/minecraft/client/gui/components/BossHealthOverlay;render(Lcom/mojang/blaze3d/vertex/PoseStack;)V", shift = Shift.AFTER))
-    public void renderBossbarEnd(PoseStack arg, float g, CallbackInfo ci) {
-        ExordiumModBase.setForceBlend(false);
-        RenderSystem.defaultBlendFunc();
-    }
-    
-    
-    // Fix for AppleSkin
-    
-    @Inject(method = "renderPlayerHealth", at = @At("HEAD"))
-    private void renderPlayerHealth(PoseStack poseStack, CallbackInfo ci) {
-        if(!ExordiumModBase.instance.config.enabledGui)
-            return;
-        ExordiumModBase.correctBlendMode();
-        ExordiumModBase.setForceBlend(true);
-    }
-    
-    @Inject(method = "renderPlayerHealth", at = @At("RETURN"))
-    private void renderPlayerHealthReturn(PoseStack poseStack, CallbackInfo ci) {
-        ExordiumModBase.setForceBlend(false);
-    }
-    
-    // Fix for chat breaking the armor bar outline
-    
-    @Inject(method = "render", at = @At(value="INVOKE", target = "Lnet/minecraft/client/gui/components/ChatComponent;render(Lcom/mojang/blaze3d/vertex/PoseStack;III)V", shift = Shift.BEFORE))
-    public void renderChat(PoseStack arg, float g, CallbackInfo ci) {
-        if(!ExordiumModBase.instance.config.enabledGui)
-            return;
-        ExordiumModBase.correctBlendMode();
-        ExordiumModBase.setForceBlend(true);
-    }
-    
-    @Inject(method = "render", at = @At(value="INVOKE", target = "Lnet/minecraft/client/gui/components/ChatComponent;render(Lcom/mojang/blaze3d/vertex/PoseStack;III)V", shift = Shift.AFTER))
-    public void renderChatEnd(PoseStack arg, float g, CallbackInfo ci) {
-        ExordiumModBase.setForceBlend(false);
-        RenderSystem.defaultBlendFunc();
-    }
-    
-    // Fix for tablist
-    
-    @Inject(method = "render", at = @At(value="INVOKE", target = "Lnet/minecraft/client/gui/components/PlayerTabOverlay;render(Lcom/mojang/blaze3d/vertex/PoseStack;ILnet/minecraft/world/scores/Scoreboard;Lnet/minecraft/world/scores/Objective;)V", shift = Shift.BEFORE))
-    public void renderTab(PoseStack arg, float g, CallbackInfo ci) {
-        if(!ExordiumModBase.instance.config.enabledGui)
-            return;
-        ExordiumModBase.correctBlendMode();
-        ExordiumModBase.setForceBlend(true);
-    }
-    
-    @Inject(method = "render", at = @At(value="INVOKE", target = "Lnet/minecraft/client/gui/components/PlayerTabOverlay;render(Lcom/mojang/blaze3d/vertex/PoseStack;ILnet/minecraft/world/scores/Scoreboard;Lnet/minecraft/world/scores/Objective;)V", shift = Shift.AFTER))
-    public void renderTabEnd(PoseStack arg, float g, CallbackInfo ci) {
-        ExordiumModBase.setForceBlend(false);
-        RenderSystem.defaultBlendFunc();
-    }
-    
-    // Fix Scoreboard overlapping with overlays like spyglass
-    
-    @Inject(method = "render", at = @At(value="INVOKE", target = "Lnet/minecraft/client/gui/Gui;displayScoreboardSidebar(Lcom/mojang/blaze3d/vertex/PoseStack;Lnet/minecraft/world/scores/Objective;)V", shift = Shift.BEFORE))
-    private void displayScoreboardSidebarBefore(PoseStack arg, float g, CallbackInfo ci) {
-        if(!ExordiumModBase.instance.config.enabledGui)
-            return;
-        ExordiumModBase.correctBlendMode();
-        ExordiumModBase.setForceBlend(true);
-    }
-    
-    @Inject(method = "render", at = @At(value="INVOKE", target = "Lnet/minecraft/client/gui/Gui;displayScoreboardSidebar(Lcom/mojang/blaze3d/vertex/PoseStack;Lnet/minecraft/world/scores/Objective;)V", shift = Shift.AFTER))
-    private void displayScoreboardSidebarAfter(PoseStack arg, float g, CallbackInfo ci) {
-        ExordiumModBase.setForceBlend(false);
-        RenderSystem.defaultBlendFunc();
-    }
+//            // title/subtitle
+//            if (this.title != null && this.titleTime > 0) {
+//                int m = 255;
+//                float j = this.titleTime - f;
+//                if (this.titleTime > this.titleFadeOutTime + this.titleStayTime) {
+//                    float p = (this.titleFadeInTime + this.titleStayTime + this.titleFadeOutTime) - j;
+//                    m = (int) (p * 255.0F / this.titleFadeInTime);
+//                }
+//                if (this.titleTime <= this.titleFadeOutTime)
+//                    m = (int) (j * 255.0F / this.titleFadeOutTime);
+//                m = Mth.clamp(m, 0, 255);
+//                if (m != 255) {
+//                    targetFps = ExordiumModBase.instance.config.targetFPSIngameGuiAnimated;
+//                }
+//            }
+//            // Attack indicator
+//            if (this.minecraft.options.attackIndicator().get() == AttackIndicatorStatus.CROSSHAIR) {
+//                float j = this.minecraft.player.getAttackStrengthScale(0.0F);
+//                if(j < 1.0F) {
+//                    targetFps = ExordiumModBase.instance.config.targetFPSIngameGuiAnimated;
+//                }
+//            }
+//            // Chat
+////            ChatAccess chatAccess = (ChatAccess) chat;
+////            if(chatAccess.hasActiveAnimations(tickCount)) {
+////                targetFps = ExordiumModBase.instance.config.targetFPSIngameGuiAnimated;
+////            }
+//            // Overlaymessage "Actionbar"
+//            if (this.overlayMessageString != null && this.overlayMessageTime > 0) {
+//                this.minecraft.getProfiler().push("overlayMessage");
+//                float timerj = this.overlayMessageTime - f;
+//                int m = (int) (timerj * 255.0F / 20.0F);
+//                if (m > 255)
+//                    m = 255;
+//                if (m > 8 && m != 255) {
+//                    targetFps = ExordiumModBase.instance.config.targetFPSIngameGuiAnimated;
+//                }
+//                this.minecraft.getProfiler().pop();
+//            }
+//        }
+//        bufferRenderer.renderEnd(1000/targetFps);
+//        if(reRenderCrosshair) {
+//            reRenderCrosshair = false;
+//            RenderSystem.setShaderColor(1.0F, 1.0F, 1.0F, 1.0F);
+//            RenderSystem.setShader(GameRenderer::getPositionTexShader);
+//            RenderSystem.setShaderTexture(0, GUI_ICONS_LOCATION);
+//            RenderSystem.enableBlend();
+//            renderCrosshair(arg);
+//            RenderSystem.defaultBlendFunc();
+//        }
+//    }
+//   
+//    @Shadow
+//    private void renderCrosshair(PoseStack poseStack) {
+//        
+//    }
+//    
+//    @Inject(method = "renderCrosshair", at = @At("HEAD"), cancellable = true)
+//    private void renderCrosshair(PoseStack poseStack, CallbackInfo ci) {
+//        if(ExordiumModBase.instance.config.enabledGui && bufferRenderer.isRendering()) {
+//            reRenderCrosshair = true;
+//            ci.cancel();
+//        }
+//    }
+//    
+//    // Fix for Bossbar
+//    
+//    @Inject(method = "render", at = @At(value="INVOKE", target = "Lnet/minecraft/client/gui/components/BossHealthOverlay;render(Lcom/mojang/blaze3d/vertex/PoseStack;)V", shift = Shift.BEFORE))
+//    public void renderBossbar(PoseStack arg, float g, CallbackInfo ci) {
+//        if(!ExordiumModBase.instance.config.enabledGui)
+//            return;
+//        ExordiumModBase.correctBlendMode();
+//        ExordiumModBase.setForceBlend(true);
+//    }
+//    
+//    @Inject(method = "render", at = @At(value="INVOKE", target = "Lnet/minecraft/client/gui/components/BossHealthOverlay;render(Lcom/mojang/blaze3d/vertex/PoseStack;)V", shift = Shift.AFTER))
+//    public void renderBossbarEnd(PoseStack arg, float g, CallbackInfo ci) {
+//        ExordiumModBase.setForceBlend(false);
+//        RenderSystem.defaultBlendFunc();
+//    }
+//    
+//    
+//    // Fix for AppleSkin
+//    
+//    @Inject(method = "renderPlayerHealth", at = @At("HEAD"))
+//    private void renderPlayerHealth(PoseStack poseStack, CallbackInfo ci) {
+//        if(!ExordiumModBase.instance.config.enabledGui)
+//            return;
+//        ExordiumModBase.correctBlendMode();
+//        ExordiumModBase.setForceBlend(true);
+//    }
+//    
+//    @Inject(method = "renderPlayerHealth", at = @At("RETURN"))
+//    private void renderPlayerHealthReturn(PoseStack poseStack, CallbackInfo ci) {
+//        ExordiumModBase.setForceBlend(false);
+//    }
+//    
+//    // Fix for chat breaking the armor bar outline
+//    
+//    @Inject(method = "render", at = @At(value="INVOKE", target = "Lnet/minecraft/client/gui/components/ChatComponent;render(Lcom/mojang/blaze3d/vertex/PoseStack;III)V", shift = Shift.BEFORE))
+//    public void renderChat(PoseStack arg, float g, CallbackInfo ci) {
+//        if(!ExordiumModBase.instance.config.enabledGui)
+//            return;
+//        ExordiumModBase.correctBlendMode();
+//        ExordiumModBase.setForceBlend(true);
+//    }
+//    
+//    @Inject(method = "render", at = @At(value="INVOKE", target = "Lnet/minecraft/client/gui/components/ChatComponent;render(Lcom/mojang/blaze3d/vertex/PoseStack;III)V", shift = Shift.AFTER))
+//    public void renderChatEnd(PoseStack arg, float g, CallbackInfo ci) {
+//        ExordiumModBase.setForceBlend(false);
+//        RenderSystem.defaultBlendFunc();
+//    }
+//    
+//    // Fix for tablist
+//    
+//    @Inject(method = "render", at = @At(value="INVOKE", target = "Lnet/minecraft/client/gui/components/PlayerTabOverlay;render(Lcom/mojang/blaze3d/vertex/PoseStack;ILnet/minecraft/world/scores/Scoreboard;Lnet/minecraft/world/scores/Objective;)V", shift = Shift.BEFORE))
+//    public void renderTab(PoseStack arg, float g, CallbackInfo ci) {
+//        if(!ExordiumModBase.instance.config.enabledGui)
+//            return;
+//        ExordiumModBase.correctBlendMode();
+//        ExordiumModBase.setForceBlend(true);
+//    }
+//    
+//    @Inject(method = "render", at = @At(value="INVOKE", target = "Lnet/minecraft/client/gui/components/PlayerTabOverlay;render(Lcom/mojang/blaze3d/vertex/PoseStack;ILnet/minecraft/world/scores/Scoreboard;Lnet/minecraft/world/scores/Objective;)V", shift = Shift.AFTER))
+//    public void renderTabEnd(PoseStack arg, float g, CallbackInfo ci) {
+//        ExordiumModBase.setForceBlend(false);
+//        RenderSystem.defaultBlendFunc();
+//    }
+//    
+//    // Fix Scoreboard overlapping with overlays like spyglass
+//    
+//    @Inject(method = "render", at = @At(value="INVOKE", target = "Lnet/minecraft/client/gui/Gui;displayScoreboardSidebar(Lcom/mojang/blaze3d/vertex/PoseStack;Lnet/minecraft/world/scores/Objective;)V", shift = Shift.BEFORE))
+//    private void displayScoreboardSidebarBefore(PoseStack arg, float g, CallbackInfo ci) {
+//        if(!ExordiumModBase.instance.config.enabledGui)
+//            return;
+//        ExordiumModBase.correctBlendMode();
+//        ExordiumModBase.setForceBlend(true);
+//    }
+//    
+//    @Inject(method = "render", at = @At(value="INVOKE", target = "Lnet/minecraft/client/gui/Gui;displayScoreboardSidebar(Lcom/mojang/blaze3d/vertex/PoseStack;Lnet/minecraft/world/scores/Objective;)V", shift = Shift.AFTER))
+//    private void displayScoreboardSidebarAfter(PoseStack arg, float g, CallbackInfo ci) {
+//        ExordiumModBase.setForceBlend(false);
+//        RenderSystem.defaultBlendFunc();
+//    }
 
 }
