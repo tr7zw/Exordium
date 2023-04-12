@@ -20,7 +20,8 @@
     "DebugScreenOverlayMixin",
     "ChatComponentMixin",
     "GuiHotbarMixin",
-    "ExperienceMixin"
+    "GuiExperienceMixin",
+    "GuiHealthMixin"
   ],
   "injectors": {
     "defaultRequire": 1

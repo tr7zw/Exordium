@@ -14,7 +14,7 @@ import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.Gui;
 
 @Mixin(Gui.class)
-public class ExperienceMixin {
+public class GuiExperienceMixin {
 
     @Shadow
     private Minecraft minecraft;

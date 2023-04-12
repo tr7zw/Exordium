@@ -16,6 +16,7 @@ public class Config {
     public ComponentSettings debugScreenSettings = new ComponentSettings(true, 10);
     public ComponentSettings hotbarSettings = new ComponentSettings(true, 20);
     public ComponentSettings experienceSettings = new ComponentSettings(true, 5);
+    public ComponentSettings healthSettings = new ComponentSettings(true, 20);
     
     public class ComponentSettings {
         public boolean enabled = true;
