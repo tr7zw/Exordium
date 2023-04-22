@@ -6,6 +6,7 @@ import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 
+import com.mojang.blaze3d.platform.GlStateManager;
 import com.mojang.blaze3d.vertex.PoseStack;
 
 import dev.tr7zw.exordium.ExordiumModBase;
@@ -76,8 +77,6 @@ public abstract class GuiHealthMixin {
     private void renderPlayerHealth(PoseStack poseStack, CallbackInfo ci) {
         if (healthBuffer.render()) {
             ci.cancel();
-        } else {
-            System.out.println("Render");
         }
     }
 

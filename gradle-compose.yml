@@ -15,6 +15,7 @@ enabledFlags:
   - publishFabric
   - modrinth
   - curseforge
+  - accesswidener
 rootProject:
   template: "."
 subProjects:

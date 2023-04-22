@@ -15,6 +15,7 @@ import com.mojang.blaze3d.systems.RenderSystem;
 
 import dev.tr7zw.config.CustomConfigScreen;
 import net.minecraft.client.OptionInstance;
+import dev.tr7zw.exordium.Config.ComponentSettings;
 import dev.tr7zw.exordium.util.BufferRenderer;
 import dev.tr7zw.exordium.util.DelayedRenderCallManager;
 import dev.tr7zw.exordium.util.NametagScreenBuffer;
@@ -108,11 +109,21 @@ public abstract class ExordiumModBase {
                         (b) -> config.enableNametagScreenBuffering = b));
                 options.add(getIntOption("text.exordium.targetFPSNameTags", 30, 80, () -> config.targetFPSNameTags, (v) -> config.targetFPSNameTags = v));
 
+                addSettings(options, config.chatSettings, "chat");
+                addSettings(options, config.debugScreenSettings, "debug");
+                addSettings(options, config.healthSettings, "health");
+                addSettings(options, config.hotbarSettings, "hotbar");
               
                 getOptions().addSmall(options.toArray(new OptionInstance[0]));
                 
             }
 
+            private void addSettings(List<OptionInstance<?>> options, ComponentSettings settings, String name) {
+                options.add(getOnOffOption("text.exordium.setting" + name + ".enabled", () -> settings.enabled,
+                        (b) -> settings.enabled = b));
+                options.add(getIntOption("text.exordium.setting" + name + ".fps", 5, 60, () -> settings.maxFps, (v) -> settings.maxFps = v));
+            }
+            
             @Override
             public void save() {
                 writeConfig();
