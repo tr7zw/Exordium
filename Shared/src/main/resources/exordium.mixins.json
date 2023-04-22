@@ -8,11 +8,7 @@
   ],
   "client": [
     "GuiMixin",
-    "GameRendererMixinHigh",
-    "GameRendererMixinLow",
     "GlStateManagerMixin",
-    "InventoryScreenMixin",
-    "ItemRendererMixin",
     "SignRendererMixin",
     "SignBlockEntityMixin",
     "EntityRendererMixin",

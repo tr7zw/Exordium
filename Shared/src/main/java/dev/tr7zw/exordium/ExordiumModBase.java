@@ -14,11 +14,10 @@ import com.mojang.blaze3d.platform.GlStateManager;
 import com.mojang.blaze3d.systems.RenderSystem;
 
 import dev.tr7zw.config.CustomConfigScreen;
-import net.minecraft.client.OptionInstance;
 import dev.tr7zw.exordium.Config.ComponentSettings;
-import dev.tr7zw.exordium.util.BufferRenderer;
 import dev.tr7zw.exordium.util.DelayedRenderCallManager;
 import dev.tr7zw.exordium.util.NametagScreenBuffer;
+import net.minecraft.client.OptionInstance;
 import net.minecraft.client.gui.screens.Screen;
 
 public abstract class ExordiumModBase {
@@ -30,7 +29,6 @@ public abstract class ExordiumModBase {
     public Config config;
     private final File settingsFile = new File("config", "exordium.json");
     private final Gson gson = new GsonBuilder().setPrettyPrinting().create();
-    private BufferRenderer screenBufferRenderer;
     private NametagScreenBuffer nametagScreenBuffer;
     private RenderTarget temporaryScreenOverwrite = null;
     public static SignSettings signSettings = new SignSettings();
@@ -69,13 +67,6 @@ public abstract class ExordiumModBase {
         }
     }
     
-    public BufferRenderer getScreenBufferRenderer() {
-        if(screenBufferRenderer == null) {
-            screenBufferRenderer = new BufferRenderer(true);
-        }
-        return screenBufferRenderer;
-    }
-    
     public NametagScreenBuffer getNameTagScreenBuffer() {
         if(nametagScreenBuffer == null) {
             nametagScreenBuffer = new NametagScreenBuffer(1000/config.targetFPSNameTags);
@@ -95,12 +86,6 @@ public abstract class ExordiumModBase {
             @Override
             public void initialize() {
                 List<OptionInstance<?>> options = new ArrayList<>();
-                options.add(getOnOffOption("text.exordium.enableGui", () -> config.enabledGui,
-                        (b) -> config.enabledGui = b));
-                options.add(getIntOption("text.exordium.targetFramerateGui", 5, 60, () -> config.targetFPSIngameGui, (v) -> config.targetFPSIngameGui = v));
-                options.add(getOnOffOption("text.exordium.enabledGuiAnimationSpeedup", () -> config.enabledGuiAnimationSpeedup,
-                        (b) -> config.enabledGuiAnimationSpeedup = b));
-                options.add(getIntOption("text.exordium.targetFPSIngameGuiAnimated", 30, 120, () -> config.targetFPSIngameGuiAnimated, (v) -> config.targetFPSIngameGuiAnimated = v));
                 
                 options.add(getOnOffOption("text.exordium.enableSignBuffering", () -> config.enableSignBuffering,
                         (b) -> config.enableSignBuffering = b));
@@ -113,15 +98,16 @@ public abstract class ExordiumModBase {
                 addSettings(options, config.debugScreenSettings, "debug");
                 addSettings(options, config.healthSettings, "health");
                 addSettings(options, config.hotbarSettings, "hotbar");
+                addSettings(options, config.experienceSettings, "experience");
               
                 getOptions().addSmall(options.toArray(new OptionInstance[0]));
                 
             }
 
             private void addSettings(List<OptionInstance<?>> options, ComponentSettings settings, String name) {
-                options.add(getOnOffOption("text.exordium.setting" + name + ".enabled", () -> settings.enabled,
+                options.add(getOnOffOption("text.exordium.setting." + name + ".enabled", () -> settings.enabled,
                         (b) -> settings.enabled = b));
-                options.add(getIntOption("text.exordium.setting" + name + ".fps", 5, 60, () -> settings.maxFps, (v) -> settings.maxFps = v));
+                options.add(getIntOption("text.exordium.setting." + name + ".fps", 5, 60, () -> settings.maxFps, (v) -> settings.maxFps = v));
             }
             
             @Override
