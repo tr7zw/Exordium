@@ -23,6 +23,11 @@ public abstract class BufferedComponent {
     private int guiScale = 0;
     private boolean isRendering = false;
     private boolean forceBlending = false;
+    private boolean blendStateFetched = false;
+    private int srcRgb = 1;
+    private int dstRgb = 0;
+    private int srcAlpha = 1;
+    private int dstAlpha = 0;
     
     public BufferedComponent(ComponentSettings settings) {
         this(false, settings);
@@ -60,6 +65,9 @@ public abstract class BufferedComponent {
         if(!settings.enabled) {
             return false;
         }
+        if(!blendStateFetched) { // the intended blendstate is not know. Skip the buffer logic, let it render normally, then grab the expected state
+            return false;
+        }
         int screenWidth = minecraft.getWindow().getGuiScaledWidth();
         int screenHeight = minecraft.getWindow().getGuiScaledHeight();
         boolean forceRender = false;
@@ -76,6 +84,7 @@ public abstract class BufferedComponent {
         boolean updateFrame = forceRender || (needsRender() && System.currentTimeMillis() > cooldown);
         if (!updateFrame) {
             renderTextureOverlay(guiTarget.getColorTextureId());
+            GlStateManager._blendFuncSeparate(srcRgb, dstRgb, srcAlpha, dstAlpha);
             return true;
         }
         
@@ -95,6 +104,15 @@ public abstract class BufferedComponent {
     }
 
     public void renderEnd() {
+        if(!blendStateFetched) {
+            // capture the expected blend state
+            blendStateFetched = true;
+            srcRgb = GlStateManager.BLEND.srcRgb;
+            srcAlpha = GlStateManager.BLEND.srcAlpha;
+            dstRgb = GlStateManager.BLEND.dstRgb;
+            dstAlpha = GlStateManager.BLEND.dstAlpha;
+            System.out.println("Fetched " + srcRgb + ", " + dstRgb + ", " + srcAlpha + ", " + dstAlpha);
+        }
         if(!isRendering) {
             return;
         }
@@ -109,6 +127,7 @@ public abstract class BufferedComponent {
             ExordiumModBase.setForceBlend(false);
         }
         renderTextureOverlay(guiTarget.getColorTextureId());
+        GlStateManager._blendFuncSeparate(srcRgb, dstRgb, srcAlpha, dstAlpha);
     }
 
     private void renderTextureOverlay(int textureid) {
