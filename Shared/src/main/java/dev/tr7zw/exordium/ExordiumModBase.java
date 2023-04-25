@@ -99,6 +99,7 @@ public abstract class ExordiumModBase {
                 addSettings(options, config.healthSettings, "health");
                 addSettings(options, config.hotbarSettings, "hotbar");
                 addSettings(options, config.experienceSettings, "experience");
+                addSettings(options, config.scoreboardSettings, "scoreboard");
               
                 getOptions().addSmall(options.toArray(new OptionInstance[0]));
                 

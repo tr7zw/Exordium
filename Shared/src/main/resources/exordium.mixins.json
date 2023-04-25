@@ -16,7 +16,8 @@
     "ChatComponentMixin",
     "GuiHotbarMixin",
     "GuiExperienceMixin",
-    "GuiHealthMixin"
+    "GuiHealthMixin",
+    "ScoreboardMixin"
   ],
   "injectors": {
     "defaultRequire": 1

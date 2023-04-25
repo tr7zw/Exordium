@@ -111,7 +111,6 @@ public abstract class BufferedComponent {
             srcAlpha = GlStateManager.BLEND.srcAlpha;
             dstRgb = GlStateManager.BLEND.dstRgb;
             dstAlpha = GlStateManager.BLEND.dstAlpha;
-            System.out.println("Fetched " + srcRgb + ", " + dstRgb + ", " + srcAlpha + ", " + dstAlpha);
         }
         if(!isRendering) {
             return;

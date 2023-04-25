@@ -11,6 +11,7 @@ public class Config {
     public ComponentSettings hotbarSettings = new ComponentSettings(true, 20);
     public ComponentSettings experienceSettings = new ComponentSettings(true, 5);
     public ComponentSettings healthSettings = new ComponentSettings(true, 20);
+    public ComponentSettings scoreboardSettings = new ComponentSettings(true, 5);
     
     public class ComponentSettings {
         public boolean enabled = true;

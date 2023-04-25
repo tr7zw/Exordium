@@ -25,5 +25,9 @@
     "text.exordium.setting.experience.enabled": "Buffer Experience",
     "text.exordium.setting.experience.fps": "Buffer Experience Max. FPS",
     "text.exordium.setting.experience.fps.tooltip": "The maximum framerate for the experience bar/level number",
-    "text.exordium.setting.experience.enabled.tooltip": "Enable/Disable buffering the experience bar/level number"
+    "text.exordium.setting.experience.enabled.tooltip": "Enable/Disable buffering the experience bar/level number",
+    "text.exordium.setting.scoreboard.enabled": "Buffer Scoreboard",
+    "text.exordium.setting.scoreboard.fps": "Buffer Scoreboard Max. FPS",
+    "text.exordium.setting.scoreboard.fps.tooltip": "The maximum framerate for the scoreboard",
+    "text.exordium.setting.scoreboard.enabled.tooltip": "Enable/Disable buffering the scoreboard"
   }
