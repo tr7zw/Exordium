@@ -8,16 +8,20 @@ import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 
+import com.llamalad7.mixinextras.injector.wrapoperation.Operation;
+import com.llamalad7.mixinextras.injector.wrapoperation.WrapOperation;
 import com.mojang.blaze3d.vertex.PoseStack;
 
 import dev.tr7zw.exordium.ExordiumModBase;
+import dev.tr7zw.exordium.access.ChatAccess;
 import dev.tr7zw.exordium.util.BufferedComponent;
 import net.minecraft.client.GuiMessage;
 import net.minecraft.client.Minecraft;
+import net.minecraft.client.gui.Gui;
 import net.minecraft.client.gui.components.ChatComponent;
 
 @Mixin(ChatComponent.class)
-public abstract class ChatComponentMixin {
+public abstract class ChatComponentMixin implements ChatAccess {
 
     @Shadow
     private Minecraft minecraft;
@@ -65,18 +69,12 @@ public abstract class ChatComponentMixin {
         return false;
     }
     
-    @Inject(method = "render", at = @At("HEAD"), cancellable = true)
-    public void render(PoseStack poseStack, int tickCount, int j, int k, CallbackInfo ci) {
+    public void updateState(int tickCount) {
         outdated = hasChanged(tickCount);
-        if(bufferedComponent.render()) {
-            ci.cancel();
-            return;
-        }
     }
     
-    @Inject(method = "render", at = @At("RETURN"))
-    public void renderEnd(PoseStack poseStack, int tickCount, int j, int k, CallbackInfo ci) {
-        bufferedComponent.renderEnd();
+    public BufferedComponent getBufferedComponent() {
+        return bufferedComponent;
     }
 
     @Shadow

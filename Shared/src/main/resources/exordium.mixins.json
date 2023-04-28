@@ -17,7 +17,8 @@
     "GuiHotbarMixin",
     "GuiExperienceMixin",
     "GuiHealthMixin",
-    "ScoreboardMixin"
+    "ScoreboardMixin",
+    "GuiMixin"
   ],
   "injectors": {
     "defaultRequire": 1

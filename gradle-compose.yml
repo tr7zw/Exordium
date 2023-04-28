@@ -6,7 +6,15 @@ replacements:
   id: "exordium"
   version: "1.0.3"
   author: "tr7zw"
-  dependencies: ""
+  dependencies: '
+  modImplementation "curse.maven:immediatelyfast-686911:4484925"
+
+      implementation("com.github.LlamaLad7:MixinExtras:0.1.1")
+
+      inc("com.github.LlamaLad7:MixinExtras:0.1.1")
+
+      annotationProcessor("com.github.LlamaLad7:MixinExtras:0.1.1")
+  '
   relocationpackage: "dev.tr7zw.exordium"
   licensename: "LICENSE"
   modrinthid: "DynYZEae"

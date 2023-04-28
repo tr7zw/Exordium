@@ -10,6 +10,7 @@ import org.junit.jupiter.api.Test;
 import org.objenesis.Objenesis;
 import org.objenesis.ObjenesisStd;
 
+import com.llamalad7.mixinextras.MixinExtrasBootstrap;
 import com.mojang.blaze3d.platform.GlStateManager;
 
 import dev.tr7zw.config.CustomConfigScreen;
@@ -34,6 +35,7 @@ public class MixinTests {
 
     @BeforeAll
     public static void setup() {
+        MixinExtrasBootstrap.init();
         SharedConstants.tryDetectVersion();
         Bootstrap.bootStrap();
     }
