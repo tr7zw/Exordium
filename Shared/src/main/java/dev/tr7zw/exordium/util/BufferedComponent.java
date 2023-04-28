@@ -91,15 +91,14 @@ public abstract class BufferedComponent {
         guiTarget.setClearColor(0, 0, 0, 0);
         guiTarget.clear(false);
         guiTarget.bindWrite(false);
-
-        ExordiumModBase.correctBlendMode();
         isRendering = true;
         ExordiumModBase.instance.setTemporaryScreenOverwrite(guiTarget);
-        if(forceBlending) {
+
+        ExordiumModBase.correctBlendMode();
+        if(forceBlending || settings.forceBlend) {
             ExordiumModBase.setForceBlend(true);
-            ExordiumModBase.setBlendBypass(false);
-            ExordiumModBase.setBypassTurnoff(0);
         }
+        guiTarget.bindWrite(false);
         return false;
     }
 
@@ -116,13 +115,12 @@ public abstract class BufferedComponent {
             return;
         }
         captureState(); // take the current state of the component
-        guiTarget.unbindWrite();
         ExordiumModBase.instance.setTemporaryScreenOverwrite(null);
+        guiTarget.unbindWrite();
         Minecraft.getInstance().getMainRenderTarget().bindWrite(true);
         cooldown = System.currentTimeMillis() + (1000/settings.maxFps);
         isRendering = false;
-        if(forceBlending) {
-            ExordiumModBase.setBlendBypass(false);
+        if(forceBlending || settings.forceBlend) {
             ExordiumModBase.setForceBlend(false);
         }
         renderTextureOverlay(guiTarget.getColorTextureId());

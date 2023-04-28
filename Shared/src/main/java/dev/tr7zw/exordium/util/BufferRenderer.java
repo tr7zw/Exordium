@@ -77,8 +77,6 @@ public class BufferRenderer {
         ExordiumModBase.instance.setTemporaryScreenOverwrite(guiTarget);
         if(forceBlending) {
             ExordiumModBase.setForceBlend(true);
-            ExordiumModBase.setBlendBypass(false);
-            ExordiumModBase.setBypassTurnoff(0);
         }
         return false;
     }
@@ -90,7 +88,6 @@ public class BufferRenderer {
         nextFrame = System.currentTimeMillis() + cacheTime;
         isRendering = false;
         if(forceBlending) {
-            ExordiumModBase.setBlendBypass(false);
             ExordiumModBase.setForceBlend(false);
         }
         int screenWidth = minecraft.getWindow().getGuiScaledWidth();

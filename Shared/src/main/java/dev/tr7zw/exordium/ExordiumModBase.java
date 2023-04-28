@@ -23,8 +23,7 @@ import net.minecraft.client.gui.screens.Screen;
 public abstract class ExordiumModBase {
 
     public static ExordiumModBase instance;
-    private static boolean forceBlend, blendBypass;
-    private static int bypassTurnoff;
+    private static boolean forceBlend;
 
     public Config config;
     private final File settingsFile = new File("config", "exordium.json");
@@ -109,6 +108,8 @@ public abstract class ExordiumModBase {
                 options.add(getOnOffOption("text.exordium.setting." + name + ".enabled", () -> settings.enabled,
                         (b) -> settings.enabled = b));
                 options.add(getIntOption("text.exordium.setting." + name + ".fps", 5, 60, () -> settings.maxFps, (v) -> settings.maxFps = v));
+                options.add(getOnOffOption("text.exordium.setting." + name + ".forceblend", () -> settings.forceBlend,
+                        (b) -> settings.forceBlend = b));
             }
             
             @Override
@@ -133,26 +134,6 @@ public abstract class ExordiumModBase {
 
     public static void setForceBlend(boolean forceBlend) {
         ExordiumModBase.forceBlend = forceBlend;
-    }
-
-    public static boolean isBlendBypass() {
-        return blendBypass;
-    }
-
-    public static void setBlendBypass(boolean blendBypass) {
-        // force blend is on, bypass is on and we are turning it off
-        if(forceBlend && ExordiumModBase.blendBypass && !blendBypass) {
-            correctBlendMode(); // fix the blend state to the expected one
-        }
-        ExordiumModBase.blendBypass = blendBypass;
-    }
-    
-    public static int getBypassTurnoff() {
-        return bypassTurnoff;
-    }
-
-    public static void setBypassTurnoff(int bypassTurnoff) {
-        ExordiumModBase.bypassTurnoff = bypassTurnoff;
     }
 
     public static void correctBlendMode() {
