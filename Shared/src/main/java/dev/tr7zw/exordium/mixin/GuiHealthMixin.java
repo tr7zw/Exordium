@@ -38,6 +38,8 @@ public abstract class GuiHealthMixin {
     private float lastSaturation;
     private float lastRenderedTick;
     private float lastPlayerHealth;
+    private float lastFoodLevel;
+    private float lastExhaustionLevel;
     private boolean hadVisualEffects;
 
     private BufferedComponent healthBuffer = new BufferedComponent(ExordiumModBase.instance.config.healthSettings) {
@@ -54,6 +56,8 @@ public abstract class GuiHealthMixin {
             lastAirSupply != minecraft.player.getAirSupply() ||
             lastSaturation != minecraft.player.getFoodData().getSaturationLevel() ||
             (hasVisualEffects || (hasVisualEffects != hadVisualEffects && lastRenderedTick != tickCount)) ||
+            lastFoodLevel != minecraft.player.getFoodData().getFoodLevel() ||
+            lastExhaustionLevel != minecraft.player.getFoodData().getExhaustionLevel() ||
             lastPlayerHealth != minecraft.player.getHealth();
         }
 
@@ -68,6 +72,8 @@ public abstract class GuiHealthMixin {
             lastSaturation = minecraft.player.getFoodData().getSaturationLevel();
             lastRenderedTick = tickCount;
             lastPlayerHealth = minecraft.player.getHealth();
+            lastFoodLevel = minecraft.player.getFoodData().getFoodLevel();
+            lastExhaustionLevel = minecraft.player.getFoodData().getExhaustionLevel();
             hadVisualEffects = minecraft.player.hasEffect(MobEffects.HUNGER) || minecraft.player.hasEffect(MobEffects.REGENERATION);
         }
     };
