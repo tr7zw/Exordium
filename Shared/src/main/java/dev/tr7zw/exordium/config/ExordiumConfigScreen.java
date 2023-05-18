@@ -46,6 +46,10 @@ public class ExordiumConfigScreen extends CustomConfigScreen {
         options.add(getIntOption("text.exordium.setting." + name + ".fps", 5, 60, () -> settings.maxFps, (v) -> settings.maxFps = v));
         options.add(getOnOffOption("text.exordium.setting." + name + ".forceblend", () -> settings.forceBlend,
                 (b) -> settings.forceBlend = b));
+        if(!name.equals("debug")) { // debug has that already built in and on
+            options.add(getOnOffOption("text.exordium.setting." + name + ".forceupdates", () -> settings.forceUpdates,
+                    (b) -> settings.forceUpdates = b));
+        }
     }
     
     @Override

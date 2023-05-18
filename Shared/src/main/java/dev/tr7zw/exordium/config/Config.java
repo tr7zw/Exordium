@@ -17,6 +17,7 @@ public class Config {
         public boolean enabled = true;
         public int maxFps = 10;
         public boolean forceBlend = false;
+        public boolean forceUpdates = false;
         public ComponentSettings(boolean enabled, int maxFps) {
             super();
             this.enabled = enabled;

@@ -81,7 +81,7 @@ public abstract class BufferedComponent {
         if(model == null) {
             refreshModel(screenWidth, screenHeight);
         }
-        boolean updateFrame = forceRender || (needsRender() && System.currentTimeMillis() > cooldown);
+        boolean updateFrame = forceRender || ((settings.forceUpdates || needsRender()) && System.currentTimeMillis() > cooldown);
         if (!updateFrame) {
             renderTextureOverlay(guiTarget.getColorTextureId());
             GlStateManager._blendFuncSeparate(srcRgb, dstRgb, srcAlpha, dstAlpha);
