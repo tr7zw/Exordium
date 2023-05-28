@@ -4,9 +4,17 @@ replacements:
   group: "dev.tr7zw"
   name: "Exordium"
   id: "exordium"
-  version: "1.0.3"
+  version: "1.1.0"
   author: "tr7zw"
-  dependencies: ""
+  dependencies: '
+  modImplementation "curse.maven:immediatelyfast-686911:4484925"
+
+      implementation("com.github.LlamaLad7:MixinExtras:0.1.1")
+
+      inc("com.github.LlamaLad7:MixinExtras:0.1.1")
+
+      annotationProcessor("com.github.LlamaLad7:MixinExtras:0.1.1")
+  '
   relocationpackage: "dev.tr7zw.exordium"
   licensename: "LICENSE"
   modrinthid: "DynYZEae"
@@ -15,6 +23,7 @@ enabledFlags:
   - publishFabric
   - modrinth
   - curseforge
+  - accesswidener
 rootProject:
   template: "."
 subProjects:

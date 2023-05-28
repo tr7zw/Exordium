@@ -1,4 +1,4 @@
-package dev.tr7zw.exordium;
+package dev.tr7zw.exordium.config;
 
 public class ConfigUpgrader {
 

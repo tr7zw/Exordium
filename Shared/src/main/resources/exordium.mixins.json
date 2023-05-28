@@ -7,18 +7,18 @@
   "mixins": [
   ],
   "client": [
-    "GuiMixin",
-    "GameRendererMixinHigh",
-    "GameRendererMixinLow",
     "GlStateManagerMixin",
-    "InventoryScreenMixin",
-    "ItemRendererMixin",
     "SignRendererMixin",
     "SignBlockEntityMixin",
     "EntityRendererMixin",
     "MinecraftMixin",
     "DebugScreenOverlayMixin",
-    "ChatComponentMixin"
+    "ChatComponentMixin",
+    "GuiHotbarMixin",
+    "GuiExperienceMixin",
+    "GuiHealthMixin",
+    "ScoreboardMixin",
+    "GuiMixin"
   ],
   "injectors": {
     "defaultRequire": 1

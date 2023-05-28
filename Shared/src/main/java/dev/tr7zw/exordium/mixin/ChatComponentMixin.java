@@ -5,7 +5,9 @@ import java.util.List;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Shadow;
 
+import dev.tr7zw.exordium.ExordiumModBase;
 import dev.tr7zw.exordium.access.ChatAccess;
+import dev.tr7zw.exordium.util.BufferedComponent;
 import net.minecraft.client.GuiMessage;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.components.ChatComponent;
@@ -20,12 +22,32 @@ public abstract class ChatComponentMixin implements ChatAccess {
     @Shadow
     private int chatScrollbarPos;
     
-    @Override
-    public boolean hasActiveAnimations(int i) {
-        if (isChatHidden())
-            return false;
-        if(isChatFocused())
-            return false;
+    private int lastScrollbarPos = 0;
+    private int messageCount = 0;
+    private boolean wasFocused = false;
+    
+    boolean outdated = false;
+    
+    private BufferedComponent bufferedComponent = new BufferedComponent(ExordiumModBase.instance.config.chatSettings) {
+        
+        @Override
+        public boolean needsRender() {
+            return outdated;
+        }
+
+        @Override
+        public void captureState() {
+            lastScrollbarPos = chatScrollbarPos;
+            messageCount = trimmedMessages.size();
+            wasFocused = isChatFocused();
+        }
+    };
+    
+    public boolean hasChanged(int i) {
+        boolean changed = chatScrollbarPos != lastScrollbarPos || messageCount != trimmedMessages.size() || isChatFocused() != wasFocused;
+        if(changed) {
+            return true;
+        }
         int j = getLinesPerPage();
         for (int o = 0; o + this.chatScrollbarPos < this.trimmedMessages.size() && o < j; o++) {
             GuiMessage.Line guiMessage = this.trimmedMessages.get(o + this.chatScrollbarPos);
@@ -37,6 +59,14 @@ public abstract class ChatComponentMixin implements ChatAccess {
             }
         }
         return false;
+    }
+    
+    public void updateState(int tickCount) {
+        outdated = hasChanged(tickCount);
+    }
+    
+    public BufferedComponent getBufferedComponent() {
+        return bufferedComponent;
     }
 
     @Shadow

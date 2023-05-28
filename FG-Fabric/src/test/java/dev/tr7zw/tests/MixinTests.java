@@ -10,11 +10,12 @@ import org.junit.jupiter.api.Test;
 import org.objenesis.Objenesis;
 import org.objenesis.ObjenesisStd;
 
+import com.llamalad7.mixinextras.MixinExtrasBootstrap;
 import com.mojang.blaze3d.platform.GlStateManager;
 
 import dev.tr7zw.config.CustomConfigScreen;
-import dev.tr7zw.exordium.Config;
 import dev.tr7zw.exordium.ExordiumModBase;
+import dev.tr7zw.exordium.config.Config;
 import net.minecraft.SharedConstants;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.OptionInstance;
@@ -34,6 +35,7 @@ public class MixinTests {
 
     @BeforeAll
     public static void setup() {
+        MixinExtrasBootstrap.init();
         SharedConstants.tryDetectVersion();
         Bootstrap.bootStrap();
     }

@@ -8,26 +8,34 @@ import com.mojang.blaze3d.platform.GlStateManager;
 import com.mojang.blaze3d.systems.RenderSystem;
 
 import dev.tr7zw.exordium.ExordiumModBase;
+import dev.tr7zw.exordium.config.Config.ComponentSettings;
 import dev.tr7zw.exordium.util.Model.Vector2f;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.GameRenderer;
 
-public class BufferRenderer {
+public abstract class BufferedComponent {
 
     private static final Minecraft minecraft = Minecraft.getInstance();
     private static Model model = null;
+    private final ComponentSettings settings;
     private RenderTarget guiTarget = new TextureTarget(100, 100, true, false);
-    private long nextFrame = System.currentTimeMillis();
+    private long cooldown = System.currentTimeMillis();
     private int guiScale = 0;
     private boolean isRendering = false;
     private boolean forceBlending = false;
+    private boolean blendStateFetched = false;
+    private int srcRgb = 1;
+    private int dstRgb = 0;
+    private int srcAlpha = 1;
+    private int dstAlpha = 0;
     
-    public BufferRenderer() {
-        this(false);
+    public BufferedComponent(ComponentSettings settings) {
+        this(false, settings);
     }
     
-    public BufferRenderer(boolean forceBlending) {
+    public BufferedComponent(boolean forceBlending, ComponentSettings settings) {
         this.forceBlending = forceBlending;
+        this.settings = settings;
     }
 
     private static void refreshModel(int screenWidth, int screenHeight){
@@ -50,7 +58,16 @@ public class BufferRenderer {
         model = new Model(modelData, uvData);
     }
     
+    /**
+     * @return true if the buffer was used. False = render as usual
+     */
     public boolean render() {
+        if(!settings.enabled) {
+            return false;
+        }
+        if(!blendStateFetched) { // the intended blendstate is not know. Skip the buffer logic, let it render normally, then grab the expected state
+            return false;
+        }
         int screenWidth = minecraft.getWindow().getGuiScaledWidth();
         int screenHeight = minecraft.getWindow().getGuiScaledHeight();
         boolean forceRender = false;
@@ -64,38 +81,53 @@ public class BufferRenderer {
         if(model == null) {
             refreshModel(screenWidth, screenHeight);
         }
-        if (!forceRender && System.currentTimeMillis() < nextFrame) {
-            renderTextureOverlay(guiTarget.getColorTextureId(), screenWidth, screenHeight);
+        boolean updateFrame = forceRender || ((settings.forceUpdates || needsRender()) && System.currentTimeMillis() > cooldown);
+        if (!updateFrame) {
+            renderTextureOverlay(guiTarget.getColorTextureId());
+            GlStateManager._blendFuncSeparate(srcRgb, dstRgb, srcAlpha, dstAlpha);
             return true;
         }
+        
         guiTarget.setClearColor(0, 0, 0, 0);
         guiTarget.clear(false);
         guiTarget.bindWrite(false);
-
-        ExordiumModBase.correctBlendMode();
         isRendering = true;
         ExordiumModBase.instance.setTemporaryScreenOverwrite(guiTarget);
-        if(forceBlending) {
+
+        ExordiumModBase.correctBlendMode();
+        if(forceBlending || settings.forceBlend) {
             ExordiumModBase.setForceBlend(true);
         }
+        guiTarget.bindWrite(false);
         return false;
     }
 
-    public void renderEnd(int cacheTime) {
-        guiTarget.unbindWrite();
+    public void renderEnd() {
+        if(!blendStateFetched) {
+            // capture the expected blend state
+            blendStateFetched = true;
+            srcRgb = GlStateManager.BLEND.srcRgb;
+            srcAlpha = GlStateManager.BLEND.srcAlpha;
+            dstRgb = GlStateManager.BLEND.dstRgb;
+            dstAlpha = GlStateManager.BLEND.dstAlpha;
+        }
+        if(!isRendering) {
+            return;
+        }
+        captureState(); // take the current state of the component
         ExordiumModBase.instance.setTemporaryScreenOverwrite(null);
+        guiTarget.unbindWrite();
         Minecraft.getInstance().getMainRenderTarget().bindWrite(true);
-        nextFrame = System.currentTimeMillis() + cacheTime;
+        cooldown = System.currentTimeMillis() + (1000/settings.maxFps);
         isRendering = false;
-        if(forceBlending) {
+        if(forceBlending || settings.forceBlend) {
             ExordiumModBase.setForceBlend(false);
         }
-        int screenWidth = minecraft.getWindow().getGuiScaledWidth();
-        int screenHeight = minecraft.getWindow().getGuiScaledHeight();
-        renderTextureOverlay(guiTarget.getColorTextureId(), screenWidth, screenHeight);
+        renderTextureOverlay(guiTarget.getColorTextureId());
+        GlStateManager._blendFuncSeparate(srcRgb, dstRgb, srcAlpha, dstAlpha);
     }
 
-    private void renderTextureOverlay(int textureid, int screenWidth, int screenHeight) {
+    private void renderTextureOverlay(int textureid) {
         RenderSystem.disableDepthTest();
         RenderSystem.depthMask(false);
         RenderSystem.enableBlend();
@@ -113,4 +145,11 @@ public class BufferRenderer {
         return isRendering;
     }
 
+    public abstract boolean needsRender();
+    
+    /**
+     * Take a snapshot of the current stateof the component
+     */
+    public abstract void captureState();
+    
 }

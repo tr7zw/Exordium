@@ -29,9 +29,8 @@
   "mixins": [
     "exordium.mixins.json"
   ],
-
+  "accessWidener" : "exordium.accesswidener",
   "depends": {
-    "fabricloader": ">=0.11.3",
     "fabric": "*",
     "minecraft": ">=1.19.4"
   }

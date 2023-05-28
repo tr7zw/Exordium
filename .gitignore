@@ -39,3 +39,4 @@ logs/
 *.properties
 gradle/wrapper
 VersionShared
+FG-Fabric/config/immediatelyfast.json
