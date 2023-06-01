@@ -3,6 +3,8 @@ package dev.tr7zw.exordium.mixin;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Shadow;
 import org.spongepowered.asm.mixin.injection.At;
+import org.spongepowered.asm.mixin.injection.Inject;
+import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 
 import com.llamalad7.mixinextras.injector.wrapoperation.Operation;
 import com.llamalad7.mixinextras.injector.wrapoperation.WrapOperation;
@@ -29,11 +31,14 @@ public abstract class GuiHealthMixin {
     @Shadow
     private int tickCount;
     
+    private boolean renderingMountHealth = false;
+    
     private boolean healthBlinking;
     private int lastRenderedHealth;
     private int lastDisplayHealth;
     private int lastArmorValue;
-    private int lastVehicleHearts;
+    private float lastVehicleHearts;
+    private int lastMaxVehicleHearts;
     private int lastAirSupply;
     private float lastSaturation;
     private float lastRenderedTick;
@@ -48,11 +53,13 @@ public abstract class GuiHealthMixin {
         public boolean needsRender() {
             boolean hasVisualEffects = minecraft.player.hasEffect(MobEffects.HUNGER) || minecraft.player.hasEffect(MobEffects.REGENERATION);
             boolean blinking = (healthBlinkTime > tickCount && (healthBlinkTime - tickCount) / 3L % 2L == 1L);
+            LivingEntity vehicle = getPlayerVehicleWithHealth();
             return healthBlinking != blinking ||
             lastRenderedHealth != lastHealth ||
             lastDisplayHealth != displayHealth ||
             lastArmorValue != minecraft.player.getArmorValue() ||
-            lastVehicleHearts != getVehicleMaxHearts(getPlayerVehicleWithHealth()) ||
+            lastMaxVehicleHearts != getVehicleMaxHearts(vehicle) ||
+            lastVehicleHearts != (vehicle == null ? -1 : vehicle.getHealth()) ||
             lastAirSupply != minecraft.player.getAirSupply() ||
             lastSaturation != minecraft.player.getFoodData().getSaturationLevel() ||
             (hasVisualEffects || (hasVisualEffects != hadVisualEffects && lastRenderedTick != tickCount)) ||
@@ -63,11 +70,13 @@ public abstract class GuiHealthMixin {
 
         @Override
         public void captureState() {
+            LivingEntity vehicle = getPlayerVehicleWithHealth();
             healthBlinking = (healthBlinkTime > tickCount && (healthBlinkTime - tickCount) / 3L % 2L == 1L);
             lastRenderedHealth = lastHealth;
             lastDisplayHealth = displayHealth;
             lastArmorValue = minecraft.player.getArmorValue();
-            lastVehicleHearts = getVehicleMaxHearts(getPlayerVehicleWithHealth());
+            lastMaxVehicleHearts = getVehicleMaxHearts(vehicle);
+            lastVehicleHearts = vehicle == null ? -1 : vehicle.getHealth();
             lastAirSupply = minecraft.player.getAirSupply();
             lastSaturation = minecraft.player.getFoodData().getSaturationLevel();
             lastRenderedTick = tickCount;
@@ -84,12 +93,23 @@ public abstract class GuiHealthMixin {
     private void renderPlayerHealthWrapper(Gui gui, PoseStack poseStack, final Operation<Void> operation) {
         if (!healthBuffer.render()) {
             operation.call(gui, poseStack);
+            renderingMountHealth = true;
+            renderVehicleHealth(poseStack);
+            renderingMountHealth = false;
         }
         healthBuffer.renderEnd();
     }
     
+    @Inject(method = "renderVehicleHealth", at = @At("HEAD"), cancellable = true)
+    private void renderVehicleHealthHead(PoseStack poseStack, CallbackInfo ci) {
+        if(!renderingMountHealth && ExordiumModBase.instance.config.healthSettings.enabled && !minecraft.player.isCreative()) {
+            // prevent rendering multiple times, just render into the texture
+            ci.cancel();
+        }
+    }
+    
     @Shadow
-    public abstract void renderPlayerHealth(PoseStack poseStack);
+    public abstract void renderVehicleHealth(PoseStack poseStack);
     
     @Shadow
     protected abstract LivingEntity getPlayerVehicleWithHealth();
