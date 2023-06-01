@@ -25,6 +25,7 @@ public abstract class ChatComponentMixin implements ChatAccess {
     private int lastScrollbarPos = 0;
     private int messageCount = 0;
     private boolean wasFocused = false;
+    private GuiMessage.Line lastMessage = null;
     
     boolean outdated = false;
     
@@ -37,6 +38,7 @@ public abstract class ChatComponentMixin implements ChatAccess {
 
         @Override
         public void captureState() {
+            lastMessage = trimmedMessages.isEmpty() ? null : trimmedMessages.get(0);
             lastScrollbarPos = chatScrollbarPos;
             messageCount = trimmedMessages.size();
             wasFocused = isChatFocused();
@@ -44,7 +46,8 @@ public abstract class ChatComponentMixin implements ChatAccess {
     };
     
     public boolean hasChanged(int i) {
-        boolean changed = chatScrollbarPos != lastScrollbarPos || messageCount != trimmedMessages.size() || isChatFocused() != wasFocused;
+        GuiMessage.Line msg = trimmedMessages.isEmpty() ? null : trimmedMessages.get(0);
+        boolean changed = chatScrollbarPos != lastScrollbarPos || messageCount != trimmedMessages.size() || isChatFocused() != wasFocused || msg != lastMessage;
         if(changed) {
             return true;
         }
