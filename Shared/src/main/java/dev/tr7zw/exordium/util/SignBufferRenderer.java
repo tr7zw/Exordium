@@ -75,13 +75,14 @@ public class SignBufferRenderer {
         return new Vec3(0.0D, (0.5F * f), (0.07F * f));
     }
     
-    public void render(PoseStack poseStack, int light) {
+    public void render(PoseStack poseStack, int light, boolean hangingSign) {
         poseStack.pushPose();
-        float g = 0.015625F * 0.6666667F;
-        Vec3 vec3 = getTextOffset(0.6666667F);
+        float scale = hangingSign ? 1.0F : 0.6666667F; 
+        float g = 0.015625F * scale;
+        Vec3 vec3 = getTextOffset(scale);
         poseStack.translate(vec3.x, vec3.y, vec3.z);
         poseStack.scale(g, -g, g);
-        poseStack.translate(ExordiumModBase.signSettings.offsetX , ExordiumModBase.signSettings.offsetY, 0);
+        poseStack.translate(ExordiumModBase.signSettings.offsetX, ExordiumModBase.signSettings.offsetY + (hangingSign ? ExordiumModBase.signSettings.hangingOffsetY : 0), hangingSign ? ExordiumModBase.signSettings.hangingOffsetZ : 0);
         RenderSystem.depthMask(true);
         RenderSystem.enableDepthTest();
         RenderSystem.enableBlend();
