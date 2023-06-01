@@ -26,8 +26,7 @@ public class GlStateManagerMixin {
 
     @Inject(method = "_blendFuncSeparate", at = @At("HEAD"), cancellable = true)
     private static void _blendFuncSeparate(int i, int j, int k, int l, CallbackInfo ci) {
-
-        if (ExordiumModBase.isForceBlend()) {// && !ExordiumModBase.isBlendBypass()) {
+        if (ExordiumModBase.isForceBlend()) {
             ci.cancel();
         }
     }

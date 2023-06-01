@@ -18,7 +18,8 @@
     "GuiExperienceMixin",
     "GuiHealthMixin",
     "ScoreboardMixin",
-    "GuiMixin"
+    "GuiMixin",
+    "GameRendererMixin"
   ],
   "injectors": {
     "defaultRequire": 1
