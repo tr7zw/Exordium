@@ -14,6 +14,7 @@ import dev.tr7zw.exordium.ExordiumModBase;
 import dev.tr7zw.exordium.util.BufferedComponent;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.Gui;
+import net.minecraft.util.Mth;
 import net.minecraft.world.effect.MobEffects;
 import net.minecraft.world.entity.LivingEntity;
 
@@ -65,7 +66,8 @@ public abstract class GuiHealthMixin {
             (hasVisualEffects || (hasVisualEffects != hadVisualEffects && lastRenderedTick != tickCount)) ||
             lastFoodLevel != minecraft.player.getFoodData().getFoodLevel() ||
             lastExhaustionLevel != minecraft.player.getFoodData().getExhaustionLevel() ||
-            lastPlayerHealth != minecraft.player.getHealth();
+            lastPlayerHealth != minecraft.player.getHealth() ||
+            Mth.ceil(lastPlayerHealth) <= 4;
         }
 
         @Override
