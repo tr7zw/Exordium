@@ -28,6 +28,8 @@ public class GuiHotbarMixin {
     private int[] itemPopAnimation = new int[10];
     private int[] itemAmount = new int[10];
     private int selectedSlot = 0;
+    private boolean hasEnchantedItem = false;
+    private boolean cooldownActive = false;
 
     private BufferedComponent bufferedComponent = new BufferedComponent(ExordiumModBase.instance.config.hotbarSettings) {
 
@@ -38,6 +40,8 @@ public class GuiHotbarMixin {
 
         @Override
         public void captureState() {
+            hasEnchantedItem = false;
+            cooldownActive = false;
             lastAttackState = minecraft.player.getAttackStrengthScale(0.0F);
             Player player = getCameraPlayer();
             if (player == null)
@@ -55,6 +59,12 @@ public class GuiHotbarMixin {
             hotbarModels[id] = minecraft.getItemRenderer().getModel(item, player.level, player, 0);
             itemPopAnimation[id] = item.getPopTime();
             itemAmount[id] = item.getCount();
+            if(item.isEnchanted()) {
+                this.hasEnchantedItem = true;
+            }
+            if(player.getCooldowns().isOnCooldown(item.getItem())) {
+                this.cooldownActive = true;
+            }
         } else {
             hotbarModels[id] = null;
             itemPopAnimation[id] = 0;
@@ -85,6 +95,9 @@ public class GuiHotbarMixin {
             if (g != lastAttackState) {
                 return true;
             }
+        }
+        if(hasEnchantedItem || cooldownActive) {
+            return true;
         }
         Player player = getCameraPlayer();
         if (player == null)
