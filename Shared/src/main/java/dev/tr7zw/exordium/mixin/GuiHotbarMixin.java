@@ -27,6 +27,7 @@ public class GuiHotbarMixin {
     private BakedModel[] hotbarModels = new BakedModel[10];
     private int[] itemPopAnimation = new int[10];
     private int[] itemAmount = new int[10];
+    private int[] itemDurability = new int[10];
     private int selectedSlot = 0;
     private boolean hasEnchantedItem = false;
     private boolean cooldownActive = false;
@@ -59,6 +60,7 @@ public class GuiHotbarMixin {
             hotbarModels[id] = minecraft.getItemRenderer().getModel(item, player.level, player, 0);
             itemPopAnimation[id] = item.getPopTime();
             itemAmount[id] = item.getCount();
+            itemDurability[id] = item.getDamageValue();
             if(item.isEnchanted()) {
                 this.hasEnchantedItem = true;
             }
@@ -69,6 +71,7 @@ public class GuiHotbarMixin {
             hotbarModels[id] = null;
             itemPopAnimation[id] = 0;
             itemAmount[id] = 0;
+            itemDurability[id] = -1;
         }
     }
     
@@ -78,6 +81,9 @@ public class GuiHotbarMixin {
                 return true;
             }
             if(itemPopAnimation[id] != item.getPopTime()) {
+                return true;
+            }
+            if(itemDurability[id] != item.getDamageValue()) {
                 return true;
             }
             if(minecraft.getItemRenderer().getModel(item, player.level, player, 0) != hotbarModels[id]) {

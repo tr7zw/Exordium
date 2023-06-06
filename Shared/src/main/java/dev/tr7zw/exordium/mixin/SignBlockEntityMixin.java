@@ -8,7 +8,6 @@ import dev.tr7zw.exordium.access.SignBufferHolder;
 import dev.tr7zw.exordium.util.SignBufferRenderer;
 import net.minecraft.client.renderer.MultiBufferSource;
 import net.minecraft.network.chat.Component;
-import net.minecraft.world.level.block.entity.BlockEntityType;
 import net.minecraft.world.level.block.entity.HangingSignBlockEntity;
 import net.minecraft.world.level.block.entity.SignBlockEntity;
 
