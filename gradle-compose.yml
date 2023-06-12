@@ -7,7 +7,7 @@ replacements:
   version: "1.1.2"
   author: "tr7zw"
   dependencies: '
-  modImplementation "maven.modrinth:immediatelyfast:1.1.23+1.19.4"
+  modImplementation "maven.modrinth:immediatelyfast:1.1.13+1.19.4"
 
       implementation("com.github.LlamaLad7:MixinExtras:0.1.1")
 
