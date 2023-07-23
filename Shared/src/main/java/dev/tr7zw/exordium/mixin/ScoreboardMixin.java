@@ -8,7 +8,6 @@ import org.spongepowered.asm.mixin.injection.At;
 
 import com.llamalad7.mixinextras.injector.wrapoperation.Operation;
 import com.llamalad7.mixinextras.injector.wrapoperation.WrapOperation;
-import com.mojang.blaze3d.vertex.PoseStack;
 
 import dev.tr7zw.exordium.ExordiumModBase;
 import dev.tr7zw.exordium.util.BufferedComponent;
@@ -16,6 +15,7 @@ import dev.tr7zw.exordium.util.ScoreboardHelper;
 import dev.tr7zw.exordium.util.ScoreboardHelper.ScoreboardState;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.Gui;
+import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.world.scores.Objective;
 
 @Mixin(Gui.class)
@@ -40,11 +40,11 @@ public class ScoreboardMixin {
     };
 
     @WrapOperation(method = "render", at = {
-            @At(value = "INVOKE", target = "Lnet/minecraft/client/gui/Gui;displayScoreboardSidebar(Lcom/mojang/blaze3d/vertex/PoseStack;Lnet/minecraft/world/scores/Objective;)V"),
+            @At(value = "INVOKE", target = "Lnet/minecraft/client/gui/Gui;displayScoreboardSidebar(Lnet/minecraft/client/gui/GuiGraphics;Lnet/minecraft/world/scores/Objective;)V"),
     })
-    private void displayScoreboardSidebarWrapper(Gui gui, PoseStack poseStack, Objective objective, final Operation<Void> operation) {
+    private void displayScoreboardSidebarWrapper(Gui gui, GuiGraphics guiGraphics, Objective objective, final Operation<Void> operation) {
         if (!scoreboardBuffer.render()) {
-            operation.call(gui, poseStack, objective);
+            operation.call(gui, guiGraphics, objective);
         }
         scoreboardBuffer.renderEnd();
     }

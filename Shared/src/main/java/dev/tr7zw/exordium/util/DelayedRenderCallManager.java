@@ -44,13 +44,13 @@ public class DelayedRenderCallManager {
             Matrix4f backupProjectionMatrix = RenderSystem.getProjectionMatrix();
             NametagScreenBuffer buffer = ExordiumModBase.instance.getNameTagScreenBuffer();
             buffer.bind();
-            RenderSystem.setProjectionMatrix(usedProjectionMatrix);
+            RenderSystem.setProjectionMatrix(usedProjectionMatrix, RenderSystem.getVertexSorting());
             for(Runnable run : nametagRenderCalls) {
                 run.run();
             }
             buffer.bindEnd();
             nametagRenderCalls.clear();
-            RenderSystem.setProjectionMatrix(backupProjectionMatrix);
+            RenderSystem.setProjectionMatrix(backupProjectionMatrix, RenderSystem.getVertexSorting());
         }
     }
     

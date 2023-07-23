@@ -12,7 +12,7 @@
     "SignBlockEntityMixin",
     "EntityRendererMixin",
     "MinecraftMixin",
-    "DebugScreenOverlayMixin",
+    "GuiDebugOverlayMixin",
     "ChatComponentMixin",
     "GuiHotbarMixin",
     "GuiExperienceMixin",

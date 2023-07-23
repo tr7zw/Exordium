@@ -24,7 +24,7 @@ public class Model {
             Vector2f uv = uvData[i];
             bufferbuilder.vertex(pos.x(), pos.y(), pos.z()).uv(uv.x(), uv.y()).endVertex();
         }
-        toDraw = new VertexBuffer();
+        toDraw = new VertexBuffer(VertexBuffer.Usage.STATIC);
         upload(bufferbuilder.end());
     }
     public void drawWithShader(Matrix4f matrix4f, Matrix4f matrix4f2, ShaderInstance shaderInstance) {

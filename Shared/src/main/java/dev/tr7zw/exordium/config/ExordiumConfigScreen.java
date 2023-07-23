@@ -10,16 +10,14 @@ import net.minecraft.client.OptionInstance;
 import net.minecraft.client.gui.screens.Screen;
 
 public class ExordiumConfigScreen extends CustomConfigScreen {
-
-    private Config config;
     
     public ExordiumConfigScreen(Screen lastScreen) {
         super(lastScreen, "text.exordium.title");
-        this.config = ExordiumModBase.instance.config;
     }
 
     @Override
     public void initialize() {
+        Config config = ExordiumModBase.instance.config;
         List<OptionInstance<?>> options = new ArrayList<>();
         
         options.add(getOnOffOption("text.exordium.enableSignBuffering", () -> config.enableSignBuffering,
@@ -59,8 +57,9 @@ public class ExordiumConfigScreen extends CustomConfigScreen {
 
     @Override
     public void reset() {
-        config = new Config();
+        ExordiumModBase.instance.config = new Config();
         ExordiumModBase.instance.writeConfig();
+        this.rebuildWidgets();
     }
 
     

@@ -8,12 +8,12 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 
 import com.llamalad7.mixinextras.injector.wrapoperation.Operation;
 import com.llamalad7.mixinextras.injector.wrapoperation.WrapOperation;
-import com.mojang.blaze3d.vertex.PoseStack;
 
 import dev.tr7zw.exordium.ExordiumModBase;
 import dev.tr7zw.exordium.util.BufferedComponent;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.Gui;
+import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.util.Mth;
 import net.minecraft.world.effect.MobEffects;
 import net.minecraft.world.entity.LivingEntity;
@@ -90,20 +90,20 @@ public abstract class GuiHealthMixin {
     };
 
     @WrapOperation(method = "render", at = {
-            @At(value = "INVOKE", target = "Lnet/minecraft/client/gui/Gui;renderPlayerHealth(Lcom/mojang/blaze3d/vertex/PoseStack;)V"),
+            @At(value = "INVOKE", target = "Lnet/minecraft/client/gui/Gui;renderPlayerHealth(Lnet/minecraft/client/gui/GuiGraphics;)V"),
     })
-    private void renderPlayerHealthWrapper(Gui gui, PoseStack poseStack, final Operation<Void> operation) {
+    private void renderPlayerHealthWrapper(Gui gui, GuiGraphics guiGraphics, final Operation<Void> operation) {
         if (!healthBuffer.render()) {
-            operation.call(gui, poseStack);
+            operation.call(gui, guiGraphics);
             renderingMountHealth = true;
-            renderVehicleHealth(poseStack);
+            renderVehicleHealth(guiGraphics);
             renderingMountHealth = false;
         }
         healthBuffer.renderEnd();
     }
     
     @Inject(method = "renderVehicleHealth", at = @At("HEAD"), cancellable = true)
-    private void renderVehicleHealthHead(PoseStack poseStack, CallbackInfo ci) {
+    private void renderVehicleHealthHead(GuiGraphics guiGraphics, CallbackInfo ci) {
         if(!renderingMountHealth && ExordiumModBase.instance.config.healthSettings.enabled && !minecraft.player.isCreative()) {
             // prevent rendering multiple times, just render into the texture
             ci.cancel();
@@ -111,7 +111,7 @@ public abstract class GuiHealthMixin {
     }
     
     @Shadow
-    public abstract void renderVehicleHealth(PoseStack poseStack);
+    public abstract void renderVehicleHealth(GuiGraphics guiGraphics);
     
     @Shadow
     protected abstract LivingEntity getPlayerVehicleWithHealth();

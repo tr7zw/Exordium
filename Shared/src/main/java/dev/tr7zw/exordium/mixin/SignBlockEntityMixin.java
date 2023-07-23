@@ -10,41 +10,37 @@ import net.minecraft.client.renderer.MultiBufferSource;
 import net.minecraft.network.chat.Component;
 import net.minecraft.world.level.block.entity.HangingSignBlockEntity;
 import net.minecraft.world.level.block.entity.SignBlockEntity;
+import net.minecraft.world.level.block.entity.SignText;
 
 @Mixin(SignBlockEntity.class)
 public class SignBlockEntityMixin implements SignBufferHolder {
 
     private SignBufferRenderer cachedBufferRenderer = null;
-    private Component[] lines = new Component[4];
+    private SignText front;
+    private SignText back;
     private int currentLight = -1;
 
-    // TODO: hook the update methods instead of hot checking stuff.
     @Override
-    public boolean renderBuffered(PoseStack poseStack, MultiBufferSource multiBufferSource, int light) {
+    public boolean renderBuffered(PoseStack poseStack, MultiBufferSource multiBufferSource, boolean renderFront, int light) {
         SignBlockEntity sign = (SignBlockEntity) (Object) this;
-        if (isSignEmpty(sign)) {
-            return true; // empty sign, nothing to do (yet)
+        if (isSignEmpty(sign.getFrontText()) || isSignEmpty(sign.getBackText())) {
+            return true; // empty sign, nothing to do
         }
-        if (cachedBufferRenderer == null || (currentLight != light && !sign.hasGlowingText())
-                || lines[0] != sign.getMessage(0, false) || lines[1] != sign.getMessage(1, false)
-                || lines[2] != sign.getMessage(2, false) || lines[3] != sign.getMessage(3, false)) {
+        if (cachedBufferRenderer == null || currentLight != light || (renderFront && (sign.getFrontText() != front))
+                || (!renderFront && (sign.getBackText() != back))) {
             if (cachedBufferRenderer == null) {
                 cachedBufferRenderer = new SignBufferRenderer(sign, light);
             }
-            cachedBufferRenderer.refreshImage(sign, light);
-            lines[0] = sign.getMessage(0, false);
-            lines[1] = sign.getMessage(1, false);
-            lines[2] = sign.getMessage(2, false);
-            lines[3] = sign.getMessage(3, false);
+            cachedBufferRenderer.refreshImage(sign, light, renderFront);
             currentLight = light;
         }
-        cachedBufferRenderer.render(poseStack, light, ((Object)this) instanceof HangingSignBlockEntity);
+        cachedBufferRenderer.render(poseStack, light, ((Object) this) instanceof HangingSignBlockEntity, renderFront);
         return true;
     }
 
-    private boolean isSignEmpty(SignBlockEntity sign) {
+    private boolean isSignEmpty(SignText text) {
         for (int i = 0; i < 4; i++) {
-            Component line = sign.getMessage(i, false);
+            Component line = text.getMessage(i, false);
             if (!line.getString().isBlank())
                 return false;
         }

@@ -6,13 +6,13 @@ import org.spongepowered.asm.mixin.injection.At;
 
 import com.llamalad7.mixinextras.injector.wrapoperation.Operation;
 import com.llamalad7.mixinextras.injector.wrapoperation.WrapOperation;
-import com.mojang.blaze3d.vertex.PoseStack;
 
 import dev.tr7zw.exordium.ExordiumModBase;
 import dev.tr7zw.exordium.util.BufferedComponent;
 import net.minecraft.client.AttackIndicatorStatus;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.Gui;
+import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.client.resources.model.BakedModel;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
@@ -57,7 +57,7 @@ public class GuiHotbarMixin {
     
     private void store(ItemStack item, int id, Player player) {
         if (item != null && !item.isEmpty()) {
-            hotbarModels[id] = minecraft.getItemRenderer().getModel(item, player.level, player, 0);
+            hotbarModels[id] = minecraft.getItemRenderer().getModel(item, player.level(), player, 0);
             itemPopAnimation[id] = item.getPopTime();
             itemAmount[id] = item.getCount();
             itemDurability[id] = item.getDamageValue();
@@ -86,7 +86,7 @@ public class GuiHotbarMixin {
             if(itemDurability[id] != item.getDamageValue()) {
                 return true;
             }
-            if(minecraft.getItemRenderer().getModel(item, player.level, player, 0) != hotbarModels[id]) {
+            if(minecraft.getItemRenderer().getModel(item, player.level(), player, 0) != hotbarModels[id]) {
                 return true;
             }
         } else if(hotbarModels[id] != null) {
@@ -125,12 +125,12 @@ public class GuiHotbarMixin {
     }
 
     @WrapOperation(method = "render", at = {
-            @At(value = "INVOKE", target = "Lnet/minecraft/client/gui/Gui;renderHotbar(FLcom/mojang/blaze3d/vertex/PoseStack;)V"),
+            @At(value = "INVOKE", target = "Lnet/minecraft/client/gui/Gui;renderHotbar(FLnet/minecraft/client/gui/GuiGraphics;)V"),
     })
-    private void renderExperienceBarWrapper(Gui gui, float f, PoseStack poseStack, final Operation<Void> operation) {
+    private void renderHotbarWrapper(Gui gui, float f, GuiGraphics guiGraphics, final Operation<Void> operation) {
         outdated = hasChanged();
         if (!bufferedComponent.render()) {
-            operation.call(gui, f, poseStack);
+            operation.call(gui, f, guiGraphics);
         }
         bufferedComponent.renderEnd();
     }

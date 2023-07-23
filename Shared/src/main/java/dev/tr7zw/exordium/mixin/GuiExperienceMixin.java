@@ -6,12 +6,12 @@ import org.spongepowered.asm.mixin.injection.At;
 
 import com.llamalad7.mixinextras.injector.wrapoperation.Operation;
 import com.llamalad7.mixinextras.injector.wrapoperation.WrapOperation;
-import com.mojang.blaze3d.vertex.PoseStack;
 
 import dev.tr7zw.exordium.ExordiumModBase;
 import dev.tr7zw.exordium.util.BufferedComponent;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.Gui;
+import net.minecraft.client.gui.GuiGraphics;
 
 @Mixin(Gui.class)
 public class GuiExperienceMixin {
@@ -36,11 +36,11 @@ public class GuiExperienceMixin {
     };
 
     @WrapOperation(method = "render", at = {
-            @At(value = "INVOKE", target = "Lnet/minecraft/client/gui/Gui;renderExperienceBar(Lcom/mojang/blaze3d/vertex/PoseStack;I)V"),
+            @At(value = "INVOKE", target = "Lnet/minecraft/client/gui/Gui;renderExperienceBar(Lnet/minecraft/client/gui/GuiGraphics;I)V"),
     })
-    private void renderExperienceBarWrapper(Gui gui, PoseStack poseStack, int i, final Operation<Void> operation) {
+    private void renderExperienceBarWrapper(Gui gui, GuiGraphics guiGraphics, int i, final Operation<Void> operation) {
         if (!experienceBuffer.render()) {
-            operation.call(gui, poseStack, i);
+            operation.call(gui, guiGraphics, i);
         }
         experienceBuffer.renderEnd();
     }
