@@ -26,7 +26,7 @@ jobs:
         with:
           modrinth-id: DynYZEae
           modrinth-token: ${{ secrets.MODRINTH_TOKEN }}
-          curseforge-id: $curseforgeid$
+          curseforge-id: 681953
           curseforge-token: ${{ secrets.CURSEFORGE_TOKEN }}  
           loaders: fabric
           name: ${{github.ref_name}} - Fabric

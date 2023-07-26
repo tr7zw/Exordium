@@ -18,6 +18,7 @@ replacements:
   relocationpackage: "dev.tr7zw.exordium"
   licensename: "LICENSE"
   modrinthid: "DynYZEae"
+  curseforgeid: "681953"
 enabledFlags:
   - autopublish
   - publishFabric
