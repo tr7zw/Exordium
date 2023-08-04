@@ -35,7 +35,7 @@ public abstract class SignRendererMixin {
     @Inject(method = "renderSignText", at = @At("HEAD"), cancellable = true)
     public void render(BlockPos pos, SignText text, PoseStack poseStack, MultiBufferSource buffer, int packedLight,
             int lineHeight, int maxWidth, boolean isFrontText, CallbackInfo info) {
-        if (!ExordiumModBase.instance.config.enableSignBuffering) {
+        if (!ExordiumModBase.instance.config.enableSignBuffering || renderingSign == null) {
             return;
         }
         poseStack.pushPose();
