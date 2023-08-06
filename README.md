@@ -2,17 +2,23 @@
 
 # Exordium
 
-__Render the HUD and screens at a lower framerate to speed up what's really important: the worldrendering.__
+Exordium is designed to render the GUI and screens at a lower framerate, prioritizing the speed of the world rendering.
 
-Renders the HUD at a lower fixed framerate (configurable in the settings), freeing up CPU and GPU time for the world rendering. There is no good reason to render the hotbar at 100+ FPS.
+[![Chat with me on Discord](https://tr7zw.dev/curse/Discord-long.png)](https://discord.gg/2wKH8yeThf)
+[![Support me on Ko-fi](https://ko-fi.com/img/githubbutton_sm.svg)](https://ko-fi.com/tr7zw)
+
+## Features
+- Render the GUI at a lower framerate (configurable in the settings).
+- Speed up GUI rendering during fade animations (configurable in the settings).
+- Render screens at a lower framerate (configurable in the settings).
+- Pre-render sign text (glowing signs render multiple times each frame in vanilla).
+- Buffer full screen name-tags to reduce the number of draw calls in-game lobbies.
 
 ## Compatibility
+**Note:** This is a work-in-progress software. Visual and compatibility issues may arise with other mods.
 
-__This is still work in progress software! There will be issues, please report them!__
-
-### Affected vanilla features
-
-- Overlays except Vignette (Pumpkin, freezing, spyglass, portal...)
+### Affected vanilla features:
+- Overlays (except Vignette)
 - Hotbar (all parts of it)
 - Crosshair
 - Bossbars
@@ -20,12 +26,12 @@ __This is still work in progress software! There will be issues, please report t
 - Titles
 - Scoreboard
 - Chat
+- All Screens (except the main menu) including the pause menu, inventory, crafting, etc.
 
-### Tested and working with
-
+### Tested and works with:
 - Sodium
 - Iris
-- Optifine
+- Optifine (not recommended/officially supported)
 - AppleSkin
 - Better Ping Display
 - Chat Heads
@@ -35,21 +41,31 @@ __This is still work in progress software! There will be issues, please report t
 - ToroHealth Damage Indicator
 - BetterF3
 
-### Not compatible
-
+### Not compatible with:
 - VulkanMod
+- High-resolution fonts on signs (disable buffering in the config)
+- Caxton (same issue as above)
+- Inventorio
+- MiniHUD (bug on their side)
+- Canvas
+- Many other mods that render their own GUI elements.
 
-### Screen setting notice
+## FAQ
+**Forge support?**  
+No.
 
-This feature is still not done (disabled by default) and has mainly transparency issues. It heavily speeds up mods like REI (Roughly Enough Items), but with visual issues.
+**Does this work with mod XYZ?**  
+It may or may not. Please report incompatible mods on GitHub.
 
-### Downloads
+**Backport to older versions?**  
+No backports are planned. The mod supports Minecraft versions 1.18.0-1.18.2 and 1.19.1-1.20.1 and is made for the Fabric mod loader.
+
+## Screen setting notice
+This feature is currently in development (disabled by default) and may have some transparency issues. This can notably speed up mods like REI, but visual discrepancies may be present.
+
+## Downloads
 - [Curseforge](https://www.curseforge.com/minecraft/mc-mods/exordium)
 - [Modrinth](https://modrinth.com/mod/exordium)
 
 ## License
-
-This project is licensed under [``tr7zw Protective License``](LICENSE).
-This license does not allow others to distribute the software/derivative works(in source or binary form).
-You have to contact the author to get permission for redistribution. (For example: Modpacks(that are not hosted on CurseForge), "Clients", mod hosting sites).
-Keep in mind that [Githubs TOS](https://docs.github.com/en/github/site-policy/github-terms-of-service#d-user-generated-content) and [Overwolfs TOS](https://www.overwolf.com/legal/terms/) apply at their respective places. This (among other things) means you don't need to ask to include the mod in a CurseForge Modpack and that by contributing code it explicitly gets the same license as the repository.
+Exordium is licensed under the [tr7zw Protective License](https://github.com/tr7zw/Exordium/blob/1.20/LICENSE). You must contact the author for redistribution permissions outside of the terms provided by [GitHub TOS](https://docs.github.com/en/github/site-policy/github-terms-of-service#d-user-generated-content) and [Overwolf's TOS](https://www.overwolf.com/legal/terms/). This includes, but is not limited to, redistributing in modpacks not hosted on CurseForge, other clients, or mod hosting sites. Contributions to this project inherit the project's existing license.
