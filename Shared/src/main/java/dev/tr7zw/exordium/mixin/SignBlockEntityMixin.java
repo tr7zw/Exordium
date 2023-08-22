@@ -21,9 +21,10 @@ public class SignBlockEntityMixin implements SignBufferHolder {
     private int currentLight = -1;
 
     @Override
-    public boolean renderBuffered(PoseStack poseStack, MultiBufferSource multiBufferSource, boolean renderFront, int light) {
+    public boolean renderBuffered(PoseStack poseStack, MultiBufferSource multiBufferSource, boolean renderFront,
+            int light) {
         SignBlockEntity sign = (SignBlockEntity) (Object) this;
-        if (isSignEmpty(sign.getFrontText()) || isSignEmpty(sign.getBackText())) {
+        if ((renderFront && isSignEmpty(sign.getFrontText())) || (!renderFront && isSignEmpty(sign.getBackText()))) {
             return true; // empty sign, nothing to do
         }
         if (cachedBufferRenderer == null || currentLight != light || (renderFront && (sign.getFrontText() != front))
@@ -33,6 +34,11 @@ public class SignBlockEntityMixin implements SignBufferHolder {
             }
             cachedBufferRenderer.refreshImage(sign, light, renderFront);
             currentLight = light;
+            if (renderFront) {
+                front = sign.getFrontText();
+            } else {
+                back = sign.getBackText();
+            }
         }
         cachedBufferRenderer.render(poseStack, light, ((Object) this) instanceof HangingSignBlockEntity, renderFront);
         return true;
