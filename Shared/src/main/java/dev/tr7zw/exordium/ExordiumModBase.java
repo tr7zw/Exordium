@@ -5,6 +5,9 @@ import java.io.IOException;
 import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
+
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.mojang.blaze3d.pipeline.RenderTarget;
@@ -20,7 +23,8 @@ import net.minecraft.client.gui.screens.Screen;
 
 public abstract class ExordiumModBase {
 
-    public static ExordiumModBase instance;
+    public static final Logger LOGGER = LogManager.getLogger("Exordium");
+    public static ExordiumModBase instance = new PreLoadedMod();
     private static boolean forceBlend;
 
     public Config config;

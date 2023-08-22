@@ -21,6 +21,7 @@ jobs:
         with:
           files: |
             FG-Fabric/build/libs/*
+            FG-Forge/build/libs/*
       - name: Publish-Fabric
         uses: Kir-Antipov/mc-publish@v3.2
         with:

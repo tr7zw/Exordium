@@ -3,8 +3,6 @@ package dev.tr7zw.exordium;
 import net.minecraftforge.fml.IExtensionPoint;
 import net.minecraftforge.fml.ModLoadingContext;
 import net.minecraftforge.fml.common.Mod;
-import net.minecraftforge.fml.event.lifecycle.FMLCommonSetupEvent;
-import net.minecraftforge.fml.javafmlmod.FMLJavaModLoadingContext;
 
 @Mod("exordium")
 public class ExordiumMod extends ExordiumModBase {
@@ -20,14 +18,10 @@ public class ExordiumMod extends ExordiumModBase {
             onServer = true;
             return;
         }
-        FMLJavaModLoadingContext.get().getModEventBus().addListener(this::setup);
-    }
-
-    private void setup(final FMLCommonSetupEvent event) {
         if(onServer)return;
-        onInitialize();
+        LOGGER.info("Loading Exordium!");
+        super.onInitialize();
     }
-
 
     @Override
     public void initModloader() {
