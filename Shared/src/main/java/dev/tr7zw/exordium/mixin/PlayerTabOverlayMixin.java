@@ -24,20 +24,17 @@ public abstract class PlayerTabOverlayMixin implements TablistAccess {
     private int footerHash = 0;
     private int scoreboardHash = 0;
     private int objectiveHash = 0;
-    private boolean scoreboardOrObjectiveChange = false;
     @Shadow
     private Component header;
     @Shadow
     private Component footer;
     private Objective lastTrackedObjective;
-
+    private boolean outdated;
     private BufferedComponent bufferedComponent = new BufferedComponent(true, ExordiumModBase.instance.config.tablistSettings) {
 
         @Override
         public boolean needsRender() {
-            int newHeaderHash = header == null ? 0 : header.getString().hashCode();
-            int newFooterHash = footer == null ? 0 : footer.getString().hashCode();
-            return playerInfoHash != fastGetPlayerInfoListHashCode(getPlayerInfos()) || headerHash != newHeaderHash || footerHash != newFooterHash || scoreboardOrObjectiveChange;
+            return outdated;
         }
 
         @Override
@@ -49,18 +46,21 @@ public abstract class PlayerTabOverlayMixin implements TablistAccess {
     };
 
     public void updateState(Scoreboard scoreboard, Objective objective) {
-        scoreboardOrObjectiveChange = scoreboardOrObjectiveChanged(scoreboard, objective);
+        boolean scoreboardOrObjectiveChange = scoreboardOrObjectiveChanged(scoreboard, objective);
+        int newHeaderHash = header == null ? 0 : header.getString().hashCode();
+        int newFooterHash = footer == null ? 0 : footer.getString().hashCode();
+        outdated = playerInfoHash != fastGetPlayerInfoListHashCode(getPlayerInfos()) || headerHash != newHeaderHash || footerHash != newFooterHash || scoreboardOrObjectiveChange;
     }
 
     public boolean scoreboardOrObjectiveChanged(Scoreboard scoreboard, Objective objective) {
-        if(objective == null && lastTrackedObjective == null) return false;
+        if (objective == null && lastTrackedObjective == null) return false;
 
         int scoreboardHashCode = 1;
         for (Score score : scoreboard.getPlayerScores(objective))
             scoreboardHashCode = 31 * scoreboardHashCode + (score == null ? 0 : score.getScore());
 
         int newObjectiveHashCode = objective == null ? 0 : objective.getName().hashCode();
-        if(scoreboardHashCode == scoreboardHash && newObjectiveHashCode == objectiveHash) return false;
+        if (scoreboardHashCode == scoreboardHash && newObjectiveHashCode == objectiveHash) return false;
         scoreboardHash = scoreboardHashCode;
         objectiveHash = newObjectiveHashCode;
         lastTrackedObjective = objective;
@@ -69,8 +69,17 @@ public abstract class PlayerTabOverlayMixin implements TablistAccess {
 
     public int fastGetPlayerInfoListHashCode(List<PlayerInfo> playerInfos) {
         int hashCode = 1;
-        for (PlayerInfo playerInfo : playerInfos)
-            hashCode = 31 * hashCode + (playerInfo == null ? 0 : (playerInfo.getTabListDisplayName() == null ? playerInfo.getProfile().getId().hashCode() : playerInfo.getTabListDisplayName().getString().hashCode()));
+        for (PlayerInfo playerInfo : playerInfos) {
+            int combinedHashes = 0;
+            if (playerInfo == null) {
+                hashCode *= 31;
+                continue;
+            }
+            combinedHashes += playerInfo.getProfile().getId().hashCode();
+            combinedHashes += playerInfo.getTabListDisplayName() == null ? 0 : playerInfo.getTabListDisplayName().getString().hashCode();
+            combinedHashes += playerInfo.getSkinLocation().hashCode();
+            hashCode = 31 * hashCode + combinedHashes;
+        }
         return hashCode;
     }
 
