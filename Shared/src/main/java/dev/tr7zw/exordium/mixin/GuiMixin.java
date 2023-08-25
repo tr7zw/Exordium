@@ -1,5 +1,9 @@
 package dev.tr7zw.exordium.mixin;
 
+import dev.tr7zw.exordium.access.TablistAccess;
+import net.minecraft.client.gui.components.PlayerTabOverlay;
+import net.minecraft.world.scores.Objective;
+import net.minecraft.world.scores.Scoreboard;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Shadow;
 import org.spongepowered.asm.mixin.injection.At;
@@ -18,6 +22,8 @@ public class GuiMixin {
 
     @Shadow
     private ChatComponent chat;
+    @Shadow
+    private PlayerTabOverlay tabList;
     
     @WrapOperation(method = "render", at = {
             @At(value = "INVOKE", target = "Lnet/minecraft/client/gui/components/ChatComponent;render(Lnet/minecraft/client/gui/GuiGraphics;III)V"),
@@ -28,6 +34,19 @@ public class GuiMixin {
         BufferedComponent bufferedComponent = chatAccess.getBufferedComponent();
         if(!bufferedComponent.render()) {
             operation.call(instance, guiGraphics, tickCount, j, k);
+        }
+        bufferedComponent.renderEnd();
+    }
+
+    @WrapOperation(method = "render", at = {
+            @At(value = "INVOKE", target = "Lnet/minecraft/client/gui/components/PlayerTabOverlay;render(Lnet/minecraft/client/gui/GuiGraphics;ILnet/minecraft/world/scores/Scoreboard;Lnet/minecraft/world/scores/Objective;)V"),
+    })
+    private void renderTablistWrapper(PlayerTabOverlay instance, GuiGraphics guiGraphics, int screenWidth, Scoreboard scoreboard, Objective objective2, final Operation<Void> operation) {
+        TablistAccess tablistAccess = (TablistAccess) tabList;
+        tablistAccess.updateState(scoreboard, objective2);
+        BufferedComponent bufferedComponent = tablistAccess.getBufferedComponent();
+        if(!bufferedComponent.render()) {
+            operation.call(instance, guiGraphics, screenWidth, scoreboard, objective2);
         }
         bufferedComponent.renderEnd();
     }
