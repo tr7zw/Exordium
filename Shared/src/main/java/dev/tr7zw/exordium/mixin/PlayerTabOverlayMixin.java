@@ -70,7 +70,7 @@ public abstract class PlayerTabOverlayMixin implements TablistAccess {
     public int fastGetPlayerInfoListHashCode(List<PlayerInfo> playerInfos) {
         int hashCode = 1;
         for (PlayerInfo playerInfo : playerInfos)
-            hashCode = 31 * hashCode + (playerInfo == null ? 0 : playerInfo.getProfile().getId().hashCode());
+            hashCode = 31 * hashCode + (playerInfo == null ? 0 : (playerInfo.getTabListDisplayName() == null ? playerInfo.getProfile().getId().hashCode() : playerInfo.getTabListDisplayName().getString().hashCode()));
         return hashCode;
     }
 
