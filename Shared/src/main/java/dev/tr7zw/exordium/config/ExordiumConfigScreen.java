@@ -33,6 +33,7 @@ public class ExordiumConfigScreen extends CustomConfigScreen {
         addSettings(options, config.hotbarSettings, "hotbar");
         addSettings(options, config.experienceSettings, "experience");
         addSettings(options, config.scoreboardSettings, "scoreboard");
+        addSettings(options, config.tablistSettings, "tablist");
       
         getOptions().addSmall(options.toArray(new OptionInstance[0]));
         

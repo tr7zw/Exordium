@@ -51,5 +51,13 @@
     "text.exordium.setting.scoreboard.forceblend": "Force Scoreboard Blend",
     "text.exordium.setting.scoreboard.forceblend.tooltip": "Force on texture blending for the scoreboard. Might fix some issues with other mods.",
     "text.exordium.setting.scoreboard.forceupdates": "Force Scoreboard Updates",
-    "text.exordium.setting.scoreboard.forceupdates.tooltip": "Force the scoreboard to update every frame(keeping in mind the fps limit). Might fix some issues with other mods."
+    "text.exordium.setting.scoreboard.forceupdates.tooltip": "Force the scoreboard to update every frame(keeping in mind the fps limit). Might fix some issues with other mods.",
+    "text.exordium.setting.tablist.enabled": "Buffer Tablist",
+    "text.exordium.setting.tablist.fps": "Buffer Tablist Max. FPS",
+    "text.exordium.setting.tablist.fps.tooltip": "The maximum framerate for the tablist",
+    "text.exordium.setting.tablist.enabled.tooltip": "Enable/Disable buffering the tablist",
+    "text.exordium.setting.tablist.forceblend": "Force Tablist Blend",
+    "text.exordium.setting.tablist.forceblend.tooltip": "Force on texture blending for the tablist. Might fix some issues with other mods.",
+    "text.exordium.setting.tablist.forceupdates": "Force Tablist Updates",
+    "text.exordium.setting.tablist.forceupdates.tooltip": "Force the tablist to update every frame(keeping in mind the fps limit). Might fix some issues with other mods."
   }

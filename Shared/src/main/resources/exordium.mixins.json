@@ -19,7 +19,8 @@
     "GuiHealthMixin",
     "ScoreboardMixin",
     "GuiMixin",
-    "GameRendererMixin"
+    "GameRendererMixin",
+    "PlayerTabOverlayMixin"
   ],
   "injectors": {
     "defaultRequire": 1
