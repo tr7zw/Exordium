@@ -93,6 +93,7 @@ public abstract class PlayerTabOverlayMixin implements TablistAccess {
                 combinedHashes += playerInfo.getTabListDisplayName().getStyle().hashCode();
             }
             combinedHashes += playerInfo.getSkinLocation().hashCode();
+            combinedHashes += playerInfo.getLatency() * 63;
 
             if (lastTrackedObjective != null && lastTrackedObjective.getRenderType() == ObjectiveCriteria.RenderType.HEARTS) {
                 PlayerTabOverlay.HealthState healthState = this.healthStates.computeIfAbsent(playerInfo.getProfile().getId(), (uUID) ->
