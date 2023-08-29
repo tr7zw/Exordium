@@ -16,7 +16,6 @@ import org.spongepowered.asm.mixin.Mixin;
 import net.minecraft.client.gui.components.PlayerTabOverlay;
 import org.spongepowered.asm.mixin.Shadow;
 
-import java.sql.SQLType;
 import java.util.List;
 import java.util.Map;
 import java.util.UUID;
