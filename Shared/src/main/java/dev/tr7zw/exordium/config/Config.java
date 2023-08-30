@@ -6,6 +6,7 @@ public class Config {
     public boolean enableSignBuffering = true;
     public int targetFPSNameTags = 60;
     public boolean enableNametagScreenBuffering = false;
+    public int pollRate = 60;
     public ComponentSettings chatSettings = new ComponentSettings(true, 20);
     public ComponentSettings debugScreenSettings = new ComponentSettings(true, 10);
     public ComponentSettings hotbarSettings = new ComponentSettings(true, 20);

@@ -59,5 +59,7 @@
     "text.exordium.setting.tablist.forceblend": "Force Tablist Blend",
     "text.exordium.setting.tablist.forceblend.tooltip": "Force on texture blending for the tablist. Might fix some issues with other mods.",
     "text.exordium.setting.tablist.forceupdates": "Force Tablist Updates",
-    "text.exordium.setting.tablist.forceupdates.tooltip": "Force the tablist to update every frame(keeping in mind the fps limit). Might fix some issues with other mods."
+    "text.exordium.setting.tablist.forceupdates.tooltip": "Force the tablist to update every frame(keeping in mind the fps limit). Might fix some issues with other mods.",
+    "text.exordium.pollRate": "Poll Rate",
+    "text.exordium.pollRate.tooltip": "The rate at which the game will check for changes in UI elements. Recommended to set to your monitor's refresh rate."
   }

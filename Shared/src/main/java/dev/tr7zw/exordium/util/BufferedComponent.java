@@ -81,13 +81,12 @@ public abstract class BufferedComponent {
         if(model == null) {
             refreshModel(screenWidth, screenHeight);
         }
-        boolean updateFrame = forceRender || ((settings.forceUpdates || needsRender()) && System.currentTimeMillis() > cooldown);
+        boolean updateFrame = forceRender || (System.currentTimeMillis() > cooldown && (settings.forceUpdates || needsRenderPaced()));
         if (!updateFrame) {
             renderTextureOverlay(guiTarget.getColorTextureId());
             GlStateManager._blendFuncSeparate(srcRgb, dstRgb, srcAlpha, dstAlpha);
             return true;
         }
-        
         guiTarget.setClearColor(0, 0, 0, 0);
         guiTarget.clear(false);
         guiTarget.bindWrite(false);
@@ -143,6 +142,14 @@ public abstract class BufferedComponent {
 
     public boolean isRendering() {
         return isRendering;
+    }
+    
+    private boolean needsRenderPaced() {
+        if (needsRender()) {
+            return true;
+        }
+        cooldown = System.currentTimeMillis() + (1000/ExordiumModBase.instance.config.pollRate);
+        return false;
     }
 
     public abstract boolean needsRender();
