@@ -4,21 +4,29 @@ import dev.tr7zw.exordium.ExordiumModBase;
 import dev.tr7zw.exordium.access.TablistAccess;
 import dev.tr7zw.exordium.util.BufferedComponent;
 import net.minecraft.client.Minecraft;
+import net.minecraft.client.gui.Gui;
 import net.minecraft.client.multiplayer.PlayerInfo;
 import net.minecraft.network.chat.Component;
 import net.minecraft.world.scores.Objective;
 import net.minecraft.world.scores.Score;
 import net.minecraft.world.scores.Scoreboard;
+import net.minecraft.world.scores.criteria.ObjectiveCriteria;
 import org.spongepowered.asm.mixin.Mixin;
 import net.minecraft.client.gui.components.PlayerTabOverlay;
 import org.spongepowered.asm.mixin.Shadow;
 
 import java.util.List;
+import java.util.Map;
+import java.util.UUID;
 
 @Mixin(PlayerTabOverlay.class)
 public abstract class PlayerTabOverlayMixin implements TablistAccess {
     @Shadow
     private Minecraft minecraft;
+    @Shadow
+    private Gui gui;
+    @Shadow
+    private Map<UUID, PlayerTabOverlay.HealthState> healthStates;
     private int playerInfoHash = 0;
     private int headerHash = 0;
     private int footerHash = 0;
@@ -70,14 +78,22 @@ public abstract class PlayerTabOverlayMixin implements TablistAccess {
     public int fastGetPlayerInfoListHashCode(List<PlayerInfo> playerInfos) {
         int hashCode = 1;
         for (PlayerInfo playerInfo : playerInfos) {
+            if (playerInfo == null) continue;
+
             int combinedHashes = 0;
-            if (playerInfo == null) {
-                hashCode *= 31;
-                continue;
-            }
             combinedHashes += playerInfo.getProfile().getId().hashCode();
-            combinedHashes += playerInfo.getTabListDisplayName() == null ? 0 : playerInfo.getTabListDisplayName().getString().hashCode();
+            if (playerInfo.getTabListDisplayName() != null) {
+                combinedHashes += playerInfo.getTabListDisplayName().getString().hashCode();
+                combinedHashes += playerInfo.getTabListDisplayName().getStyle().hashCode();
+            }
             combinedHashes += playerInfo.getSkinLocation().hashCode();
+            combinedHashes += playerInfo.getLatency() * 63;
+
+            if (lastTrackedObjective != null && lastTrackedObjective.getRenderType() == ObjectiveCriteria.RenderType.HEARTS) {
+                PlayerTabOverlay.HealthState healthState = this.healthStates.computeIfAbsent(playerInfo.getProfile().getId(), (uUID) ->
+                        new PlayerTabOverlay.HealthState(lastTrackedObjective.getScoreboard().getOrCreatePlayerScore(playerInfo.getProfile().getName(), lastTrackedObjective).getScore()));
+                combinedHashes = 31 * combinedHashes + (healthState.isBlinking(this.gui.getGuiTicks()) ? 63 : 127);
+            }
             hashCode = 31 * hashCode + combinedHashes;
         }
         return hashCode;
