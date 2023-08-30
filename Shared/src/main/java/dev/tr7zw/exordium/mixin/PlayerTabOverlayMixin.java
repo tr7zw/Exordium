@@ -8,6 +8,7 @@ import net.minecraft.client.gui.Gui;
 import net.minecraft.client.multiplayer.PlayerInfo;
 import net.minecraft.network.chat.Component;
 import net.minecraft.network.chat.Style;
+import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.scores.Objective;
 import net.minecraft.world.scores.Score;
 import net.minecraft.world.scores.Scoreboard;
@@ -79,16 +80,12 @@ public abstract class PlayerTabOverlayMixin implements TablistAccess {
     public int fastGetPlayerInfoListHashCode(List<PlayerInfo> playerInfos) {
         int hashCode = 1;
         for (PlayerInfo playerInfo : playerInfos) {
+            if (playerInfo == null) continue;
+
             int combinedHashes = 0;
-            if (playerInfo == null) {
-                hashCode *= 31;
-                continue;
-            }
             combinedHashes += playerInfo.getProfile().getId().hashCode();
             if (playerInfo.getTabListDisplayName() != null) {
                 combinedHashes += playerInfo.getTabListDisplayName().getString().hashCode();
-                Style displaynameStyle = playerInfo.getTabListDisplayName().getStyle();
-                combinedHashes += (displaynameStyle.getColor() == null ? 0 : displaynameStyle.getColor().getValue()) + (displaynameStyle.isBold() ? 1 : 0) + (displaynameStyle.isItalic() ? 3 : 0) + (displaynameStyle.isObfuscated() ? 7 : 0) + (displaynameStyle.isUnderlined() ? 15 : 0) + (displaynameStyle.isStrikethrough() ? 31 : 0);
                 combinedHashes += playerInfo.getTabListDisplayName().getStyle().hashCode();
             }
             combinedHashes += playerInfo.getSkinLocation().hashCode();
