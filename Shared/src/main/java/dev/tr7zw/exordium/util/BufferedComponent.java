@@ -29,6 +29,10 @@ public abstract class BufferedComponent {
     private int srcAlpha = 1;
     private int dstAlpha = 0;
     
+    public static Model getModel() {
+        return model;
+    }
+    
     public BufferedComponent(ComponentSettings settings) {
         this(false, settings);
     }
@@ -83,7 +87,8 @@ public abstract class BufferedComponent {
         }
         boolean updateFrame = forceRender || (System.currentTimeMillis() > cooldown && (settings.forceUpdates || needsRenderPaced()));
         if (!updateFrame) {
-            renderTextureOverlay(guiTarget.getColorTextureId());
+//            renderTextureOverlay(guiTarget.getColorTextureId());
+            ExordiumModBase.instance.getDelayedRenderCallManager().addBufferedComponent(this);
             GlStateManager._blendFuncSeparate(srcRgb, dstRgb, srcAlpha, dstAlpha);
             return true;
         }
@@ -122,7 +127,8 @@ public abstract class BufferedComponent {
         if(forceBlending || settings.forceBlend) {
             ExordiumModBase.setForceBlend(false);
         }
-        renderTextureOverlay(guiTarget.getColorTextureId());
+//        renderTextureOverlay(guiTarget.getColorTextureId());
+        ExordiumModBase.instance.getDelayedRenderCallManager().addBufferedComponent(this);
         GlStateManager._blendFuncSeparate(srcRgb, dstRgb, srcAlpha, dstAlpha);
     }
 
@@ -138,6 +144,10 @@ public abstract class BufferedComponent {
         RenderSystem.depthMask(true);
         RenderSystem.enableDepthTest();
         RenderSystem.setShaderColor(1.0F, 1.0F, 1.0F, 1.0F);
+    }
+    
+    public int getTextureId() {
+        return guiTarget.getColorTextureId();
     }
 
     public boolean isRendering() {

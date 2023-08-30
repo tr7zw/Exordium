@@ -7,10 +7,13 @@ import net.minecraft.world.scores.Scoreboard;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Shadow;
 import org.spongepowered.asm.mixin.injection.At;
+import org.spongepowered.asm.mixin.injection.Inject;
+import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 
 import com.llamalad7.mixinextras.injector.wrapoperation.Operation;
 import com.llamalad7.mixinextras.injector.wrapoperation.WrapOperation;
 
+import dev.tr7zw.exordium.ExordiumModBase;
 import dev.tr7zw.exordium.access.ChatAccess;
 import dev.tr7zw.exordium.util.BufferedComponent;
 import net.minecraft.client.gui.Gui;
@@ -49,6 +52,11 @@ public class GuiMixin {
             operation.call(instance, guiGraphics, screenWidth, scoreboard, objective2);
         }
         bufferedComponent.renderEnd();
+    }
+    
+    @Inject(method = "render", at = @At(value = "TAIL"))
+    public void render(GuiGraphics guiGraphics, float partialTick, CallbackInfo ci) {
+        ExordiumModBase.instance.getDelayedRenderCallManager().renderComponents();
     }
     
 }
