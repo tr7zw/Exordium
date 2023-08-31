@@ -9,6 +9,7 @@ import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.mojang.blaze3d.pipeline.RenderTarget;
 import com.mojang.blaze3d.platform.GlStateManager;
+import com.mojang.blaze3d.shaders.Uniform;
 import com.mojang.blaze3d.systems.RenderSystem;
 
 import dev.tr7zw.exordium.config.Config;
@@ -17,6 +18,7 @@ import dev.tr7zw.exordium.config.ExordiumConfigScreen;
 import dev.tr7zw.exordium.util.DelayedRenderCallManager;
 import dev.tr7zw.exordium.util.NametagScreenBuffer;
 import net.minecraft.client.gui.screens.Screen;
+import net.minecraft.client.renderer.ShaderInstance;
 
 public abstract class ExordiumModBase {
 
@@ -31,6 +33,8 @@ public abstract class ExordiumModBase {
     public static SignSettings signSettings = new SignSettings();
     public static NametagSettings nametagSettings = new NametagSettings();
     private final DelayedRenderCallManager delayedRenderCallManager = new DelayedRenderCallManager();
+    public ShaderInstance customShaderInstance;
+    public Uniform textureCount;
 
     public void onInitialize() {
 		instance = this;
