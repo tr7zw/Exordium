@@ -21,7 +21,8 @@
     "GuiMixin",
     "GameRendererMixin",
     "PlayerTabOverlayMixin",
-    "VignetteMixin"
+    "VignetteMixin",
+    "CrosshairMixin"
   ],
   "injectors": {
     "defaultRequire": 1

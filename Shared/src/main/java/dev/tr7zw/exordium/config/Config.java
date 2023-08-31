@@ -14,17 +14,24 @@ public class Config {
     public ComponentSettings healthSettings = new ComponentSettings(true, 20);
     public ComponentSettings scoreboardSettings = new ComponentSettings(true, 5);
     public ComponentSettings tablistSettings = new ComponentSettings(true, 20);
-    public ComponentSettings vignetteSettings = new ComponentSettings(true, 5);
+    public ComponentSettings vignetteSettings = new ComponentSettings(true, 5, true);
+    public ComponentSettings crosshairSettings = new ComponentSettings(false, 20, true);
     
-    public class ComponentSettings {
+    public static class ComponentSettings {
+        public transient boolean hideBlendOption = false;
         public boolean enabled = true;
         public int maxFps = 10;
         public boolean forceBlend = false;
         public boolean forceUpdates = false;
         public ComponentSettings(boolean enabled, int maxFps) {
+            this(enabled, maxFps, false);
+        }
+        
+        public ComponentSettings(boolean enabled, int maxFps, boolean hideBlendOption) {
             super();
             this.enabled = enabled;
             this.maxFps = maxFps;
+            this.hideBlendOption = hideBlendOption;
         }
     }
     
