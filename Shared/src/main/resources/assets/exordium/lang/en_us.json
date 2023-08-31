@@ -61,5 +61,13 @@
     "text.exordium.setting.tablist.forceupdates": "Force Tablist Updates",
     "text.exordium.setting.tablist.forceupdates.tooltip": "Force the tablist to update every frame(keeping in mind the fps limit). Might fix some issues with other mods.",
     "text.exordium.pollRate": "Poll Rate",
-    "text.exordium.pollRate.tooltip": "The rate at which the game will check for changes in UI elements. Recommended to set to your monitor's refresh rate."
+    "text.exordium.pollRate.tooltip": "The rate at which the game will check for changes in UI elements. Recommended to set to your monitor's refresh rate.",
+    "text.exordium.setting.vignette.enabled": "Buffer Fast Vignette",
+    "text.exordium.setting.vignette.enabled.tooltip": "Enable/Disable a custom buffered vignette implementation",
+    "text.exordium.setting.vignette.fps": "Buffer Vignette Max. FPS",
+    "text.exordium.setting.vignette.fps.tooltip": "The maximum framerate for the vignette",
+    "text.exordium.setting.vignette.forceblend": "Force Vignette Blend",
+    "text.exordium.setting.vignette.forceblend.tooltip": "Force on texture blending for the vignette. Might fix some issues with other mods.",
+    "text.exordium.setting.vignette.forceupdates": "Force Vignette Updates",
+    "text.exordium.setting.vignette.forceupdates.tooltip": "Force the vignette to update every frame(keeping in mind the fps limit). Might fix some issues with other mods."
   }

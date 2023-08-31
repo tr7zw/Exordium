@@ -20,7 +20,8 @@
     "ScoreboardMixin",
     "GuiMixin",
     "GameRendererMixin",
-    "PlayerTabOverlayMixin"
+    "PlayerTabOverlayMixin",
+    "VignetteMixin"
   ],
   "injectors": {
     "defaultRequire": 1
