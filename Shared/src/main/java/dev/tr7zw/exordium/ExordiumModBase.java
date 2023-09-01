@@ -15,6 +15,7 @@ import com.mojang.blaze3d.systems.RenderSystem;
 import dev.tr7zw.exordium.config.Config;
 import dev.tr7zw.exordium.config.ConfigUpgrader;
 import dev.tr7zw.exordium.config.ExordiumConfigScreen;
+import dev.tr7zw.exordium.util.CustomShaderManager;
 import dev.tr7zw.exordium.util.DelayedRenderCallManager;
 import dev.tr7zw.exordium.util.NametagScreenBuffer;
 import net.minecraft.client.gui.screens.Screen;
@@ -33,8 +34,7 @@ public abstract class ExordiumModBase {
     public static SignSettings signSettings = new SignSettings();
     public static NametagSettings nametagSettings = new NametagSettings();
     private final DelayedRenderCallManager delayedRenderCallManager = new DelayedRenderCallManager();
-    public ShaderInstance customShaderInstance;
-    public Uniform textureCount;
+    private final CustomShaderManager customShaderManager = new CustomShaderManager();
 
     public void onInitialize() {
 		instance = this;
@@ -106,6 +106,10 @@ public abstract class ExordiumModBase {
 
     public void setTemporaryScreenOverwrite(RenderTarget temporaryScreenOverwrite) {
         this.temporaryScreenOverwrite = temporaryScreenOverwrite;
+    }
+    
+    public CustomShaderManager getCustomShaderManager() {
+        return customShaderManager;
     }
     
 }

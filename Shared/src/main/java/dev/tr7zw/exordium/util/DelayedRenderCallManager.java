@@ -25,6 +25,7 @@ public class DelayedRenderCallManager {
     private List<BufferedComponent> componentRenderCalls = new ArrayList<>();
     private Matrix4f usedProjectionMatrix = new Matrix4f();
     private final int maxTexturesPerDraw = 8;
+    private BlendSateHolder blendSateHolder = new BlendSateHolder();
 
     public void setProjectionMatrix(Matrix4f mat) {
         this.usedProjectionMatrix = mat;
@@ -62,34 +63,33 @@ public class DelayedRenderCallManager {
     }
 
     public void renderComponents() {
+        blendSateHolder.fetch();
+        CustomShaderManager shaderManager = ExordiumModBase.instance.getCustomShaderManager();
         RenderSystem.disableDepthTest();
         RenderSystem.depthMask(false);
         RenderSystem.enableBlend();
         RenderSystem.blendFunc(GlStateManager.SourceFactor.ONE, GlStateManager.DestFactor.ONE_MINUS_SRC_ALPHA);
-        RenderSystem.setShader(() -> ExordiumModBase.instance.customShaderInstance);
+        RenderSystem.setShader(() -> shaderManager.getPositionMultiTexShader());
         RenderSystem.setShaderColor(1.0F, 1.0F, 1.0F, 1.0F);
         Model model = BufferedComponent.getModel();
         int textureId = 0;
-        int rendercalls = 0;
         for (BufferedComponent component : componentRenderCalls) {
             RenderSystem.setShaderTexture(textureId, component.getTextureId());
             textureId++;
             if(textureId == maxTexturesPerDraw) {
-                ExordiumModBase.instance.textureCount.set(maxTexturesPerDraw);
+                shaderManager.getPositionMultiTexTextureCountUniform().set(maxTexturesPerDraw);
                 model.draw(RenderSystem.getModelViewMatrix());
                 textureId = 0;
-                rendercalls++;
             }
         }
         if(textureId > 0) {
-            ExordiumModBase.instance.textureCount.set(textureId);
+            shaderManager.getPositionMultiTexTextureCountUniform().set(textureId);
             model.draw(RenderSystem.getModelViewMatrix());
-            rendercalls++;
         }
-//        System.out.println(rendercalls + " " + componentRenderCalls.size());
         RenderSystem.depthMask(true);
         RenderSystem.enableDepthTest();
         RenderSystem.setShaderColor(1.0F, 1.0F, 1.0F, 1.0F);
+        blendSateHolder.apply();
         componentRenderCalls.clear();
     }
 

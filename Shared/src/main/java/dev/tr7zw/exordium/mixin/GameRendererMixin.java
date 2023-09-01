@@ -40,8 +40,8 @@ public abstract class GameRendererMixin {
     @Inject(method = "reloadShaders", at = @At("TAIL"))
     public void reloadShaders(ResourceProvider resourceProvider, CallbackInfo ci) {
         try {
-            ExordiumModBase.instance.customShaderInstance = new ShaderInstance(resourceProvider, "position_multi_tex", DefaultVertexFormat.POSITION_TEX);
-            ExordiumModBase.instance.textureCount = ExordiumModBase.instance.customShaderInstance.getUniform("texcount");
+            ExordiumModBase.instance.getCustomShaderManager().registerShaderInstance(
+                    new ShaderInstance(resourceProvider, "position_multi_tex", DefaultVertexFormat.POSITION_TEX));
         } catch (IOException e) {
             throw new RuntimeException("Unable to load Exordium Shader", e);
         }

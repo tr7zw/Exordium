@@ -30,26 +30,26 @@ public class ExordiumConfigScreen extends CustomConfigScreen {
                 (v) -> config.targetFPSNameTags = v));
         options.add(getIntOption("text.exordium.pollRate", 20, 240, () -> config.pollRate, (v) -> config.pollRate = v));
 
-        addSettings(options, config.chatSettings, "chat");
-        addSettings(options, config.debugScreenSettings, "debug");
-        addSettings(options, config.healthSettings, "health");
-        addSettings(options, config.hotbarSettings, "hotbar");
-        addSettings(options, config.experienceSettings, "experience");
-        addSettings(options, config.scoreboardSettings, "scoreboard");
-        addSettings(options, config.tablistSettings, "tablist");
-        addSettings(options, config.vignetteSettings, "vignette");
-        addSettings(options, config.crosshairSettings, "crosshair");
+        addSettings(options, config.chatSettings, "chat", false);
+        addSettings(options, config.debugScreenSettings, "debug", false);
+        addSettings(options, config.healthSettings, "health", false);
+        addSettings(options, config.hotbarSettings, "hotbar", false);
+        addSettings(options, config.experienceSettings, "experience", false);
+        addSettings(options, config.scoreboardSettings, "scoreboard", false);
+        addSettings(options, config.tablistSettings, "tablist", false);
+        addSettings(options, config.vignetteSettings, "vignette", true);
+        addSettings(options, config.crosshairSettings, "crosshair", true);
 
         getOptions().addSmall(options.toArray(new OptionInstance[0]));
 
     }
 
-    private void addSettings(List<OptionInstance<?>> options, ComponentSettings settings, String name) {
+    private void addSettings(List<OptionInstance<?>> options, ComponentSettings settings, String name, boolean hideBlending) {
         options.add(getOnOffOption("text.exordium.setting." + name + ".enabled", () -> settings.enabled,
                 (b) -> settings.enabled = b));
         options.add(getIntOption("text.exordium.setting." + name + ".fps", 5, 60, () -> settings.maxFps,
                 (v) -> settings.maxFps = v));
-        if (!settings.hideBlendOption) {
+        if (!hideBlending) {
             options.add(getOnOffOption("text.exordium.setting." + name + ".forceblend", () -> settings.forceBlend,
                     (b) -> settings.forceBlend = b));
         }
