@@ -15,7 +15,7 @@ import net.minecraft.client.gui.components.DebugScreenOverlay;
 @Mixin(Gui.class)
 public class GuiDebugOverlayMixin {
 
-    private BufferedComponent debugBufferedComponent = new BufferedComponent(true, ExordiumModBase.instance.config.debugScreenSettings) {
+    private BufferedComponent debugBufferedComponent = new BufferedComponent(true, () -> ExordiumModBase.instance.config.debugScreenSettings) {
         
         @Override
         public boolean needsRender() {

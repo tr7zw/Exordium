@@ -38,7 +38,7 @@ public abstract class PlayerTabOverlayMixin implements TablistAccess {
     private Component footer;
     private Objective lastTrackedObjective;
     private boolean outdated;
-    private BufferedComponent bufferedComponent = new BufferedComponent(true, ExordiumModBase.instance.config.tablistSettings) {
+    private BufferedComponent bufferedComponent = new BufferedComponent(true, () -> ExordiumModBase.instance.config.tablistSettings) {
 
         @Override
         public boolean needsRender() {

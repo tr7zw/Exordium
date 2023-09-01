@@ -32,7 +32,7 @@ public class GuiHotbarMixin {
     private boolean hasEnchantedItem = false;
     private boolean cooldownActive = false;
 
-    private BufferedComponent bufferedComponent = new BufferedComponent(ExordiumModBase.instance.config.hotbarSettings) {
+    private BufferedComponent bufferedComponent = new BufferedComponent(() -> ExordiumModBase.instance.config.hotbarSettings) {
 
         @Override
         public boolean needsRender() {

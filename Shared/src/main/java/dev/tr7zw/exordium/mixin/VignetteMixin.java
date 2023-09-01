@@ -35,7 +35,7 @@ public class VignetteMixin {
     private float lastVignetteBrightness = 1.0F;
 
     private BufferedComponent vignetteBuffer = new BufferedComponent(true,
-            ExordiumModBase.instance.config.vignetteSettings) {
+            () -> ExordiumModBase.instance.config.vignetteSettings) {
 
         @Override
         public boolean needsRender() {

@@ -48,7 +48,7 @@ public abstract class GuiHealthMixin {
     private float lastExhaustionLevel;
     private boolean hadVisualEffects;
 
-    private BufferedComponent healthBuffer = new BufferedComponent(ExordiumModBase.instance.config.healthSettings) {
+    private BufferedComponent healthBuffer = new BufferedComponent(() -> ExordiumModBase.instance.config.healthSettings) {
 
         @Override
         public boolean needsRender() {

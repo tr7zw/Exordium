@@ -1,5 +1,7 @@
 package dev.tr7zw.exordium.util;
 
+import java.util.function.Supplier;
+
 import org.joml.Vector3f;
 
 import com.mojang.blaze3d.pipeline.RenderTarget;
@@ -17,7 +19,7 @@ public abstract class BufferedComponent {
 
     private static final Minecraft minecraft = Minecraft.getInstance();
     private static Model model = null;
-    private final ComponentSettings settings;
+    private final Supplier<ComponentSettings> settings;
     private RenderTarget guiTarget = new TextureTarget(100, 100, true, false);
     private long cooldown = System.currentTimeMillis();
     private int guiScale = 0;
@@ -29,11 +31,11 @@ public abstract class BufferedComponent {
         return model;
     }
     
-    public BufferedComponent(ComponentSettings settings) {
+    public BufferedComponent(Supplier<ComponentSettings> settings) {
         this(false, settings);
     }
     
-    public BufferedComponent(boolean forceBlending, ComponentSettings settings) {
+    public BufferedComponent(boolean forceBlending, Supplier<ComponentSettings> settings) {
         this.forceBlending = forceBlending;
         this.settings = settings;
     }
@@ -62,7 +64,7 @@ public abstract class BufferedComponent {
      * @return true if the buffer was used. False = render as usual
      */
     public boolean render() {
-        if(!settings.enabled) {
+        if(!settings.get().enabled) {
             return false;
         }
         if(!blendSateHolder.isBlendStateFetched()) { // the intended blendstate is not know. Skip the buffer logic, let it render normally, then grab the expected state
@@ -81,7 +83,7 @@ public abstract class BufferedComponent {
         if(model == null) {
             refreshModel(screenWidth, screenHeight);
         }
-        boolean updateFrame = forceRender || (System.currentTimeMillis() > cooldown && (settings.forceUpdates || needsRenderPaced()));
+        boolean updateFrame = forceRender || (System.currentTimeMillis() > cooldown && (settings.get().forceUpdates || needsRenderPaced()));
         if (!updateFrame) {
 //            renderTextureOverlay(guiTarget.getColorTextureId());
             ExordiumModBase.instance.getDelayedRenderCallManager().addBufferedComponent(this);
@@ -95,7 +97,7 @@ public abstract class BufferedComponent {
         ExordiumModBase.instance.setTemporaryScreenOverwrite(guiTarget);
 
         ExordiumModBase.correctBlendMode();
-        if(forceBlending || settings.forceBlend) {
+        if(forceBlending || settings.get().forceBlend) {
             ExordiumModBase.setForceBlend(true);
         }
         guiTarget.bindWrite(false);
@@ -114,9 +116,9 @@ public abstract class BufferedComponent {
         ExordiumModBase.instance.setTemporaryScreenOverwrite(null);
         guiTarget.unbindWrite();
         Minecraft.getInstance().getMainRenderTarget().bindWrite(true);
-        cooldown = System.currentTimeMillis() + (1000/settings.maxFps);
+        cooldown = System.currentTimeMillis() + (1000/settings.get().maxFps);
         isRendering = false;
-        if(forceBlending || settings.forceBlend) {
+        if(forceBlending || settings.get().forceBlend) {
             ExordiumModBase.setForceBlend(false);
         }
 //        renderTextureOverlay(guiTarget.getColorTextureId());

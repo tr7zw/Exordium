@@ -29,7 +29,7 @@ public abstract class ChatComponentMixin implements ChatAccess {
     
     boolean outdated = false;
     
-    private BufferedComponent bufferedComponent = new BufferedComponent(ExordiumModBase.instance.config.chatSettings) {
+    private BufferedComponent bufferedComponent = new BufferedComponent(() -> ExordiumModBase.instance.config.chatSettings) {
         
         @Override
         public boolean needsRender() {

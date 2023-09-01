@@ -25,7 +25,7 @@ public class ScoreboardMixin {
     private Minecraft minecraft;
     private String scoreboardState = null;
 
-    private BufferedComponent scoreboardBuffer = new BufferedComponent(true, ExordiumModBase.instance.config.scoreboardSettings) {
+    private BufferedComponent scoreboardBuffer = new BufferedComponent(true, () -> ExordiumModBase.instance.config.scoreboardSettings) {
 
         @Override
         public boolean needsRender() {

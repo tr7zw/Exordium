@@ -24,7 +24,7 @@ public class CrosshairMixin {
     private float lastYaw = 0;
 
     private BufferedComponent crosshairBufferedComponent = new BufferedComponent(true,
-            ExordiumModBase.instance.config.debugScreenSettings) {
+            () -> ExordiumModBase.instance.config.debugScreenSettings) {
 
         @Override
         public boolean needsRender() {

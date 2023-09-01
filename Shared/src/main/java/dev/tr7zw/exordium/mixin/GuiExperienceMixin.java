@@ -21,7 +21,7 @@ public class GuiExperienceMixin {
     private int lastlevel = 0;
     private float lastprogress = 0;
 
-    private BufferedComponent experienceBuffer = new BufferedComponent(ExordiumModBase.instance.config.experienceSettings) {
+    private BufferedComponent experienceBuffer = new BufferedComponent(() -> ExordiumModBase.instance.config.experienceSettings) {
 
         @Override
         public boolean needsRender() {
