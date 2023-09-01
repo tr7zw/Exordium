@@ -9,11 +9,11 @@ public class BlendSateHolder {
     private int dstRgb = 0;
     private int srcAlpha = 1;
     private int dstAlpha = 0;
-    
+
     public boolean isBlendStateFetched() {
         return blendStateFetched;
     }
- 
+
     public void fetch() {
         blendStateFetched = true;
         srcRgb = GlStateManager.BLEND.srcRgb;
@@ -21,9 +21,9 @@ public class BlendSateHolder {
         dstRgb = GlStateManager.BLEND.dstRgb;
         dstAlpha = GlStateManager.BLEND.dstAlpha;
     }
-    
+
     public void apply() {
         GlStateManager._blendFuncSeparate(srcRgb, dstRgb, srcAlpha, dstAlpha);
     }
-    
+
 }

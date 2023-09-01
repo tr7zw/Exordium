@@ -25,13 +25,14 @@ import net.minecraft.world.phys.Vec3;
 public abstract class SignRendererMixin {
 
     private SignBlockEntity renderingSign;
-    
+
     @Inject(method = "renderSignWithText", at = @At("HEAD"))
     void renderSignWithText(SignBlockEntity signEntity, PoseStack poseStack, MultiBufferSource buffer, int packedLight,
-            int packedOverlay, BlockState state, SignBlock signBlock, WoodType woodType, Model model, CallbackInfo info) {
+            int packedOverlay, BlockState state, SignBlock signBlock, WoodType woodType, Model model,
+            CallbackInfo info) {
         this.renderingSign = signEntity;
     }
-    
+
     @Inject(method = "renderSignText", at = @At("HEAD"), cancellable = true)
     public void render(BlockPos pos, SignText text, PoseStack poseStack, MultiBufferSource buffer, int packedLight,
             int lineHeight, int maxWidth, boolean isFrontText, CallbackInfo info) {
@@ -46,9 +47,10 @@ public abstract class SignRendererMixin {
             info.cancel();
         }
     }
-    
+
     @Shadow
     abstract Vec3 getTextOffset();
+
     @Shadow
     abstract void translateSignText(PoseStack poseStack, boolean isFrontText, Vec3 offset);
 

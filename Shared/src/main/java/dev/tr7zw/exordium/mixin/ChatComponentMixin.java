@@ -21,16 +21,17 @@ public abstract class ChatComponentMixin implements ChatAccess {
     private List<GuiMessage.Line> trimmedMessages;
     @Shadow
     private int chatScrollbarPos;
-    
+
     private int lastScrollbarPos = 0;
     private int messageCount = 0;
     private boolean wasFocused = false;
     private GuiMessage.Line lastMessage = null;
-    
+
     boolean outdated = false;
-    
-    private BufferedComponent bufferedComponent = new BufferedComponent(() -> ExordiumModBase.instance.config.chatSettings) {
-        
+
+    private BufferedComponent bufferedComponent = new BufferedComponent(
+            () -> ExordiumModBase.instance.config.chatSettings) {
+
         @Override
         public boolean needsRender() {
             return outdated;
@@ -44,11 +45,12 @@ public abstract class ChatComponentMixin implements ChatAccess {
             wasFocused = isChatFocused();
         }
     };
-    
+
     public boolean hasChanged(int i) {
         GuiMessage.Line msg = trimmedMessages.isEmpty() ? null : trimmedMessages.get(0);
-        boolean changed = chatScrollbarPos != lastScrollbarPos || messageCount != trimmedMessages.size() || isChatFocused() != wasFocused || msg != lastMessage;
-        if(changed) {
+        boolean changed = chatScrollbarPos != lastScrollbarPos || messageCount != trimmedMessages.size()
+                || isChatFocused() != wasFocused || msg != lastMessage;
+        if (changed) {
             return true;
         }
         int j = getLinesPerPage();
@@ -57,28 +59,28 @@ public abstract class ChatComponentMixin implements ChatAccess {
             if (guiMessage != null) {
                 int p = i - guiMessage.addedTime();
                 if (p > 170 && p < 200) { // 180 is correct, add a tiny buffer for the frame to catch up
-                        return true;
+                    return true;
                 }
             }
         }
         return false;
     }
-    
+
     public void updateState(int tickCount) {
         outdated = hasChanged(tickCount);
     }
-    
+
     public BufferedComponent getBufferedComponent() {
         return bufferedComponent;
     }
 
     @Shadow
     public abstract boolean isChatFocused();
-    
+
     @Shadow
     public abstract boolean isChatHidden();
-    
+
     @Shadow
     public abstract int getLinesPerPage();
-    
+
 }

@@ -21,13 +21,14 @@ public class NametagScreenBuffer {
     private boolean needsNewData = true;
     private int requestedNewData = 0;
     private long nextFrame = System.currentTimeMillis();
-    
+
     public NametagScreenBuffer(int cacheTime) {
         reset(cacheTime);
     }
-    
+
     /**
-     * Prepares the buffer for a new frame if the old one is too old or the size changed.
+     * Prepares the buffer for a new frame if the old one is too old or the size
+     * changed.
      * 
      * @param cacheTime
      */
@@ -36,22 +37,22 @@ public class NametagScreenBuffer {
         guiTarget.clear(false);
         nextFrame = System.currentTimeMillis() + cacheTime;
     }
-    
+
     /**
      * @return true if ready for rendering
      */
     public boolean bind() {
-        reset(1000/ExordiumModBase.instance.config.targetFPSNameTags);
+        reset(1000 / ExordiumModBase.instance.config.targetFPSNameTags);
         guiTarget.bindWrite(false);
 
         ExordiumModBase.instance.setTemporaryScreenOverwrite(guiTarget);
         return true;
     }
-    
+
     public boolean acceptsData() {
         return needsNewData;
     }
-    
+
     private void updateNeeds() {
         boolean forceRender = false;
         if (guiTarget.width != minecraft.getWindow().getWidth()
@@ -60,9 +61,9 @@ public class NametagScreenBuffer {
             forceRender = true;
         }
         needsNewData = forceRender || System.currentTimeMillis() > nextFrame;
-        if(needsNewData) {
+        if (needsNewData) {
             requestedNewData++;
-        }else {
+        } else {
             requestedNewData = 0;
         }
     }
@@ -75,13 +76,14 @@ public class NametagScreenBuffer {
     }
 
     public void renderOverlay() {
-        if(needsNewData && requestedNewData >= 2)return;
+        if (needsNewData && requestedNewData >= 2)
+            return;
         int screenWidth = minecraft.getWindow().getGuiScaledWidth();
         int screenHeight = minecraft.getWindow().getGuiScaledHeight();
         renderTextureOverlay(guiTarget.getColorTextureId(), screenWidth, screenHeight);
         updateNeeds();
     }
-    
+
     private void renderTextureOverlay(int textureid, int screenWidth, int screenHeight) {
         RenderSystem.disableDepthTest();
         RenderSystem.depthMask(false);
@@ -102,5 +104,5 @@ public class NametagScreenBuffer {
 //        RenderSystem.enableDepthTest();
 
     }
-    
+
 }

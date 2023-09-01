@@ -9,7 +9,6 @@ import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.mojang.blaze3d.pipeline.RenderTarget;
 import com.mojang.blaze3d.platform.GlStateManager;
-import com.mojang.blaze3d.shaders.Uniform;
 import com.mojang.blaze3d.systems.RenderSystem;
 
 import dev.tr7zw.exordium.config.Config;
@@ -19,7 +18,6 @@ import dev.tr7zw.exordium.util.CustomShaderManager;
 import dev.tr7zw.exordium.util.DelayedRenderCallManager;
 import dev.tr7zw.exordium.util.NametagScreenBuffer;
 import net.minecraft.client.gui.screens.Screen;
-import net.minecraft.client.renderer.ShaderInstance;
 
 public abstract class ExordiumModBase {
 
@@ -37,7 +35,7 @@ public abstract class ExordiumModBase {
     private final CustomShaderManager customShaderManager = new CustomShaderManager();
 
     public void onInitialize() {
-		instance = this;
+        instance = this;
         if (settingsFile.exists()) {
             try {
                 config = gson.fromJson(new String(Files.readAllBytes(settingsFile.toPath()), StandardCharsets.UTF_8),
@@ -51,13 +49,13 @@ public abstract class ExordiumModBase {
             config = new Config();
             writeConfig();
         } else {
-            if(ConfigUpgrader.upgradeConfig(config)) {
+            if (ConfigUpgrader.upgradeConfig(config)) {
                 writeConfig(); // Config got modified
             }
         }
-		initModloader();
-	}
-	
+        initModloader();
+    }
+
     public void writeConfig() {
         if (settingsFile.exists())
             settingsFile.delete();
@@ -67,18 +65,18 @@ public abstract class ExordiumModBase {
             e1.printStackTrace();
         }
     }
-    
+
     public NametagScreenBuffer getNameTagScreenBuffer() {
-        if(nametagScreenBuffer == null) {
-            nametagScreenBuffer = new NametagScreenBuffer(1000/config.targetFPSNameTags);
+        if (nametagScreenBuffer == null) {
+            nametagScreenBuffer = new NametagScreenBuffer(1000 / config.targetFPSNameTags);
         }
         return nametagScreenBuffer;
     }
-    
+
     public DelayedRenderCallManager getDelayedRenderCallManager() {
         return delayedRenderCallManager;
     }
-    
+
     public abstract void initModloader();
 
     public Screen createConfigScreen(Screen parent) {
@@ -107,9 +105,9 @@ public abstract class ExordiumModBase {
     public void setTemporaryScreenOverwrite(RenderTarget temporaryScreenOverwrite) {
         this.temporaryScreenOverwrite = temporaryScreenOverwrite;
     }
-    
+
     public CustomShaderManager getCustomShaderManager() {
         return customShaderManager;
     }
-    
+
 }

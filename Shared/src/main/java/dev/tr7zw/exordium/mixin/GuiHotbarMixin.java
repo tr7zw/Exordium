@@ -32,7 +32,8 @@ public class GuiHotbarMixin {
     private boolean hasEnchantedItem = false;
     private boolean cooldownActive = false;
 
-    private BufferedComponent bufferedComponent = new BufferedComponent(() -> ExordiumModBase.instance.config.hotbarSettings) {
+    private BufferedComponent bufferedComponent = new BufferedComponent(
+            () -> ExordiumModBase.instance.config.hotbarSettings) {
 
         @Override
         public boolean needsRender() {
@@ -54,17 +55,17 @@ public class GuiHotbarMixin {
             selectedSlot = player.getInventory().selected;
         }
     };
-    
+
     private void store(ItemStack item, int id, Player player) {
         if (item != null && !item.isEmpty()) {
             hotbarModels[id] = minecraft.getItemRenderer().getModel(item, player.level(), player, 0);
             itemPopAnimation[id] = item.getPopTime();
             itemAmount[id] = item.getCount();
             itemDurability[id] = item.getDamageValue();
-            if(item.isEnchanted()) {
+            if (item.isEnchanted()) {
                 this.hasEnchantedItem = true;
             }
-            if(player.getCooldowns().isOnCooldown(item.getItem())) {
+            if (player.getCooldowns().isOnCooldown(item.getItem())) {
                 this.cooldownActive = true;
             }
         } else {
@@ -74,22 +75,22 @@ public class GuiHotbarMixin {
             itemDurability[id] = -1;
         }
     }
-    
+
     private boolean hasChanged(ItemStack item, int id, Player player) {
-        if(item != null && !item.isEmpty()) {
-            if(itemAmount[id] != item.getCount()) {
+        if (item != null && !item.isEmpty()) {
+            if (itemAmount[id] != item.getCount()) {
                 return true;
             }
-            if(itemPopAnimation[id] != item.getPopTime()) {
+            if (itemPopAnimation[id] != item.getPopTime()) {
                 return true;
             }
-            if(itemDurability[id] != item.getDamageValue()) {
+            if (itemDurability[id] != item.getDamageValue()) {
                 return true;
             }
-            if(minecraft.getItemRenderer().getModel(item, player.level(), player, 0) != hotbarModels[id]) {
+            if (minecraft.getItemRenderer().getModel(item, player.level(), player, 0) != hotbarModels[id]) {
                 return true;
             }
-        } else if(hotbarModels[id] != null) {
+        } else if (hotbarModels[id] != null) {
             return true;
         }
         return false;
@@ -102,22 +103,22 @@ public class GuiHotbarMixin {
                 return true;
             }
         }
-        if(hasEnchantedItem || cooldownActive) {
+        if (hasEnchantedItem || cooldownActive) {
             return true;
         }
         Player player = getCameraPlayer();
         if (player == null)
             return true;
-        if(selectedSlot != player.getInventory().selected) {
+        if (selectedSlot != player.getInventory().selected) {
             return true;
         }
         for (int m = 0; m < 9; m++) {
             ItemStack item = (player.getInventory()).items.get(m);
-            if(hasChanged(item, m, player)) {
+            if (hasChanged(item, m, player)) {
                 return true;
             }
         }
-        if(hasChanged(player.getOffhandItem(), 9, player)) {
+        if (hasChanged(player.getOffhandItem(), 9, player)) {
             return true;
         }
 

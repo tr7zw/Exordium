@@ -16,17 +16,17 @@ public class Config {
     public ComponentSettings tablistSettings = new ComponentSettings(true, 20);
     public ComponentSettings vignetteSettings = new ComponentSettings(true, 5);
     public ComponentSettings crosshairSettings = new ComponentSettings(false, 20);
-    
+
     public static class ComponentSettings {
         public boolean enabled = true;
         public int maxFps = 10;
         public boolean forceBlend = false;
         public boolean forceUpdates = false;
-        
+
         public ComponentSettings(boolean enabled, int maxFps) {
             this.enabled = enabled;
             this.maxFps = maxFps;
         }
     }
-    
+
 }

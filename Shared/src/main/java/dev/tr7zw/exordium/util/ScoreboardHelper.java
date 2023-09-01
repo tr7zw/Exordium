@@ -18,7 +18,7 @@ import net.minecraft.world.scores.Scoreboard;
 public class ScoreboardHelper {
 
     private static final Minecraft minecraft = Minecraft.getInstance();
-    
+
     public static ScoreboardState getScoreboardData() {
         Scoreboard scoreboard = minecraft.level.getScoreboard();
         Objective objective = null;
@@ -28,10 +28,10 @@ public class ScoreboardHelper {
             if (n >= 0)
                 objective = scoreboard.getDisplayObjective(3 + n);
         }
-        if(objective == null) {
-            objective =  scoreboard.getDisplayObjective(1);
+        if (objective == null) {
+            objective = scoreboard.getDisplayObjective(1);
         }
-        if(objective == null) {
+        if (objective == null) {
             return null;
         }
         Collection<Score> collection = scoreboard.getPlayerScores(objective);
@@ -52,7 +52,8 @@ public class ScoreboardHelper {
         }
         return new ScoreboardState(title, list2);
     }
-    
-    public static record ScoreboardState(Component title, List<Pair<Integer, Component>> entries) {}
-    
+
+    public static record ScoreboardState(Component title, List<Pair<Integer, Component>> entries) {
+    }
+
 }

@@ -8,18 +8,18 @@ public class CustomShaderManager {
 
     private ShaderInstance positionMultiTexShader;
     private Uniform positionMultiTexShaderTextureCountUniform;
-    
+
     public void registerShaderInstance(ShaderInstance shaderInstance) {
         this.positionMultiTexShader = shaderInstance;
         this.positionMultiTexShaderTextureCountUniform = shaderInstance.getUniform("texcount");
     }
-    
+
     public ShaderInstance getPositionMultiTexShader() {
         return positionMultiTexShader;
     }
-    
+
     public Uniform getPositionMultiTexTextureCountUniform() {
         return positionMultiTexShaderTextureCountUniform;
     }
-    
+
 }

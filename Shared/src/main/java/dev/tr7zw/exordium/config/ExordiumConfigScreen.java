@@ -44,7 +44,8 @@ public class ExordiumConfigScreen extends CustomConfigScreen {
 
     }
 
-    private void addSettings(List<OptionInstance<?>> options, ComponentSettings settings, String name, boolean hideBlending) {
+    private void addSettings(List<OptionInstance<?>> options, ComponentSettings settings, String name,
+            boolean hideBlending) {
         options.add(getOnOffOption("text.exordium.setting." + name + ".enabled", () -> settings.enabled,
                 (b) -> settings.enabled = b));
         options.add(getIntOption("text.exordium.setting." + name + ".fps", 5, 60, () -> settings.maxFps,

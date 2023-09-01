@@ -76,13 +76,13 @@ public class DelayedRenderCallManager {
         for (BufferedComponent component : componentRenderCalls) {
             RenderSystem.setShaderTexture(textureId, component.getTextureId());
             textureId++;
-            if(textureId == maxTexturesPerDraw) {
+            if (textureId == maxTexturesPerDraw) {
                 shaderManager.getPositionMultiTexTextureCountUniform().set(maxTexturesPerDraw);
                 model.draw(RenderSystem.getModelViewMatrix());
                 textureId = 0;
             }
         }
-        if(textureId > 0) {
+        if (textureId > 0) {
             shaderManager.getPositionMultiTexTextureCountUniform().set(textureId);
             model.draw(RenderSystem.getModelViewMatrix());
         }
