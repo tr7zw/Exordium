@@ -12,6 +12,6 @@ public class SignSettings {
     public final float offsetY = -91.7f;
 
     public final float hangingOffsetZ = -0.3f;
-    public final float hangingOffsetY = 55f;
+    public final float hangingOffsetY = 0f;
 
 }
