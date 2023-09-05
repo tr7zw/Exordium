@@ -14,7 +14,6 @@ import com.mojang.blaze3d.pipeline.RenderTarget;
 import com.mojang.blaze3d.platform.GlStateManager;
 import com.mojang.blaze3d.systems.RenderSystem;
 
-import dev.tr7zw.exordium.buffers.BufferManager;
 import dev.tr7zw.exordium.config.Config;
 import dev.tr7zw.exordium.config.ConfigUpgrader;
 import dev.tr7zw.exordium.config.ExordiumConfigScreen;
@@ -37,8 +36,8 @@ public abstract class ExordiumModBase {
     public static SignSettings signSettings = new SignSettings();
     public static NametagSettings nametagSettings = new NametagSettings();
     private final DelayedRenderCallManager delayedRenderCallManager = new DelayedRenderCallManager();
-    private BufferManager bufferManager;
     private final CustomShaderManager customShaderManager = new CustomShaderManager();
+    private final BufferManager bufferManager = new BufferManager();
 
     public void onInitialize() {
         instance = this;
@@ -59,7 +58,7 @@ public abstract class ExordiumModBase {
                 writeConfig(); // Config got modified
             }
         }
-        bufferManager = new BufferManager();
+        bufferManager.initialize();
 		initModloader();
 	}
 	
@@ -112,13 +111,13 @@ public abstract class ExordiumModBase {
     public void setTemporaryScreenOverwrite(RenderTarget temporaryScreenOverwrite) {
         this.temporaryScreenOverwrite = temporaryScreenOverwrite;
     }
-    
-    public BufferManager getBufferManager() {
-        return bufferManager;
-    }
 
     public CustomShaderManager getCustomShaderManager() {
         return customShaderManager;
+    }
+    
+    public BufferManager getBufferManager() {
+        return bufferManager;
     }
 
 }
