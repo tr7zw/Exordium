@@ -1,6 +1,7 @@
 package dev.tr7zw.exordium;
 
 import net.minecraft.resources.ResourceLocation;
+import net.minecraftforge.client.event.RenderGuiEvent;
 import net.minecraftforge.client.event.RenderGuiOverlayEvent;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.eventbus.api.Event.Result;
@@ -35,6 +36,11 @@ public class ExordiumMod extends ExordiumModBase {
                         (remote, isServer) -> true));
         MinecraftForge.EVENT_BUS.addListener(this::preOverlayRender);
         MinecraftForge.EVENT_BUS.addListener(this::postOverlayRender);
+        MinecraftForge.EVENT_BUS.addListener(this::postRenderGuiEvent);
+    }
+    
+    private void postRenderGuiEvent(RenderGuiEvent.Post event) {
+        ExordiumModBase.instance.getDelayedRenderCallManager().renderComponents();
     }
     
     private void preOverlayRender(RenderGuiOverlayEvent.Pre event) {
