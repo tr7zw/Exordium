@@ -25,24 +25,26 @@ public class ScoreboardMixin {
     private Minecraft minecraft;
     private String scoreboardState = null;
 
-    private BufferedComponent scoreboardBuffer = new BufferedComponent(true, ExordiumModBase.instance.config.scoreboardSettings) {
+    private BufferedComponent scoreboardBuffer = new BufferedComponent(true,
+            () -> ExordiumModBase.instance.config.scoreboardSettings) {
 
         @Override
         public boolean needsRender() {
             ScoreboardState cur = ScoreboardHelper.getScoreboardData();
-            return !Objects.equals(scoreboardState, ""+cur); // dirty workaround
+            return !Objects.equals(scoreboardState, "" + cur); // dirty workaround
         }
 
         @Override
         public void captureState() {
-            scoreboardState = ""+ScoreboardHelper.getScoreboardData();
+            scoreboardState = "" + ScoreboardHelper.getScoreboardData();
         }
     };
 
     @WrapOperation(method = "render", at = {
             @At(value = "INVOKE", target = "Lnet/minecraft/client/gui/Gui;displayScoreboardSidebar(Lnet/minecraft/client/gui/GuiGraphics;Lnet/minecraft/world/scores/Objective;)V"),
     })
-    private void displayScoreboardSidebarWrapper(Gui gui, GuiGraphics guiGraphics, Objective objective, final Operation<Void> operation) {
+    private void displayScoreboardSidebarWrapper(Gui gui, GuiGraphics guiGraphics, Objective objective,
+            final Operation<Void> operation) {
         if (!scoreboardBuffer.render()) {
             operation.call(gui, guiGraphics, objective);
         }

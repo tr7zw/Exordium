@@ -21,47 +21,48 @@ public class BufferRenderer {
     private int guiScale = 0;
     private boolean isRendering = false;
     private boolean forceBlending = false;
-    
+
     public BufferRenderer() {
         this(false);
     }
-    
+
     public BufferRenderer(boolean forceBlending) {
         this.forceBlending = forceBlending;
     }
 
-    private static void refreshModel(int screenWidth, int screenHeight){
-        if(model != null) {
+    private static void refreshModel(int screenWidth, int screenHeight) {
+        if (model != null) {
             model.close();
         }
 
-        Vector3f[] modelData = new Vector3f[]{
-            new Vector3f(0.0f, screenHeight, -90.0f),
-            new Vector3f(screenWidth, screenHeight, -90.0F),
-            new Vector3f(screenWidth, 0.0F, -90.0F),
-            new Vector3f(0.0F, 0.0F, -90.0F),
+        Vector3f[] modelData = new Vector3f[] {
+                new Vector3f(0.0f, screenHeight, -90.0f),
+                new Vector3f(screenWidth, screenHeight, -90.0F),
+                new Vector3f(screenWidth, 0.0F, -90.0F),
+                new Vector3f(0.0F, 0.0F, -90.0F),
         };
-        Vector2f[] uvData = new Vector2f[]{
-            new Vector2f(0.0f, 0.0f),
-            new Vector2f(1.0f, 0.0f),
-            new Vector2f(1.0f, 1.0f),
-            new Vector2f(0.0f, 1.0f),
+        Vector2f[] uvData = new Vector2f[] {
+                new Vector2f(0.0f, 0.0f),
+                new Vector2f(1.0f, 0.0f),
+                new Vector2f(1.0f, 1.0f),
+                new Vector2f(0.0f, 1.0f),
         };
         model = new Model(modelData, uvData);
     }
-    
+
     public boolean render() {
         int screenWidth = minecraft.getWindow().getGuiScaledWidth();
         int screenHeight = minecraft.getWindow().getGuiScaledHeight();
         boolean forceRender = false;
         if (guiTarget.width != minecraft.getWindow().getWidth()
-                || guiTarget.height != minecraft.getWindow().getHeight() || minecraft.options.guiScale().get() != guiScale) {
+                || guiTarget.height != minecraft.getWindow().getHeight()
+                || minecraft.options.guiScale().get() != guiScale) {
             guiTarget.resize(minecraft.getWindow().getWidth(), minecraft.getWindow().getHeight(), true);
             refreshModel(screenWidth, screenHeight);
             guiScale = minecraft.options.guiScale().get();
             forceRender = true;
         }
-        if(model == null) {
+        if (model == null) {
             refreshModel(screenWidth, screenHeight);
         }
         if (!forceRender && System.currentTimeMillis() < nextFrame) {
@@ -75,7 +76,7 @@ public class BufferRenderer {
         ExordiumModBase.correctBlendMode();
         isRendering = true;
         ExordiumModBase.instance.setTemporaryScreenOverwrite(guiTarget);
-        if(forceBlending) {
+        if (forceBlending) {
             ExordiumModBase.setForceBlend(true);
         }
         return false;
@@ -87,7 +88,7 @@ public class BufferRenderer {
         Minecraft.getInstance().getMainRenderTarget().bindWrite(true);
         nextFrame = System.currentTimeMillis() + cacheTime;
         isRendering = false;
-        if(forceBlending) {
+        if (forceBlending) {
             ExordiumModBase.setForceBlend(false);
         }
         int screenWidth = minecraft.getWindow().getGuiScaledWidth();

@@ -18,6 +18,7 @@ import dev.tr7zw.exordium.buffers.BufferManager;
 import dev.tr7zw.exordium.config.Config;
 import dev.tr7zw.exordium.config.ConfigUpgrader;
 import dev.tr7zw.exordium.config.ExordiumConfigScreen;
+import dev.tr7zw.exordium.util.CustomShaderManager;
 import dev.tr7zw.exordium.util.DelayedRenderCallManager;
 import dev.tr7zw.exordium.util.NametagScreenBuffer;
 import net.minecraft.client.gui.screens.Screen;
@@ -37,9 +38,10 @@ public abstract class ExordiumModBase {
     public static NametagSettings nametagSettings = new NametagSettings();
     private final DelayedRenderCallManager delayedRenderCallManager = new DelayedRenderCallManager();
     private BufferManager bufferManager;
+    private final CustomShaderManager customShaderManager = new CustomShaderManager();
 
     public void onInitialize() {
-		instance = this;
+        instance = this;
         if (settingsFile.exists()) {
             try {
                 config = gson.fromJson(new String(Files.readAllBytes(settingsFile.toPath()), StandardCharsets.UTF_8),
@@ -53,7 +55,7 @@ public abstract class ExordiumModBase {
             config = new Config();
             writeConfig();
         } else {
-            if(ConfigUpgrader.upgradeConfig(config)) {
+            if (ConfigUpgrader.upgradeConfig(config)) {
                 writeConfig(); // Config got modified
             }
         }
@@ -70,18 +72,18 @@ public abstract class ExordiumModBase {
             e1.printStackTrace();
         }
     }
-    
+
     public NametagScreenBuffer getNameTagScreenBuffer() {
-        if(nametagScreenBuffer == null) {
-            nametagScreenBuffer = new NametagScreenBuffer(1000/config.targetFPSNameTags);
+        if (nametagScreenBuffer == null) {
+            nametagScreenBuffer = new NametagScreenBuffer(1000 / config.targetFPSNameTags);
         }
         return nametagScreenBuffer;
     }
-    
+
     public DelayedRenderCallManager getDelayedRenderCallManager() {
         return delayedRenderCallManager;
     }
-    
+
     public abstract void initModloader();
 
     public Screen createConfigScreen(Screen parent) {
@@ -114,5 +116,9 @@ public abstract class ExordiumModBase {
     public BufferManager getBufferManager() {
         return bufferManager;
     }
-    
+
+    public CustomShaderManager getCustomShaderManager() {
+        return customShaderManager;
+    }
+
 }

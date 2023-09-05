@@ -19,7 +19,10 @@
     "GuiHealthMixin",
     "ScoreboardMixin",
     "GuiMixin",
-    "GameRendererMixin"
+    "GameRendererMixin",
+    "PlayerTabOverlayMixin",
+    "VignetteMixin",
+    "CrosshairMixin"
   ],
   "injectors": {
     "defaultRequire": 1

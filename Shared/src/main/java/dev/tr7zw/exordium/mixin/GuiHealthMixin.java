@@ -31,9 +31,9 @@ public abstract class GuiHealthMixin {
     private int displayHealth;
     @Shadow
     private int tickCount;
-    
+
     private boolean renderingMountHealth = false;
-    
+
     private boolean healthBlinking;
     private int lastRenderedHealth;
     private int lastDisplayHealth;
@@ -48,26 +48,28 @@ public abstract class GuiHealthMixin {
     private float lastExhaustionLevel;
     private boolean hadVisualEffects;
 
-    private BufferedComponent healthBuffer = new BufferedComponent(ExordiumModBase.instance.config.healthSettings) {
+    private BufferedComponent healthBuffer = new BufferedComponent(
+            () -> ExordiumModBase.instance.config.healthSettings) {
 
         @Override
         public boolean needsRender() {
-            boolean hasVisualEffects = minecraft.player.hasEffect(MobEffects.HUNGER) || minecraft.player.hasEffect(MobEffects.REGENERATION);
+            boolean hasVisualEffects = minecraft.player.hasEffect(MobEffects.HUNGER)
+                    || minecraft.player.hasEffect(MobEffects.REGENERATION);
             boolean blinking = (healthBlinkTime > tickCount && (healthBlinkTime - tickCount) / 3L % 2L == 1L);
             LivingEntity vehicle = getPlayerVehicleWithHealth();
             return healthBlinking != blinking ||
-            lastRenderedHealth != lastHealth ||
-            lastDisplayHealth != displayHealth ||
-            lastArmorValue != minecraft.player.getArmorValue() ||
-            lastMaxVehicleHearts != getVehicleMaxHearts(vehicle) ||
-            lastVehicleHearts != (vehicle == null ? -1 : vehicle.getHealth()) ||
-            lastAirSupply != minecraft.player.getAirSupply() ||
-            lastSaturation != minecraft.player.getFoodData().getSaturationLevel() ||
-            (hasVisualEffects || (hasVisualEffects != hadVisualEffects && lastRenderedTick != tickCount)) ||
-            lastFoodLevel != minecraft.player.getFoodData().getFoodLevel() ||
-            lastExhaustionLevel != minecraft.player.getFoodData().getExhaustionLevel() ||
-            lastPlayerHealth != minecraft.player.getHealth() ||
-            Mth.ceil(lastPlayerHealth) <= 4;
+                    lastRenderedHealth != lastHealth ||
+                    lastDisplayHealth != displayHealth ||
+                    lastArmorValue != minecraft.player.getArmorValue() ||
+                    lastMaxVehicleHearts != getVehicleMaxHearts(vehicle) ||
+                    lastVehicleHearts != (vehicle == null ? -1 : vehicle.getHealth()) ||
+                    lastAirSupply != minecraft.player.getAirSupply() ||
+                    lastSaturation != minecraft.player.getFoodData().getSaturationLevel() ||
+                    (hasVisualEffects || (hasVisualEffects != hadVisualEffects && lastRenderedTick != tickCount)) ||
+                    lastFoodLevel != minecraft.player.getFoodData().getFoodLevel() ||
+                    lastExhaustionLevel != minecraft.player.getFoodData().getExhaustionLevel() ||
+                    lastPlayerHealth != minecraft.player.getHealth() ||
+                    Mth.ceil(lastPlayerHealth) <= 4;
         }
 
         @Override
@@ -85,7 +87,8 @@ public abstract class GuiHealthMixin {
             lastPlayerHealth = minecraft.player.getHealth();
             lastFoodLevel = minecraft.player.getFoodData().getFoodLevel();
             lastExhaustionLevel = minecraft.player.getFoodData().getExhaustionLevel();
-            hadVisualEffects = minecraft.player.hasEffect(MobEffects.HUNGER) || minecraft.player.hasEffect(MobEffects.REGENERATION);
+            hadVisualEffects = minecraft.player.hasEffect(MobEffects.HUNGER)
+                    || minecraft.player.hasEffect(MobEffects.REGENERATION);
         }
     };
 
@@ -101,21 +104,22 @@ public abstract class GuiHealthMixin {
         }
         healthBuffer.renderEnd();
     }
-    
+
     @Inject(method = "renderVehicleHealth", at = @At("HEAD"), cancellable = true)
     private void renderVehicleHealthHead(GuiGraphics guiGraphics, CallbackInfo ci) {
-        if(!renderingMountHealth && ExordiumModBase.instance.config.healthSettings.enabled && !minecraft.player.isCreative()) {
+        if (!renderingMountHealth && ExordiumModBase.instance.config.healthSettings.enabled
+                && !minecraft.player.isCreative()) {
             // prevent rendering multiple times, just render into the texture
             ci.cancel();
         }
     }
-    
+
     @Shadow
     public abstract void renderVehicleHealth(GuiGraphics guiGraphics);
-    
+
     @Shadow
     protected abstract LivingEntity getPlayerVehicleWithHealth();
-    
+
     @Shadow
     protected abstract int getVehicleMaxHearts(LivingEntity livingEntity);
 

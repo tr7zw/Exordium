@@ -6,23 +6,27 @@ public class Config {
     public boolean enableSignBuffering = true;
     public int targetFPSNameTags = 60;
     public boolean enableNametagScreenBuffering = false;
+    public int pollRate = 60;
     public ComponentSettings chatSettings = new ComponentSettings(true, 20);
     public ComponentSettings debugScreenSettings = new ComponentSettings(true, 10);
     public ComponentSettings hotbarSettings = new ComponentSettings(true, 20);
     public ComponentSettings experienceSettings = new ComponentSettings(true, 5);
     public ComponentSettings healthSettings = new ComponentSettings(true, 20);
     public ComponentSettings scoreboardSettings = new ComponentSettings(true, 5);
-    
-    public class ComponentSettings {
+    public ComponentSettings tablistSettings = new ComponentSettings(true, 20);
+    public ComponentSettings vignetteSettings = new ComponentSettings(true, 5);
+    public ComponentSettings crosshairSettings = new ComponentSettings(false, 20);
+
+    public static class ComponentSettings {
         public boolean enabled = true;
         public int maxFps = 10;
         public boolean forceBlend = false;
         public boolean forceUpdates = false;
+
         public ComponentSettings(boolean enabled, int maxFps) {
-            super();
             this.enabled = enabled;
             this.maxFps = maxFps;
         }
     }
-    
+
 }
