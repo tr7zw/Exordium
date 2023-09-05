@@ -6,7 +6,7 @@ import dev.tr7zw.exordium.util.BufferedComponent;
 public class BufferManager {
 
     private BufferedComponent debugBufferedComponent = new BufferedComponent(true,
-            ExordiumModBase.instance.config.debugScreenSettings) {
+            () -> ExordiumModBase.instance.config.debugScreenSettings) {
 
         @Override
         public boolean needsRender() {

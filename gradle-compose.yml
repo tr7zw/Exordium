@@ -6,19 +6,6 @@ replacements:
   id: "exordium"
   version: "1.1.4"
   author: "tr7zw"
-  dependencies: '
-      modImplementation "maven.modrinth:immediatelyfast:1.2.1+1.20.1"
-
-      modImplementation "maven.modrinth:spark:BeIg1bik"
-
-      modImplementation "maven.modrinth:sodium:6SSPmLc9"
-
-      implementation("com.github.LlamaLad7:MixinExtras:0.1.1")
-
-      include "com.github.LlamaLad7:MixinExtras:0.1.1"
-
-      annotationProcessor("com.github.LlamaLad7:MixinExtras:0.1.1")
-  '
   relocationpackage: "dev.tr7zw.exordium"
   licensename: "LICENSE"
   modrinthid: "DynYZEae"
@@ -34,13 +21,21 @@ rootProject:
 subProjects:
   FG-Fabric:
     template: "Fabric"
+    replacements:
+      dependencies: '
+          modImplementation "maven.modrinth:immediatelyfast:1.2.1+1.20.1"
+
+          modImplementation "maven.modrinth:spark:BeIg1bik"
+
+          modImplementation "maven.modrinth:sodium:6SSPmLc9"
+
+          include(implementation(annotationProcessor("io.github.llamalad7:mixinextras-fabric:0.2.0-rc.2")))
+      '
   FG-Forge:
     template: "Forge"
     replacements:
       dependencies: '
-      implementation("com.github.LlamaLad7:MixinExtras:0.1.1")
+      implementation(annotationProcessor("io.github.llamalad7:mixinextras-common:0.2.0-rc.2"))
 
-      include "com.github.LlamaLad7:MixinExtras:0.1.1"
-
-      annotationProcessor("com.github.LlamaLad7:MixinExtras:0.1.1")
+      implementation(include("io.github.llamalad7:mixinextras-forge:0.2.0-rc.2"))
       '
