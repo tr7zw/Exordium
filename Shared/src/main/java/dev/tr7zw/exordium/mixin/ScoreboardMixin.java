@@ -10,6 +10,7 @@ import com.llamalad7.mixinextras.injector.wrapoperation.Operation;
 import com.llamalad7.mixinextras.injector.wrapoperation.WrapOperation;
 
 import dev.tr7zw.exordium.ExordiumModBase;
+import dev.tr7zw.exordium.access.VanillaBufferAccess.ScoreBoardOverlayAccess;
 import dev.tr7zw.exordium.util.BufferedComponent;
 import dev.tr7zw.exordium.util.ScoreboardHelper;
 import dev.tr7zw.exordium.util.ScoreboardHelper.ScoreboardState;
@@ -19,7 +20,7 @@ import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.world.scores.Objective;
 
 @Mixin(Gui.class)
-public class ScoreboardMixin {
+public class ScoreboardMixin implements ScoreBoardOverlayAccess {
 
     @Shadow
     private Minecraft minecraft;
@@ -49,6 +50,11 @@ public class ScoreboardMixin {
             operation.call(gui, guiGraphics, objective);
         }
         scoreboardBuffer.renderEnd();
+    }
+
+    @Override
+    public BufferedComponent getScoreBoardOverlayBuffer() {
+        return scoreboardBuffer;
     }
 
 }

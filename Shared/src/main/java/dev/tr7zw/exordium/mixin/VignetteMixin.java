@@ -9,6 +9,7 @@ import com.llamalad7.mixinextras.injector.wrapoperation.WrapOperation;
 import com.mojang.blaze3d.systems.RenderSystem;
 
 import dev.tr7zw.exordium.ExordiumModBase;
+import dev.tr7zw.exordium.access.VanillaBufferAccess.VignetteOverlayAccess;
 import dev.tr7zw.exordium.util.BufferedComponent;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.Gui;
@@ -19,7 +20,7 @@ import net.minecraft.world.entity.Entity;
 import net.minecraft.world.level.border.WorldBorder;
 
 @Mixin(Gui.class)
-public class VignetteMixin {
+public class VignetteMixin implements VignetteOverlayAccess {
 
     @Shadow
     private Minecraft minecraft;
@@ -34,7 +35,7 @@ public class VignetteMixin {
     private float state = 0f;
     private float lastVignetteBrightness = 1.0F;
 
-    private BufferedComponent vignetteBuffer = new BufferedComponent(true,
+    private BufferedComponent vignetteBuffer = new BufferedComponent(false,
             () -> ExordiumModBase.instance.config.vignetteSettings) {
 
         @Override
@@ -79,32 +80,41 @@ public class VignetteMixin {
             final Operation<Void> operation) {
         if (!vignetteBuffer.render()) {
             if (ExordiumModBase.instance.config.vignetteSettings.enabled) {
-                RenderSystem.disableDepthTest();
-                RenderSystem.depthMask(false);
-//            RenderSystem.blendFuncSeparate(SourceFactor.ZERO, DestFactor.ONE_MINUS_SRC_COLOR, SourceFactor.ONE,
-//                    DestFactor.ZERO);
-                ExordiumModBase.correctBlendMode();
-                float f = state;
-                if (f > 0.0F) {
-                    f = Mth.clamp(f, 0.0F, 1.0F);
-                    guiGraphics.setColor(f, 0.0F, 0.0F, 1.0F);
-                } else {
-                    float g = this.vignetteBrightness;
-                    g = Mth.clamp(g, 0.0F, 1.0F);
-                    guiGraphics.setColor(0, 0, 0, vignetteBrightness);
-                }
-
-                guiGraphics.blit(FAST_VIGNETTE_LOCATION, 0, 0, -90, 0.0F, 0.0F, this.screenWidth, this.screenHeight,
-                        this.screenWidth, this.screenHeight);
-                RenderSystem.depthMask(true);
-                RenderSystem.enableDepthTest();
-                guiGraphics.setColor(1.0F, 1.0F, 1.0F, 1.0F);
-                RenderSystem.defaultBlendFunc();
+                renderCustomVignette(guiGraphics);
             } else {
                 operation.call(gui, guiGraphics, entity);
             }
         }
         vignetteBuffer.renderEnd();
+    }
+
+    public void renderCustomVignette(GuiGraphics guiGraphics) {
+        RenderSystem.disableDepthTest();
+        RenderSystem.depthMask(false);
+//            RenderSystem.blendFuncSeparate(SourceFactor.ZERO, DestFactor.ONE_MINUS_SRC_COLOR, SourceFactor.ONE,
+//                    DestFactor.ZERO);
+        ExordiumModBase.correctBlendMode();
+        float f = state;
+        if (f > 0.0F) {
+            f = Mth.clamp(f, 0.0F, 1.0F);
+            guiGraphics.setColor(f, 0.0F, 0.0F, 1.0F);
+        } else {
+            float g = this.vignetteBrightness;
+            g = Mth.clamp(g, 0.0F, 1.0F);
+            guiGraphics.setColor(0, 0, 0, vignetteBrightness);
+        }
+
+        guiGraphics.blit(FAST_VIGNETTE_LOCATION, 0, 0, -90, 0.0F, 0.0F, this.screenWidth, this.screenHeight,
+                this.screenWidth, this.screenHeight);
+        RenderSystem.depthMask(true);
+        RenderSystem.enableDepthTest();
+        guiGraphics.setColor(1.0F, 1.0F, 1.0F, 1.0F);
+        RenderSystem.defaultBlendFunc();
+    }
+
+    @Override
+    public BufferedComponent getVignetteOverlayBuffer() {
+        return vignetteBuffer;
     }
 
 }

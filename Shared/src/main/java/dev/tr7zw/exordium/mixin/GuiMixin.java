@@ -11,6 +11,7 @@ import com.llamalad7.mixinextras.injector.wrapoperation.WrapOperation;
 
 import dev.tr7zw.exordium.ExordiumModBase;
 import dev.tr7zw.exordium.access.ChatAccess;
+import dev.tr7zw.exordium.access.GuiAccess;
 import dev.tr7zw.exordium.access.TablistAccess;
 import dev.tr7zw.exordium.util.BufferedComponent;
 import net.minecraft.client.gui.Gui;
@@ -21,12 +22,14 @@ import net.minecraft.world.scores.Objective;
 import net.minecraft.world.scores.Scoreboard;
 
 @Mixin(Gui.class)
-public class GuiMixin {
+public class GuiMixin implements GuiAccess {
 
     @Shadow
     private ChatComponent chat;
     @Shadow
     private PlayerTabOverlay tabList;
+    @Shadow
+    protected int tickCount;
 
     @WrapOperation(method = "render", at = {
             @At(value = "INVOKE", target = "Lnet/minecraft/client/gui/components/ChatComponent;render(Lnet/minecraft/client/gui/GuiGraphics;III)V"),
@@ -35,7 +38,7 @@ public class GuiMixin {
             final Operation<Void> operation) {
         ChatAccess chatAccess = (ChatAccess) chat;
         chatAccess.updateState(tickCount);
-        BufferedComponent bufferedComponent = chatAccess.getBufferedComponent();
+        BufferedComponent bufferedComponent = chatAccess.getChatOverlayBuffer();
         if (!bufferedComponent.render()) {
             operation.call(instance, guiGraphics, tickCount, j, k);
         }
@@ -49,7 +52,7 @@ public class GuiMixin {
             Scoreboard scoreboard, Objective objective2, final Operation<Void> operation) {
         TablistAccess tablistAccess = (TablistAccess) tabList;
         tablistAccess.updateState(scoreboard, objective2);
-        BufferedComponent bufferedComponent = tablistAccess.getBufferedComponent();
+        BufferedComponent bufferedComponent = tablistAccess.getPlayerListOverlayBuffer();
         if (!bufferedComponent.render()) {
             operation.call(instance, guiGraphics, screenWidth, scoreboard, objective2);
         }
@@ -59,6 +62,21 @@ public class GuiMixin {
     @Inject(method = "render", at = @At(value = "TAIL"))
     public void render(GuiGraphics guiGraphics, float partialTick, CallbackInfo ci) {
         ExordiumModBase.instance.getDelayedRenderCallManager().renderComponents();
+    }
+
+    @Override
+    public ChatComponent getChatComponent() {
+        return chat;
+    }
+
+    @Override
+    public PlayerTabOverlay getPlayerTabOverlay() {
+        return tabList;
+    }
+
+    @Override
+    public int getTickCount() {
+        return tickCount;
     }
 
 }

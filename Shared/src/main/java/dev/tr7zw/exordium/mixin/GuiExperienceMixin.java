@@ -8,13 +8,14 @@ import com.llamalad7.mixinextras.injector.wrapoperation.Operation;
 import com.llamalad7.mixinextras.injector.wrapoperation.WrapOperation;
 
 import dev.tr7zw.exordium.ExordiumModBase;
+import dev.tr7zw.exordium.access.VanillaBufferAccess.ExperienceBarOverlayAccess;
 import dev.tr7zw.exordium.util.BufferedComponent;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.Gui;
 import net.minecraft.client.gui.GuiGraphics;
 
 @Mixin(Gui.class)
-public class GuiExperienceMixin {
+public class GuiExperienceMixin implements ExperienceBarOverlayAccess {
 
     @Shadow
     private Minecraft minecraft;
@@ -44,6 +45,11 @@ public class GuiExperienceMixin {
             operation.call(gui, guiGraphics, i);
         }
         experienceBuffer.renderEnd();
+    }
+
+    @Override
+    public BufferedComponent getExperienceBarOverlayBuffer() {
+        return experienceBuffer;
     }
 
 }

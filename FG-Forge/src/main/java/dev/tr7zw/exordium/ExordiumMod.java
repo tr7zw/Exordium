@@ -1,7 +1,17 @@
 package dev.tr7zw.exordium;
 
+import java.util.concurrent.atomic.AtomicBoolean;
+import java.util.function.Consumer;
+
+import dev.tr7zw.exordium.BufferManager.HandlerData;
+import dev.tr7zw.exordium.access.ChatAccess;
+import dev.tr7zw.exordium.access.GuiAccess;
+import dev.tr7zw.exordium.access.TablistAccess;
+import dev.tr7zw.exordium.access.VanillaBufferAccess.VignetteOverlayAccess;
 import dev.tr7zw.exordium.util.BufferedComponent;
 import net.minecraft.client.Minecraft;
+import net.minecraft.resources.ResourceLocation;
+import net.minecraft.world.scores.Scoreboard;
 import net.minecraftforge.client.event.RenderGuiEvent;
 import net.minecraftforge.client.event.RenderGuiOverlayEvent;
 import net.minecraftforge.common.MinecraftForge;
@@ -49,8 +59,17 @@ public class ExordiumMod extends ExordiumModBase {
     private void preOverlayRender(RenderGuiOverlayEvent.Pre event) {
         if (!event.isCanceled()) {
             BufferedComponent comp = getBufferManager().getBufferedComponent(event.getOverlay().id(), minecraft.gui);
-            if (comp != null && comp.render()) {
-                event.setCanceled(true);
+            if (comp != null) {
+                if (comp.render()) {
+                    event.setCanceled(true);
+                }
+            } else {
+                Consumer<HandlerData> handler = getBufferManager().getCustomHandler(event.getOverlay().id());
+                if (handler != null) {
+                    HandlerData data = new HandlerData(event.getGuiGraphics(), new AtomicBoolean());
+                    handler.accept(data);
+                    event.setCanceled(data.cancel().get());
+                }
             }
         }
     }
@@ -60,6 +79,11 @@ public class ExordiumMod extends ExordiumModBase {
             BufferedComponent comp = getBufferManager().getBufferedComponent(event.getOverlay().id(), minecraft.gui);
             if (comp != null) {
                 comp.renderEnd();
+            } else {
+                Runnable handler = getBufferManager().getCustomEndHandler(event.getOverlay().id());
+                if (handler != null) {
+                    handler.run();
+                }
             }
         }
     }

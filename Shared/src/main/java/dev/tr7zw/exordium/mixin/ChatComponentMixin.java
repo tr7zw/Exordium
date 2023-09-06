@@ -29,7 +29,7 @@ public abstract class ChatComponentMixin implements ChatAccess {
 
     boolean outdated = false;
 
-    private BufferedComponent bufferedComponent = new BufferedComponent(
+    private BufferedComponent chatBufferedComponent = new BufferedComponent(
             () -> ExordiumModBase.instance.config.chatSettings) {
 
         @Override
@@ -70,10 +70,6 @@ public abstract class ChatComponentMixin implements ChatAccess {
         outdated = hasChanged(tickCount);
     }
 
-    public BufferedComponent getBufferedComponent() {
-        return bufferedComponent;
-    }
-
     @Shadow
     public abstract boolean isChatFocused();
 
@@ -82,5 +78,10 @@ public abstract class ChatComponentMixin implements ChatAccess {
 
     @Shadow
     public abstract int getLinesPerPage();
+
+    @Override
+    public BufferedComponent getChatOverlayBuffer() {
+        return chatBufferedComponent;
+    }
 
 }
