@@ -8,6 +8,7 @@ import com.llamalad7.mixinextras.injector.wrapoperation.Operation;
 import com.llamalad7.mixinextras.injector.wrapoperation.WrapOperation;
 
 import dev.tr7zw.exordium.ExordiumModBase;
+import dev.tr7zw.exordium.access.VanillaBufferAccess.HotbarOverlayAccess;
 import dev.tr7zw.exordium.util.BufferedComponent;
 import net.minecraft.client.AttackIndicatorStatus;
 import net.minecraft.client.Minecraft;
@@ -18,7 +19,7 @@ import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
 
 @Mixin(Gui.class)
-public class GuiHotbarMixin {
+public class GuiHotbarMixin implements HotbarOverlayAccess {
 
     @Shadow
     private Minecraft minecraft;
@@ -32,7 +33,7 @@ public class GuiHotbarMixin {
     private boolean hasEnchantedItem = false;
     private boolean cooldownActive = false;
 
-    private BufferedComponent bufferedComponent = new BufferedComponent(
+    private BufferedComponent hotbarBufferedComponent = new BufferedComponent(
             () -> ExordiumModBase.instance.config.hotbarSettings) {
 
         @Override
@@ -130,15 +131,20 @@ public class GuiHotbarMixin {
     })
     private void renderHotbarWrapper(Gui gui, float f, GuiGraphics guiGraphics, final Operation<Void> operation) {
         outdated = hasChanged();
-        if (!bufferedComponent.render()) {
+        if (!hotbarBufferedComponent.render()) {
             operation.call(gui, f, guiGraphics);
         }
-        bufferedComponent.renderEnd();
+        hotbarBufferedComponent.renderEnd();
     }
 
     @Shadow
     private Player getCameraPlayer() {
         return null;
+    }
+
+    @Override
+    public BufferedComponent getHotbarOverlayBuffer() {
+        return hotbarBufferedComponent;
     }
 
 }

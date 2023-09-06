@@ -5,6 +5,9 @@ import java.io.IOException;
 import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
+
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.mojang.blaze3d.pipeline.RenderTarget;
@@ -21,7 +24,8 @@ import net.minecraft.client.gui.screens.Screen;
 
 public abstract class ExordiumModBase {
 
-    public static ExordiumModBase instance;
+    public static final Logger LOGGER = LogManager.getLogger("Exordium");
+    public static ExordiumModBase instance = new PreLoadedMod();
     private static boolean forceBlend;
 
     public Config config;
@@ -33,6 +37,7 @@ public abstract class ExordiumModBase {
     public static NametagSettings nametagSettings = new NametagSettings();
     private final DelayedRenderCallManager delayedRenderCallManager = new DelayedRenderCallManager();
     private final CustomShaderManager customShaderManager = new CustomShaderManager();
+    private final BufferManager bufferManager = new BufferManager();
 
     public void onInitialize() {
         instance = this;
@@ -53,9 +58,10 @@ public abstract class ExordiumModBase {
                 writeConfig(); // Config got modified
             }
         }
-        initModloader();
-    }
-
+        bufferManager.initialize();
+		initModloader();
+	}
+	
     public void writeConfig() {
         if (settingsFile.exists())
             settingsFile.delete();
@@ -108,6 +114,10 @@ public abstract class ExordiumModBase {
 
     public CustomShaderManager getCustomShaderManager() {
         return customShaderManager;
+    }
+    
+    public BufferManager getBufferManager() {
+        return bufferManager;
     }
 
 }

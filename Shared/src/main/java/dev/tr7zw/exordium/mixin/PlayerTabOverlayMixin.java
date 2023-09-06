@@ -39,7 +39,7 @@ public abstract class PlayerTabOverlayMixin implements TablistAccess {
     private Component footer;
     private Objective lastTrackedObjective;
     private boolean outdated;
-    private BufferedComponent bufferedComponent = new BufferedComponent(true,
+    private BufferedComponent playerlistBufferedComponent = new BufferedComponent(true,
             () -> ExordiumModBase.instance.config.tablistSettings) {
 
         @Override
@@ -55,6 +55,7 @@ public abstract class PlayerTabOverlayMixin implements TablistAccess {
         }
     };
 
+    @Override
     public void updateState(Scoreboard scoreboard, Objective objective) {
         boolean scoreboardOrObjectiveChange = scoreboardOrObjectiveChanged(scoreboard, objective);
         int newHeaderHash = header == null ? 0 : header.getString().hashCode();
@@ -109,10 +110,12 @@ public abstract class PlayerTabOverlayMixin implements TablistAccess {
         return hashCode;
     }
 
-    public BufferedComponent getBufferedComponent() {
-        return bufferedComponent;
-    }
-
     @Shadow
     public abstract List<PlayerInfo> getPlayerInfos();
+
+    @Override
+    public BufferedComponent getPlayerListOverlayBuffer() {
+        return playerlistBufferedComponent;
+    }
+    
 }

@@ -8,13 +8,14 @@ import com.llamalad7.mixinextras.injector.wrapoperation.Operation;
 import com.llamalad7.mixinextras.injector.wrapoperation.WrapOperation;
 
 import dev.tr7zw.exordium.ExordiumModBase;
+import dev.tr7zw.exordium.access.VanillaBufferAccess.CrosshairOverlayAccess;
 import dev.tr7zw.exordium.util.BufferedComponent;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.Gui;
 import net.minecraft.client.gui.GuiGraphics;
 
 @Mixin(Gui.class)
-public class CrosshairMixin {
+public class CrosshairMixin implements CrosshairOverlayAccess {
 
     @Shadow
     private Minecraft minecraft;
@@ -54,6 +55,11 @@ public class CrosshairMixin {
             operation.call(gui, guiGraphics);
         }
         crosshairBufferedComponent.renderEnd();
+    }
+
+    @Override
+    public BufferedComponent getCrosshairOverlayBuffer() {
+        return crosshairBufferedComponent;
     }
 
 }
