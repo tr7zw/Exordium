@@ -41,9 +41,10 @@ public class BufferManager {
         vanillaBuffers.put(new ResourceLocation("hotbar"), gui -> ((HotbarOverlayAccess) gui).getHotbarOverlayBuffer());
        registerCustomHandler(new ResourceLocation("vignette"), data -> {
             VignetteOverlayAccess vignette = (VignetteOverlayAccess) minecraft.gui;
-            if (ExordiumModBase.instance.config.vignetteSettings.enabled
-                    && vignette.getVignetteOverlayBuffer().render()) {
-                vignette.renderCustomVignette(data.gui());
+            if (ExordiumModBase.instance.config.vignetteSettings.enabled) {
+                if(!vignette.getVignetteOverlayBuffer().render()) {
+                    vignette.renderCustomVignette(data.gui());  
+                }
                 data.cancel().set(true);
             }
             vignette.getVignetteOverlayBuffer().renderEnd();
