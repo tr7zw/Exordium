@@ -4,7 +4,7 @@ replacements:
   group: "dev.tr7zw"
   name: "Exordium"
   id: "exordium"
-  version: "1.1.4"
+  version: "1.2.0"
   author: "tr7zw"
   relocationpackage: "dev.tr7zw.exordium"
   licensename: "LICENSE"
@@ -13,6 +13,7 @@ replacements:
 enabledFlags:
   - autopublish
   - publishFabric
+  - publishForge
   - modrinth
   - curseforge
   - accesswidener
