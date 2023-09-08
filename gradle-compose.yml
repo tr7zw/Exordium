@@ -4,7 +4,7 @@ replacements:
   group: "dev.tr7zw"
   name: "Exordium"
   id: "exordium"
-  version: "1.2.0"
+  version: "1.2.1"
   author: "tr7zw"
   relocationpackage: "dev.tr7zw.exordium"
   licensename: "LICENSE"
