@@ -11,6 +11,7 @@ import dev.tr7zw.exordium.ExordiumModBase;
 import dev.tr7zw.exordium.access.VanillaBufferAccess.CrosshairOverlayAccess;
 import dev.tr7zw.exordium.util.BufferedComponent;
 import net.minecraft.client.AttackIndicatorStatus;
+import net.minecraft.client.CameraType;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.Gui;
 import net.minecraft.client.gui.GuiGraphics;
@@ -27,13 +28,17 @@ public class CrosshairMixin implements CrosshairOverlayAccess {
     private float lastYaw = 0;
     private float lastCooldown = 0;
     private boolean lastHighlight = false;
+    private boolean lastHidden = false;
 
     private BufferedComponent crosshairBufferedComponent = new BufferedComponent(true,
-            () -> ExordiumModBase.instance.config.debugScreenSettings) {
+            () -> ExordiumModBase.instance.config.crosshairSettings) {
 
         @Override
         public boolean needsRender() {
             if (wasRenderingF3 != minecraft.options.renderDebug) {
+                return true;
+            }
+            if(lastHidden != ((minecraft.options.getCameraType() != CameraType.FIRST_PERSON) || minecraft.player.isSpectator())) {
                 return true;
             }
             if (wasRenderingF3) {
@@ -58,6 +63,7 @@ public class CrosshairMixin implements CrosshairOverlayAccess {
 
         @Override
         public void captureState() {
+            lastHidden = minecraft.options.getCameraType() != CameraType.FIRST_PERSON || minecraft.player.isSpectator();
             wasRenderingF3 = minecraft.options.renderDebug;
             lastPitch = minecraft.getCameraEntity().getXRot();
             lastYaw = minecraft.getCameraEntity().getYRot();
