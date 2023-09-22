@@ -20,6 +20,7 @@ import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.Gui;
 import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.resources.ResourceLocation;
+import net.minecraft.world.scores.DisplaySlot;
 import net.minecraft.world.scores.Scoreboard;
 
 public class BufferManager {
@@ -68,7 +69,7 @@ public class BufferManager {
             GuiAccess guiAccess = (GuiAccess) minecraft.gui;
             TablistAccess tablistAccess = (TablistAccess) guiAccess.getPlayerTabOverlay();
             Scoreboard scoreboard = minecraft.level.getScoreboard();
-            tablistAccess.updateState(scoreboard, scoreboard.getDisplayObjective(0));
+            tablistAccess.updateState(scoreboard, scoreboard.getDisplayObjective(DisplaySlot.LIST));
             BufferedComponent bufferedComponent = tablistAccess.getPlayerListOverlayBuffer();
             if (bufferedComponent.render()) {
                 data.cancel().set(true);

@@ -10,6 +10,7 @@ import com.mojang.datafixers.util.Pair;
 
 import net.minecraft.client.Minecraft;
 import net.minecraft.network.chat.Component;
+import net.minecraft.world.scores.DisplaySlot;
 import net.minecraft.world.scores.Objective;
 import net.minecraft.world.scores.PlayerTeam;
 import net.minecraft.world.scores.Score;
@@ -26,10 +27,10 @@ public class ScoreboardHelper {
         if (playerTeam != null) {
             int n = playerTeam.getColor().getId();
             if (n >= 0)
-                objective = scoreboard.getDisplayObjective(3 + n);
+                objective = scoreboard.getDisplayObjective(DisplaySlot.BY_ID.apply(3 + n));
         }
         if (objective == null) {
-            objective = scoreboard.getDisplayObjective(1);
+            objective = scoreboard.getDisplayObjective(DisplaySlot.SIDEBAR);
         }
         if (objective == null) {
             return null;

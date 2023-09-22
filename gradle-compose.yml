@@ -1,5 +1,5 @@
 version: '0.0.2'
-source: "https://github.com/tr7zw/ModComposeTemplate/tree/1.20"
+source: "https://github.com/tr7zw/ModComposeTemplate/tree/1.20.2"
 replacements:
   group: "dev.tr7zw"
   name: "Exordium"
@@ -24,11 +24,11 @@ subProjects:
     template: "Fabric"
     replacements:
       dependencies: '
-          modImplementation "maven.modrinth:immediatelyfast:1.2.1+1.20.1"
+          modImplementation "maven.modrinth:immediatelyfast:1.2.5+1.20.2"
 
-          modImplementation "maven.modrinth:spark:BeIg1bik"
+          modImplementation "maven.modrinth:spark:XGW2fviP"
 
-          modImplementation "maven.modrinth:sodium:6SSPmLc9"
+          modImplementation "maven.modrinth:sodium:mc1.20.2-0.5.3"
 
           include(implementation(annotationProcessor("io.github.llamalad7:mixinextras-fabric:0.2.0-rc.2")))
       '

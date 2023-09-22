@@ -101,7 +101,7 @@ public abstract class PlayerTabOverlayMixin implements TablistAccess {
                 playerHash += Objects.hash(playerTeam.getColor(), prefix.getStyle(), prefix.getString(), suffix.getStyle(), suffix.getString());
             }
             playerHash += playerInfo.getGameMode() == GameType.SPECTATOR ? 31 : 0;
-            playerHash += playerInfo.getSkinLocation().hashCode();
+            playerHash += playerInfo.getSkin().texture().hashCode();
             playerHash += playerInfo.getLatency() * 63;
 
             if (lastTrackedObjective != null

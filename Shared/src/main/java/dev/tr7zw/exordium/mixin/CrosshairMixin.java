@@ -15,6 +15,7 @@ import net.minecraft.client.CameraType;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.Gui;
 import net.minecraft.client.gui.GuiGraphics;
+import net.minecraft.client.gui.components.DebugScreenOverlay;
 import net.minecraft.world.entity.LivingEntity;
 
 @Mixin(Gui.class)
@@ -22,6 +23,8 @@ public class CrosshairMixin implements CrosshairOverlayAccess {
 
     @Shadow
     private Minecraft minecraft;
+    @Shadow
+    private DebugScreenOverlay debugOverlay;
 
     private boolean wasRenderingF3 = false;
     private float lastPitch = 0;
@@ -35,7 +38,7 @@ public class CrosshairMixin implements CrosshairOverlayAccess {
 
         @Override
         public boolean needsRender() {
-            if (wasRenderingF3 != minecraft.options.renderDebug) {
+            if (wasRenderingF3 != debugOverlay.showDebugScreen()) {
                 return true;
             }
             if(lastHidden != ((minecraft.options.getCameraType() != CameraType.FIRST_PERSON) || minecraft.player.isSpectator())) {
@@ -64,7 +67,7 @@ public class CrosshairMixin implements CrosshairOverlayAccess {
         @Override
         public void captureState() {
             lastHidden = minecraft.options.getCameraType() != CameraType.FIRST_PERSON || minecraft.player.isSpectator();
-            wasRenderingF3 = minecraft.options.renderDebug;
+            wasRenderingF3 = debugOverlay.showDebugScreen();
             lastPitch = minecraft.getCameraEntity().getXRot();
             lastYaw = minecraft.getCameraEntity().getYRot();
             lastCooldown = minecraft.player.getAttackStrengthScale(0.0F);
