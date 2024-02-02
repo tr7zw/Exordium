@@ -42,9 +42,10 @@ public class ExordiumMod extends ExordiumModBase {
                 () -> new IExtensionPoint.DisplayTest(
                         () -> ModLoadingContext.get().getActiveContainer().getModInfo().getVersion().toString(),
                         (remote, isServer) -> true));
-        ModLoadingContext.get().registerExtensionPoint(ConfigScreenFactory.class, () -> new ConfigScreenFactory((mc, screen) -> {
-            return createConfigScreen(screen);
-        }));
+        ModLoadingContext.get().registerExtensionPoint(ConfigScreenFactory.class,
+                () -> new ConfigScreenFactory((mc, screen) -> {
+                    return createConfigScreen(screen);
+                }));
         MinecraftForge.EVENT_BUS.addListener(this::preOverlayRender);
         MinecraftForge.EVENT_BUS.addListener(this::postOverlayRender);
         MinecraftForge.EVENT_BUS.addListener(this::postRenderGuiEvent);

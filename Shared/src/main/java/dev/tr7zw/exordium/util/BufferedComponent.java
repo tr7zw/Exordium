@@ -45,18 +45,11 @@ public abstract class BufferedComponent {
             model.close();
         }
 
-        Vector3f[] modelData = new Vector3f[] {
-                new Vector3f(0.0f, screenHeight, -90.0f),
-                new Vector3f(screenWidth, screenHeight, -90.0F),
-                new Vector3f(screenWidth, 0.0F, -90.0F),
-                new Vector3f(0.0F, 0.0F, -90.0F),
-        };
-        Vector2f[] uvData = new Vector2f[] {
-                new Vector2f(0.0f, 0.0f),
-                new Vector2f(1.0f, 0.0f),
-                new Vector2f(1.0f, 1.0f),
-                new Vector2f(0.0f, 1.0f),
-        };
+        Vector3f[] modelData = new Vector3f[] { new Vector3f(0.0f, screenHeight, -90.0f),
+                new Vector3f(screenWidth, screenHeight, -90.0F), new Vector3f(screenWidth, 0.0F, -90.0F),
+                new Vector3f(0.0F, 0.0F, -90.0F), };
+        Vector2f[] uvData = new Vector2f[] { new Vector2f(0.0f, 0.0f), new Vector2f(1.0f, 0.0f),
+                new Vector2f(1.0f, 1.0f), new Vector2f(0.0f, 1.0f), };
         model = new Model(modelData, uvData);
     }
 
@@ -74,8 +67,7 @@ public abstract class BufferedComponent {
         int screenWidth = minecraft.getWindow().getGuiScaledWidth();
         int screenHeight = minecraft.getWindow().getGuiScaledHeight();
         boolean forceRender = false;
-        if (guiTarget.width != minecraft.getWindow().getWidth()
-                || guiTarget.height != minecraft.getWindow().getHeight()
+        if (guiTarget.width != minecraft.getWindow().getWidth() || guiTarget.height != minecraft.getWindow().getHeight()
                 || minecraft.options.guiScale().get() != guiScale) {
             guiTarget.resize(minecraft.getWindow().getWidth(), minecraft.getWindow().getHeight(), true);
             refreshModel(screenWidth, screenHeight);

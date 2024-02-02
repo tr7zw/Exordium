@@ -32,8 +32,7 @@ public class GuiMixin implements GuiAccess {
     protected int tickCount;
 
     @WrapOperation(method = "render", at = {
-            @At(value = "INVOKE", target = "Lnet/minecraft/client/gui/components/ChatComponent;render(Lnet/minecraft/client/gui/GuiGraphics;III)V"),
-    })
+            @At(value = "INVOKE", target = "Lnet/minecraft/client/gui/components/ChatComponent;render(Lnet/minecraft/client/gui/GuiGraphics;III)V"), })
     private void renderChatWrapper(ChatComponent instance, GuiGraphics guiGraphics, int tickCount, int j, int k,
             final Operation<Void> operation) {
         ChatAccess chatAccess = (ChatAccess) chat;
@@ -46,8 +45,7 @@ public class GuiMixin implements GuiAccess {
     }
 
     @WrapOperation(method = "render", at = {
-            @At(value = "INVOKE", target = "Lnet/minecraft/client/gui/components/PlayerTabOverlay;render(Lnet/minecraft/client/gui/GuiGraphics;ILnet/minecraft/world/scores/Scoreboard;Lnet/minecraft/world/scores/Objective;)V"),
-    })
+            @At(value = "INVOKE", target = "Lnet/minecraft/client/gui/components/PlayerTabOverlay;render(Lnet/minecraft/client/gui/GuiGraphics;ILnet/minecraft/world/scores/Scoreboard;Lnet/minecraft/world/scores/Objective;)V"), })
     private void renderTablistWrapper(PlayerTabOverlay instance, GuiGraphics guiGraphics, int screenWidth,
             Scoreboard scoreboard, Objective objective2, final Operation<Void> operation) {
         TablistAccess tablistAccess = (TablistAccess) tabList;

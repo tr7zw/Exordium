@@ -10,11 +10,7 @@ import com.mojang.datafixers.util.Pair;
 
 import net.minecraft.client.Minecraft;
 import net.minecraft.network.chat.Component;
-import net.minecraft.world.scores.DisplaySlot;
-import net.minecraft.world.scores.Objective;
-import net.minecraft.world.scores.PlayerTeam;
-import net.minecraft.world.scores.Score;
-import net.minecraft.world.scores.Scoreboard;
+import net.minecraft.world.scores.*;
 
 public class ScoreboardHelper {
 
@@ -35,10 +31,11 @@ public class ScoreboardHelper {
         if (objective == null) {
             return null;
         }
-        Collection<Score> collection = scoreboard.getPlayerScores(objective);
-        List<Score> list = (List<Score>) collection.stream()
-                .filter(score -> (score.getOwner() != null && !score.getOwner().startsWith("#")))
+
+        Collection<PlayerScoreEntry> collection = scoreboard.listPlayerScores(objective);
+        List<PlayerScoreEntry> list = collection.stream().filter(score -> !score.owner().startsWith("#"))
                 .collect(Collectors.toList());
+
         if (list.size() > 15) {
             collection = Lists.newArrayList(Iterables.skip(list, collection.size() - 15));
         } else {
@@ -46,10 +43,10 @@ public class ScoreboardHelper {
         }
         List<Pair<Integer, Component>> list2 = Lists.newArrayListWithCapacity(collection.size());
         Component title = objective.getDisplayName();
-        for (Score score : collection) {
-            PlayerTeam playerTeam2 = scoreboard.getPlayersTeam(score.getOwner());
-            Component component2 = PlayerTeam.formatNameForTeam(playerTeam2, Component.literal(score.getOwner()));
-            list2.add(Pair.of(score.getScore(), component2));
+        for (PlayerScoreEntry score : collection) {
+            PlayerTeam playerTeam2 = scoreboard.getPlayersTeam(score.owner());
+            Component component2 = PlayerTeam.formatNameForTeam(playerTeam2, score.ownerName());
+            list2.add(Pair.of(score.value(), component2));
         }
         return new ScoreboardState(title, list2);
     }

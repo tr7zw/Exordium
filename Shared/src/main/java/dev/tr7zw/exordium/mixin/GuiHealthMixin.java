@@ -57,19 +57,16 @@ public abstract class GuiHealthMixin {
                     || minecraft.player.hasEffect(MobEffects.REGENERATION);
             boolean blinking = (healthBlinkTime > tickCount && (healthBlinkTime - tickCount) / 3L % 2L == 1L);
             LivingEntity vehicle = getPlayerVehicleWithHealth();
-            return healthBlinking != blinking ||
-                    lastRenderedHealth != lastHealth ||
-                    lastDisplayHealth != displayHealth ||
-                    lastArmorValue != minecraft.player.getArmorValue() ||
-                    lastMaxVehicleHearts != getVehicleMaxHearts(vehicle) ||
-                    lastVehicleHearts != (vehicle == null ? -1 : vehicle.getHealth()) ||
-                    lastAirSupply != minecraft.player.getAirSupply() ||
-                    lastSaturation != minecraft.player.getFoodData().getSaturationLevel() ||
-                    (hasVisualEffects || (hasVisualEffects != hadVisualEffects && lastRenderedTick != tickCount)) ||
-                    lastFoodLevel != minecraft.player.getFoodData().getFoodLevel() ||
-                    lastExhaustionLevel != minecraft.player.getFoodData().getExhaustionLevel() ||
-                    lastPlayerHealth != minecraft.player.getHealth() ||
-                    Mth.ceil(lastPlayerHealth) <= 4;
+            return healthBlinking != blinking || lastRenderedHealth != lastHealth || lastDisplayHealth != displayHealth
+                    || lastArmorValue != minecraft.player.getArmorValue()
+                    || lastMaxVehicleHearts != getVehicleMaxHearts(vehicle)
+                    || lastVehicleHearts != (vehicle == null ? -1 : vehicle.getHealth())
+                    || lastAirSupply != minecraft.player.getAirSupply()
+                    || lastSaturation != minecraft.player.getFoodData().getSaturationLevel()
+                    || (hasVisualEffects || (hasVisualEffects != hadVisualEffects && lastRenderedTick != tickCount))
+                    || lastFoodLevel != minecraft.player.getFoodData().getFoodLevel()
+                    || lastExhaustionLevel != minecraft.player.getFoodData().getExhaustionLevel()
+                    || lastPlayerHealth != minecraft.player.getHealth() || Mth.ceil(lastPlayerHealth) <= 4;
         }
 
         @Override
@@ -93,8 +90,7 @@ public abstract class GuiHealthMixin {
     };
 
     @WrapOperation(method = "render", at = {
-            @At(value = "INVOKE", target = "Lnet/minecraft/client/gui/Gui;renderPlayerHealth(Lnet/minecraft/client/gui/GuiGraphics;)V"),
-    })
+            @At(value = "INVOKE", target = "Lnet/minecraft/client/gui/Gui;renderPlayerHealth(Lnet/minecraft/client/gui/GuiGraphics;)V"), })
     private void renderPlayerHealthWrapper(Gui gui, GuiGraphics guiGraphics, final Operation<Void> operation) {
         if (!healthBuffer.render()) {
             operation.call(gui, guiGraphics);

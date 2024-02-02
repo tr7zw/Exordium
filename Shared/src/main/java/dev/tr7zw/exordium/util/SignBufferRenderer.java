@@ -70,18 +70,10 @@ public class SignBufferRenderer {
         float height = (int) ExordiumModBase.signSettings.renderHeight;
         float width = (int) ExordiumModBase.signSettings.renderWidth;
 
-        Vector3f[] modelData = new Vector3f[] {
-                new Vector3f(0.0f, height, 0.01F),
-                new Vector3f(width, height, 0.01F),
-                new Vector3f(width, 0.0f, 0.01F),
-                new Vector3f(0.0f, 0.0f, 0.01F),
-        };
-        Vector2f[] uvData = new Vector2f[] {
-                new Vector2f(0.0f, 0.0f),
-                new Vector2f(1.0f, 0.0f),
-                new Vector2f(1.0f, 1.0f),
-                new Vector2f(0.0f, 1.0f),
-        };
+        Vector3f[] modelData = new Vector3f[] { new Vector3f(0.0f, height, 0.01F), new Vector3f(width, height, 0.01F),
+                new Vector3f(width, 0.0f, 0.01F), new Vector3f(0.0f, 0.0f, 0.01F), };
+        Vector2f[] uvData = new Vector2f[] { new Vector2f(0.0f, 0.0f), new Vector2f(1.0f, 0.0f),
+                new Vector2f(1.0f, 1.0f), new Vector2f(0.0f, 1.0f), };
         model = new Model(modelData, uvData);
     }
 
@@ -151,12 +143,10 @@ public class SignBufferRenderer {
             float q = (-minecraft.font.width(formattedCharSequence) / 2);
             if (bl) {
                 minecraft.font.drawInBatch8xOutline(formattedCharSequence, -28 + q, (p * 10 - 20), n, l, matrix4f,
-                        bufferSource,
-                        o);
+                        bufferSource, o);
             } else {
                 minecraft.font.drawInBatch(formattedCharSequence, (-28 + q), (p * 10 - 20), n, false, matrix4f,
-                        bufferSource,
-                        Font.DisplayMode.NORMAL, 0, o);
+                        bufferSource, Font.DisplayMode.NORMAL, 0, o);
             }
         }
         bufferSource.endBatch(); // force clear the vertex consumer

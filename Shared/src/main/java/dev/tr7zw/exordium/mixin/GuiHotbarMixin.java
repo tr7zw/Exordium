@@ -127,8 +127,7 @@ public class GuiHotbarMixin implements HotbarOverlayAccess {
     }
 
     @WrapOperation(method = "render", at = {
-            @At(value = "INVOKE", target = "Lnet/minecraft/client/gui/Gui;renderHotbar(FLnet/minecraft/client/gui/GuiGraphics;)V"),
-    })
+            @At(value = "INVOKE", target = "Lnet/minecraft/client/gui/Gui;renderHotbar(FLnet/minecraft/client/gui/GuiGraphics;)V"), })
     private void renderHotbarWrapper(Gui gui, float f, GuiGraphics guiGraphics, final Operation<Void> operation) {
         outdated = hasChanged();
         if (!hotbarBufferedComponent.render()) {

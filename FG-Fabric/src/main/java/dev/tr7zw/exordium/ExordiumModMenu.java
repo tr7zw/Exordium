@@ -10,6 +10,6 @@ public class ExordiumModMenu implements ModMenuApi {
         return parent -> {
             return ExordiumModBase.instance.createConfigScreen(parent);
         };
-    }  
-    
+    }
+
 }

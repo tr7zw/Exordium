@@ -74,8 +74,7 @@ public class VignetteMixin implements VignetteOverlayAccess {
     };
 
     @WrapOperation(method = "render", at = {
-            @At(value = "INVOKE", target = "Lnet/minecraft/client/gui/Gui;renderVignette(Lnet/minecraft/client/gui/GuiGraphics;Lnet/minecraft/world/entity/Entity;)V"),
-    })
+            @At(value = "INVOKE", target = "Lnet/minecraft/client/gui/Gui;renderVignette(Lnet/minecraft/client/gui/GuiGraphics;Lnet/minecraft/world/entity/Entity;)V"), })
     private void renderVignetteWrapper(Gui gui, GuiGraphics guiGraphics, Entity entity,
             final Operation<Void> operation) {
         if (!vignetteBuffer.render()) {

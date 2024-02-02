@@ -42,8 +42,7 @@ public class ScoreboardMixin implements ScoreBoardOverlayAccess {
     };
 
     @WrapOperation(method = "render", at = {
-            @At(value = "INVOKE", target = "Lnet/minecraft/client/gui/Gui;displayScoreboardSidebar(Lnet/minecraft/client/gui/GuiGraphics;Lnet/minecraft/world/scores/Objective;)V"),
-    })
+            @At(value = "INVOKE", target = "Lnet/minecraft/client/gui/Gui;displayScoreboardSidebar(Lnet/minecraft/client/gui/GuiGraphics;Lnet/minecraft/world/scores/Objective;)V"), })
     private void displayScoreboardSidebarWrapper(Gui gui, GuiGraphics guiGraphics, Objective objective,
             final Operation<Void> operation) {
         if (!scoreboardBuffer.render()) {
