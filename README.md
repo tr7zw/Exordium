@@ -44,6 +44,7 @@ __This is still work in progress software! There will be issues, please report t
 This feature is still not done (disabled by default) and has mainly transparency issues. It heavily speeds up mods like REI (Roughly Enough Items), but with visual issues.
 
 ### Downloads
+
 - [Curseforge](https://www.curseforge.com/minecraft/mc-mods/exordium)
 - [Modrinth](https://modrinth.com/mod/exordium)
 

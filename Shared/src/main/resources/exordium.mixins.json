@@ -4,8 +4,7 @@
     "package": "dev.tr7zw.exordium.mixin",
     "compatibilityLevel": "JAVA_16",
     "refmap": "exordium.refmap.mixins.json",
-    "mixins": [
-    ],
+    "mixins": [],
     "client": [
         "GlStateManagerMixin",
         "SignRendererMixin",
