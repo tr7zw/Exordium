@@ -40,11 +40,11 @@ public class BufferManager {
         vanillaBuffers.put(new ResourceLocation("scoreboard"),
                 gui -> ((ScoreBoardOverlayAccess) gui).getScoreBoardOverlayBuffer());
         vanillaBuffers.put(new ResourceLocation("hotbar"), gui -> ((HotbarOverlayAccess) gui).getHotbarOverlayBuffer());
-       registerCustomHandler(new ResourceLocation("vignette"), data -> {
+        registerCustomHandler(new ResourceLocation("vignette"), data -> {
             VignetteOverlayAccess vignette = (VignetteOverlayAccess) minecraft.gui;
             if (ExordiumModBase.instance.config.vignetteSettings.enabled) {
-                if(!vignette.getVignetteOverlayBuffer().render()) {
-                    vignette.renderCustomVignette(data.gui());  
+                if (!vignette.getVignetteOverlayBuffer().render()) {
+                    vignette.renderCustomVignette(data.gui());
                 }
                 data.cancel().set(true);
             }
@@ -90,23 +90,24 @@ public class BufferManager {
         }
         return null;
     }
-    
+
     public Consumer<HandlerData> getCustomHandler(ResourceLocation resourceLocation) {
         return customHandlers.get(resourceLocation);
     }
-    
+
     public Runnable getCustomEndHandler(ResourceLocation resourceLocation) {
         return customEndHandlers.get(resourceLocation);
     }
-    
+
     public void registerCustomHandler(ResourceLocation resourceLocation, Consumer<HandlerData> handler) {
         customHandlers.put(resourceLocation, handler);
     }
-    
+
     public void registerCustomEndHandler(ResourceLocation resourceLocation, Runnable handler) {
         customEndHandlers.put(resourceLocation, handler);
     }
-    
-    public record HandlerData(GuiGraphics gui, AtomicBoolean cancel) {}
+
+    public record HandlerData(GuiGraphics gui, AtomicBoolean cancel) {
+    }
 
 }

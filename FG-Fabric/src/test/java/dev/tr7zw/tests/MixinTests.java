@@ -55,7 +55,7 @@ public class MixinTests {
         objenesis.newInstance(SignBlockEntity.class);
         objenesis.newInstance(SignRenderer.class);
     }
-    
+
     @Test
     public void langTests() throws Throwable {
         Language lang = TestUtil.loadDefault("/assets/exordium/lang/en_us.json");
@@ -64,9 +64,9 @@ public class MixinTests {
         CustomConfigScreen screen = (CustomConfigScreen) ExordiumModBase.instance.createConfigScreen(null);
         List<OptionInstance<?>> options = TestUtil.bootStrapCustomConfigScreen(screen);
         assertNotEquals(screen.getTitle().getString(), lang.getOrDefault(screen.getTitle().getString()));
-        for(OptionInstance<?> option : options) {
+        for (OptionInstance<?> option : options) {
             Set<String> keys = TestUtil.getKeys(option, true);
-            for(String key : keys) {
+            for (String key : keys) {
                 System.out.println(key + " " + lang.getOrDefault(key));
                 assertNotEquals(key, lang.getOrDefault(key));
             }

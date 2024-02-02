@@ -2,8 +2,9 @@ package dev.tr7zw.exordium.mixin;
 
 import java.util.*;
 
+import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.level.GameType;
-import net.minecraft.world.scores.PlayerTeam;
+import net.minecraft.world.scores.*;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Shadow;
 
@@ -15,9 +16,6 @@ import net.minecraft.client.gui.Gui;
 import net.minecraft.client.gui.components.PlayerTabOverlay;
 import net.minecraft.client.multiplayer.PlayerInfo;
 import net.minecraft.network.chat.Component;
-import net.minecraft.world.scores.Objective;
-import net.minecraft.world.scores.Score;
-import net.minecraft.world.scores.Scoreboard;
 import net.minecraft.world.scores.criteria.ObjectiveCriteria;
 
 @Mixin(PlayerTabOverlay.class)
@@ -61,8 +59,8 @@ public abstract class PlayerTabOverlayMixin implements TablistAccess {
         int newHeaderHash = header == null ? 0 : header.getString().hashCode();
         int newFooterHash = footer == null ? 0 : footer.getString().hashCode();
         boolean plaverInfoOutdated = !playerInfoHashes.equals(fastGetPlayerInfoListHashCode(getPlayerInfos()));
-        outdated = plaverInfoOutdated || headerHash != newHeaderHash
-                || footerHash != newFooterHash || scoreboardOrObjectiveChange;
+        outdated = plaverInfoOutdated || headerHash != newHeaderHash || footerHash != newFooterHash
+                || scoreboardOrObjectiveChange;
     }
 
     public boolean scoreboardOrObjectiveChanged(Scoreboard scoreboard, Objective objective) {
@@ -70,8 +68,8 @@ public abstract class PlayerTabOverlayMixin implements TablistAccess {
             return false;
 
         int scoreboardHashCode = 1;
-        for (Score score : scoreboard.getPlayerScores(objective))
-            scoreboardHashCode = 31 * scoreboardHashCode + (score == null ? 0 : score.getScore());
+        for (PlayerScoreEntry score : scoreboard.listPlayerScores(objective))
+            scoreboardHashCode = 31 * scoreboardHashCode + (score == null ? 0 : score.value());
 
         int newObjectiveHashCode = objective == null ? 0 : objective.getName().hashCode();
         if (scoreboardHashCode == scoreboardHash && newObjectiveHashCode == objectiveHash)
@@ -89,16 +87,18 @@ public abstract class PlayerTabOverlayMixin implements TablistAccess {
                 continue;
 
             int playerHash = playerInfo.getProfile().getId().hashCode();
-			playerHash += playerInfo.getProfile().getName().hashCode();
+            playerHash += playerInfo.getProfile().getName().hashCode();
             if (playerInfo.getTabListDisplayName() != null) {
                 playerHash += playerInfo.getTabListDisplayName().getString().hashCode();
                 playerHash += playerInfo.getTabListDisplayName().getStyle().hashCode();
             } else {
                 PlayerTeam playerTeam = playerInfo.getTeam();
-                if(playerTeam == null) continue;
+                if (playerTeam == null)
+                    continue;
                 Component prefix = playerTeam.getPlayerPrefix();
                 Component suffix = playerTeam.getPlayerSuffix();
-                playerHash += Objects.hash(playerTeam.getColor(), prefix.getStyle(), prefix.getString(), suffix.getStyle(), suffix.getString());
+                playerHash += Objects.hash(playerTeam.getColor(), prefix.getStyle(), prefix.getString(),
+                        suffix.getStyle(), suffix.getString());
             }
             playerHash += playerInfo.getGameMode() == GameType.SPECTATOR ? 31 : 0;
             playerHash += playerInfo.getSkin().texture().hashCode();
@@ -106,12 +106,15 @@ public abstract class PlayerTabOverlayMixin implements TablistAccess {
 
             if (lastTrackedObjective != null
                     && lastTrackedObjective.getRenderType() == ObjectiveCriteria.RenderType.HEARTS) {
-                PlayerTabOverlay.HealthState healthState = this.healthStates.computeIfAbsent(
-                        playerInfo.getProfile().getId(),
-                        (uUID) -> new PlayerTabOverlay.HealthState(lastTrackedObjective.getScoreboard()
-                                .getOrCreatePlayerScore(playerInfo.getProfile().getName(), lastTrackedObjective)
-                                .getScore()));
-                playerHash += healthState.isBlinking(this.gui.getGuiTicks()) ? 63 : 127;
+                Player player = minecraft.level.getPlayerByUUID(playerInfo.getProfile().getId());
+
+                if (player != null) {
+                    PlayerTabOverlay.HealthState healthState = this.healthStates.computeIfAbsent(
+                            playerInfo.getProfile().getId(),
+                            (_uuid) -> new PlayerTabOverlay.HealthState(lastTrackedObjective.getScoreboard()
+                                    .getOrCreatePlayerScore(player, lastTrackedObjective).get()));
+                    playerHash += healthState.isBlinking(this.gui.getGuiTicks()) ? 63 : 127;
+                }
             }
             hashCodes.add(playerHash);
         }
@@ -125,5 +128,5 @@ public abstract class PlayerTabOverlayMixin implements TablistAccess {
     public BufferedComponent getPlayerListOverlayBuffer() {
         return playerlistBufferedComponent;
     }
-    
+
 }

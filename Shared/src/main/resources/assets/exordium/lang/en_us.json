@@ -74,4 +74,4 @@
     "text.exordium.setting.crosshair.fps.tooltip": "The maximum framerate for the crosshair(used during F3 mode)",
     "text.exordium.setting.crosshair.forceupdates": "Force Crosshair Updates",
     "text.exordium.setting.crosshair.forceupdates.tooltip": "Force the crosshair to update every possible update frame(keeping in mind the fps limit). Might fix some issues with other mods."
-  }
+}

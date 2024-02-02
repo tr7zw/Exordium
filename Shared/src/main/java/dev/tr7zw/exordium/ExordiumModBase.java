@@ -59,9 +59,9 @@ public abstract class ExordiumModBase {
             }
         }
         bufferManager.initialize();
-		initModloader();
-	}
-	
+        initModloader();
+    }
+
     public void writeConfig() {
         if (settingsFile.exists())
             settingsFile.delete();
@@ -115,7 +115,7 @@ public abstract class ExordiumModBase {
     public CustomShaderManager getCustomShaderManager() {
         return customShaderManager;
     }
-    
+
     public BufferManager getBufferManager() {
         return bufferManager;
     }

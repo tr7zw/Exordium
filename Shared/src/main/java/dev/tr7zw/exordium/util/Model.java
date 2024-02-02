@@ -16,8 +16,8 @@ public class Model {
     int vertexCount;
 
     public Model(Vector3f[] modelData, Vector2f[] uvData) {
-
-        BufferBuilder bufferbuilder = new BufferBuilder(modelData.length);
+        // 4 bytes per float, 5 floats per entry
+        BufferBuilder bufferbuilder = new BufferBuilder(modelData.length * 4 * 5);
 
         bufferbuilder.begin(VertexFormat.Mode.QUADS, DefaultVertexFormat.POSITION_TEX);
         for (int i = 0; i < modelData.length; i++) {

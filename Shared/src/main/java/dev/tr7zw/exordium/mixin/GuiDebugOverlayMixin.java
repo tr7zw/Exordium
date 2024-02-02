@@ -28,11 +28,11 @@ public class GuiDebugOverlayMixin implements DebugOverlayAccess {
         public void captureState() {
         }
     };
-    
+
     @WrapOperation(method = "render", at = {
-            @At(value = "INVOKE", target = "Lnet/minecraft/client/gui/components/DebugScreenOverlay;render(Lnet/minecraft/client/gui/GuiGraphics;)V"),
-    })
-    private void renderExperienceBarWrapper(DebugScreenOverlay overlay, GuiGraphics guiGraphics, final Operation<Void> operation) {
+            @At(value = "INVOKE", target = "Lnet/minecraft/client/gui/components/DebugScreenOverlay;render(Lnet/minecraft/client/gui/GuiGraphics;)V"), })
+    private void renderExperienceBarWrapper(DebugScreenOverlay overlay, GuiGraphics guiGraphics,
+            final Operation<Void> operation) {
         if (!debugBufferedComponent.render()) {
             operation.call(overlay, guiGraphics);
         }

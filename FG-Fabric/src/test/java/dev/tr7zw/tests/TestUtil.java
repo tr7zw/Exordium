@@ -97,16 +97,16 @@ public class TestUtil {
             }
         };
     }
-    
+
     public static Set<String> getKeys(OptionInstance<?> optionsInstance, boolean tooltips) {
         Set<String> keys = new HashSet<>();
         keys.add(optionsInstance.toString());
-        if(tooltips) {
+        if (tooltips) {
             keys.add(optionsInstance.toString() + ".tooltip");
         }
         return keys;
     }
-    
+
     public static List<OptionInstance<?>> bootStrapCustomConfigScreen(CustomConfigScreen screen) throws Exception {
         Field optionsField = CustomConfigScreen.class.getDeclaredField("list");
         optionsField.setAccessible(true);
@@ -117,13 +117,13 @@ public class TestUtil {
         init.invoke(screen);
         return list.options;
     }
-    
+
     private static class CustomOptionsList extends OptionsList {
 
         public List<OptionInstance<?>> options = new ArrayList<>();
-        
+
         public CustomOptionsList() {
-            super(null, 0, 0, 0, 0, 0);
+            super(null, 0, 0, 0, 0);
         }
 
         @Override
@@ -136,7 +136,7 @@ public class TestUtil {
         public void addSmall(OptionInstance<?> optionInstance, OptionInstance<?> optionInstance2) {
             options.add(optionInstance);
         }
-        
+
     }
 
 }

@@ -41,7 +41,8 @@ public class CrosshairMixin implements CrosshairOverlayAccess {
             if (wasRenderingF3 != debugOverlay.showDebugScreen()) {
                 return true;
             }
-            if(lastHidden != ((minecraft.options.getCameraType() != CameraType.FIRST_PERSON) || minecraft.player.isSpectator())) {
+            if (lastHidden != ((minecraft.options.getCameraType() != CameraType.FIRST_PERSON)
+                    || minecraft.player.isSpectator())) {
                 return true;
             }
             if (wasRenderingF3) {
@@ -50,12 +51,12 @@ public class CrosshairMixin implements CrosshairOverlayAccess {
             }
             if (minecraft.options.attackIndicator().get() == AttackIndicatorStatus.CROSSHAIR) {
                 float cooldown = minecraft.player.getAttackStrengthScale(0.0F);
-                if(lastCooldown != cooldown) {
+                if (lastCooldown != cooldown) {
                     return true;
                 }
                 boolean flag = false;
-                if (minecraft.crosshairPickEntity != null
-                        && minecraft.crosshairPickEntity instanceof LivingEntity && cooldown >= 1.0F) {
+                if (minecraft.crosshairPickEntity != null && minecraft.crosshairPickEntity instanceof LivingEntity
+                        && cooldown >= 1.0F) {
                     flag = minecraft.player.getCurrentItemAttackStrengthDelay() > 5.0F;
                     flag &= minecraft.crosshairPickEntity.isAlive();
                 }
@@ -72,8 +73,8 @@ public class CrosshairMixin implements CrosshairOverlayAccess {
             lastYaw = minecraft.getCameraEntity().getYRot();
             lastCooldown = minecraft.player.getAttackStrengthScale(0.0F);
             boolean flag = false;
-            if (minecraft.crosshairPickEntity != null
-                    && minecraft.crosshairPickEntity instanceof LivingEntity && lastCooldown >= 1.0F) {
+            if (minecraft.crosshairPickEntity != null && minecraft.crosshairPickEntity instanceof LivingEntity
+                    && lastCooldown >= 1.0F) {
                 flag = minecraft.player.getCurrentItemAttackStrengthDelay() > 5.0F;
                 flag &= minecraft.crosshairPickEntity.isAlive();
             }
@@ -82,8 +83,7 @@ public class CrosshairMixin implements CrosshairOverlayAccess {
     };
 
     @WrapOperation(method = "render", at = {
-            @At(value = "INVOKE", target = "Lnet/minecraft/client/gui/Gui;renderCrosshair(Lnet/minecraft/client/gui/GuiGraphics;)V"),
-    })
+            @At(value = "INVOKE", target = "Lnet/minecraft/client/gui/Gui;renderCrosshair(Lnet/minecraft/client/gui/GuiGraphics;)V"), })
     private void renderCrosshairWrapper(Gui gui, GuiGraphics guiGraphics, final Operation<Void> operation) {
         if (!crosshairBufferedComponent.render()) {
             operation.call(gui, guiGraphics);
