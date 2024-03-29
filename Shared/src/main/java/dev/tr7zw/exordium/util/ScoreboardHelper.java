@@ -1,16 +1,16 @@
 package dev.tr7zw.exordium.util;
 
-import java.util.Collection;
-import java.util.List;
-import java.util.stream.Collectors;
-
 import com.google.common.collect.Iterables;
 import com.google.common.collect.Lists;
 import com.mojang.datafixers.util.Pair;
-
 import net.minecraft.client.Minecraft;
 import net.minecraft.network.chat.Component;
+import net.minecraft.network.chat.numbers.NumberFormat;
 import net.minecraft.world.scores.*;
+
+import java.util.Collection;
+import java.util.List;
+import java.util.stream.Collectors;
 
 public class ScoreboardHelper {
 
@@ -41,17 +41,21 @@ public class ScoreboardHelper {
         } else {
             collection = list;
         }
-        List<Pair<Integer, Component>> list2 = Lists.newArrayListWithCapacity(collection.size());
+        List<Pair<Component, Component>> list2 = Lists.newArrayListWithCapacity(collection.size());
         Component title = objective.getDisplayName();
         for (PlayerScoreEntry score : collection) {
             PlayerTeam playerTeam2 = scoreboard.getPlayersTeam(score.owner());
             Component component2 = PlayerTeam.formatNameForTeam(playerTeam2, score.ownerName());
-            list2.add(Pair.of(score.value(), component2));
+            NumberFormat format = score.numberFormatOverride() == null ? objective.numberFormat()
+                    : score.numberFormatOverride();
+            list2.add(Pair.of(format == null ? Component.literal(score.value() + "") : format.format(score.value()),
+                    component2));
+
         }
         return new ScoreboardState(title, list2);
     }
 
-    public static record ScoreboardState(Component title, List<Pair<Integer, Component>> entries) {
+    public static record ScoreboardState(Component title, List<Pair<Component, Component>> entries) {
     }
 
 }
