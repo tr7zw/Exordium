@@ -1,26 +1,23 @@
 package dev.tr7zw.exordium;
 
-import java.io.File;
-import java.io.IOException;
-import java.nio.charset.StandardCharsets;
-import java.nio.file.Files;
-
-import dev.tr7zw.exordium.util.DelayedRenderCallManager;
-import org.apache.logging.log4j.LogManager;
-import org.apache.logging.log4j.Logger;
-
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.mojang.blaze3d.pipeline.RenderTarget;
 import com.mojang.blaze3d.platform.GlStateManager;
 import com.mojang.blaze3d.systems.RenderSystem;
-
 import dev.tr7zw.exordium.config.Config;
 import dev.tr7zw.exordium.config.ConfigUpgrader;
 import dev.tr7zw.exordium.config.ExordiumConfigScreen;
 import dev.tr7zw.exordium.util.CustomShaderManager;
-import dev.tr7zw.exordium.util.NametagScreenBuffer;
+import dev.tr7zw.exordium.util.DelayedRenderCallManager;
 import net.minecraft.client.gui.screens.Screen;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
+
+import java.io.File;
+import java.io.IOException;
+import java.nio.charset.StandardCharsets;
+import java.nio.file.Files;
 
 public abstract class ExordiumModBase {
 
@@ -31,10 +28,7 @@ public abstract class ExordiumModBase {
     public Config config;
     private final File settingsFile = new File("config", "exordium.json");
     private final Gson gson = new GsonBuilder().setPrettyPrinting().create();
-    private NametagScreenBuffer nametagScreenBuffer;
     private RenderTarget temporaryScreenOverwrite = null;
-    public static SignSettings signSettings = new SignSettings();
-    public static NametagSettings nametagSettings = new NametagSettings();
     private final DelayedRenderCallManager delayedRenderCallManager = new DelayedRenderCallManager();
     private final CustomShaderManager customShaderManager = new CustomShaderManager();
     private final BufferManager bufferManager = new BufferManager();
@@ -70,13 +64,6 @@ public abstract class ExordiumModBase {
         } catch (IOException e1) {
             e1.printStackTrace();
         }
-    }
-
-    public NametagScreenBuffer getNameTagScreenBuffer() {
-        if (nametagScreenBuffer == null) {
-            nametagScreenBuffer = new NametagScreenBuffer(1000 / config.targetFPSNameTags);
-        }
-        return nametagScreenBuffer;
     }
 
     public DelayedRenderCallManager getDelayedRenderCallManager() {

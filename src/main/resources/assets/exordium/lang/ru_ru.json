@@ -1,11 +1,5 @@
 {
     "text.exordium.title": "Настройки Exordium",
-    "text.exordium.enableSignBuffering": "Буфер табличек",
-    "text.exordium.enableSignBuffering.tooltip": "Переключить использование отдельного буфера для текста на табличках.",
-    "text.exordium.enableNametagScreenBuffering": "Буфер имён",
-    "text.exordium.enableNametagScreenBuffering.tooltip": "Переключить использование отдельного буфера для имён на экране.",
-    "text.exordium.targetFPSNameTags": "FPS буфера имён",
-    "text.exordium.targetFPSNameTags.tooltip": "Предельная частота обновления буфера имён.",
     "text.exordium.setting.chat.enabled": "Буфер чата",
     "text.exordium.setting.chat.enabled.tooltip": "Переключить использование отдельного буфера для чата.",
     "text.exordium.setting.chat.fps": "FPS буфера чата",

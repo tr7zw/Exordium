@@ -2,7 +2,7 @@ package dev.tr7zw.exordium.util;
 
 import com.mojang.blaze3d.platform.GlStateManager;
 
-public class BlendSateHolder {
+public class BlendStateHolder {
 
     private boolean blendStateFetched = false;
     private int srcRgb = 1;

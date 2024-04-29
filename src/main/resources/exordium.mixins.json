@@ -10,7 +10,6 @@
     "client": [
         "ChatComponentMixin",
         "CrosshairMixin",
-        "EntityRendererMixin",
         "GameRendererMixin",
         "GlStateManagerMixin",
         "GuiDebugOverlayMixin",
@@ -21,8 +20,6 @@
         "MinecraftMixin",
         "PlayerTabOverlayMixin",
         "ScoreboardMixin",
-        "SignBlockEntityMixin",
-        "SignRendererMixin",
         "VignetteMixin"
     ],
     "injectors": {

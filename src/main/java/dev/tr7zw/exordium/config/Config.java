@@ -3,9 +3,6 @@ package dev.tr7zw.exordium.config;
 public class Config {
 
     public int configVersion = 2;
-    public boolean enableSignBuffering = true;
-    public int targetFPSNameTags = 60;
-    public boolean enableNametagScreenBuffering = false;
     public int pollRate = 60;
     public ComponentSettings chatSettings = new ComponentSettings(true, 20);
     public ComponentSettings debugScreenSettings = new ComponentSettings(true, 10);
