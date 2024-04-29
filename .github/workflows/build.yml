@@ -22,15 +22,15 @@ jobs:
           gradle-home-cache-cleanup: true
       - name: make gradle wrapper executable
         if: ${{ runner.os != 'Windows' }}
-        run: chmod +x ./gradlecw
+        run: chmod +x ./gradlew
       - name: build
-        run: ./gradlecw build
+        run: ./gradlew build
       - name: capture build artifacts
         uses: actions/upload-artifact@v2
         with:
           name: Artifacts
           path: |
-            FG-Fabric/build/libs/*
+            build/libs/*
       - name: Test Report
         uses: dorny/test-reporter@v1
         if: success() || failure()
