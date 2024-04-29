@@ -1,0 +1,190 @@
+plugins {
+	id "fabric-loom" version "1.6-SNAPSHOT"
+	id 'com.github.johnrengelman.shadow' version '7.1.2'
+	id "com.diffplug.spotless" version "6.22.0"
+	
+    // This dependency is only used to determine the state of the Git working tree so that build artifacts can be
+    // more easily identified. This setup is copied from sodium
+    id 'org.ajoberstar.grgit' version '5.2.0'
+}
+
+apply plugin: 'eclipse'
+apply plugin: "java"
+apply plugin: "maven-publish"
+
+loom {
+	accessWidenerPath = file("src/main/resources/exordium.accesswidener")
+}
+
+configurations {
+	shadow
+	implementation.extendsFrom shadow
+}
+
+shadowJar {
+	configurations = [project.configurations.shadow]
+	relocate 'dev.tr7zw.util', 'dev.tr7zw.exordium.util'
+	relocate 'dev.tr7zw.config', 'dev.tr7zw.exordium.config'
+}
+
+remapJar {
+	dependsOn(shadowJar)
+	input = shadowJar.archiveFile
+
+	doLast {
+		// Delete the shadowJar.archiveFile after remapJar task is executed
+		delete shadowJar.archiveFile
+	}
+}
+
+processResources {
+	duplicatesStrategy(DuplicatesStrategy.EXCLUDE)
+
+	var replaceProperties = [
+			minecraft_version: minecraft_version,
+			minecraft_version_range_fabric: minecraft_version_range,
+			description: "Allan, please add details!",
+			homepage_url: "https://github.com/tr7zw",
+			sources_url: "https://github.com/tr7zw",
+			issues_url: "https://github.com/tr7zw",
+			license_name: "tr7zw Protective License",
+			mod_id: "exordium",
+			mod_name: "Exordium",
+			version: "1.2.1${getVersionMetadata()}",
+			mod_author: "tr7zw",
+			pack_format_number: pack_format_number,
+	]
+	inputs.properties replaceProperties
+
+	filesMatching(['fabric.mod.json', 'pack.mcmeta']) {
+		expand replaceProperties + [project: project]
+	}
+
+	from "${project.rootDir}/LICENSE"
+}
+
+repositories {
+	maven {
+		name = "Modrinth"
+		url = "https://api.modrinth.com/maven"
+		content {
+			includeGroup "maven.modrinth"
+		}
+	}
+
+	maven {
+		url "https://cursemaven.com"
+	}
+
+	maven { url "https://repo.codemc.io/repository/maven-public/" }
+	maven { url "https://repo.codemc.io/repository/maven-snapshots/" }
+	maven { url "https://aperlambda.github.io/maven" }
+	maven { url 'https://jitpack.io' }
+	maven {
+		name = 'ParchmentMC'
+		url = 'https://maven.parchmentmc.org'
+	}
+}
+
+dependencies {
+	minecraft "com.mojang:minecraft:${project.minecraft_version}"
+
+	mappings loom.layered() {
+		officialMojangMappings()
+		parchment("org.parchmentmc.data:parchment-${project.parchment_mc_version}:${project.parchment_version}@zip")
+	}
+
+	modImplementation "net.fabricmc:fabric-loader:${project.fabric_loader_version}"
+	modImplementation "net.fabricmc.fabric-api:fabric-api:${project.fabric_api_version}"
+	modImplementation "maven.modrinth:modmenu:${project.mod_menu_version}"
+	modImplementation "maven.modrinth:immediatelyfast:${project.immediatelyfast_version}"
+	modImplementation "maven.modrinth:spark:${project.spark_version}"
+
+	compileOnly 'org.projectlombok:lombok:1.18.30'
+	annotationProcessor 'org.projectlombok:lombok:1.18.30'
+	
+	testCompileOnly 'org.projectlombok:lombok:1.18.30'
+	testAnnotationProcessor 'org.projectlombok:lombok:1.18.30'
+
+	testImplementation "net.fabricmc:fabric-loader-junit:${project.fabric_loader_version}"
+	testImplementation 'org.objenesis:objenesis:3.3'
+}
+
+archivesBaseName = project.archives_base_name
+version = project.mod_version + "-mc" + project.minecraft_version + getVersionMetadata()
+group = project.maven_group
+
+tasks.withType(JavaCompile) {
+	options.encoding = "UTF-8"
+
+	// The Minecraft launcher currently installs Java 8 for users, so your mod probably wants to target Java 8 too
+	// JDK 9 introduced a new way of specifying this that will make sure no newer classes or methods are used.
+	// We'll use that if it's available, but otherwise we'll use the older option.
+	def targetVersion = 17
+	if (JavaVersion.current().isJava9Compatible()) {
+		options.release = targetVersion
+	}
+}
+
+spotless {
+	java {
+		target '**/*.java'
+		targetExclude 'run'
+		eclipse().configFile("${project.rootDir}/formatter.xml")
+	}
+	
+	format 'misc', {
+		target '**/*.gitattributes', '**/*.gitignore', '**/*.toml'
+		targetExclude 'run'
+
+		trimTrailingWhitespace()
+		endWithNewline()
+	}
+	
+	yaml {
+		target '**/*.yaml'
+		targetExclude 'run'
+		jackson()
+	}
+	
+	json {
+		target '**/*.json'
+		targetExclude 'run'
+		gson()
+	}
+	
+	flexmark {
+		target '**/*.md'
+		targetExclude 'run'
+		flexmark()
+	}
+}
+
+compileJava.dependsOn 'spotlessApply'
+
+def getVersionMetadata() {
+    // CI builds only
+    if (project.hasProperty("build.release")) {
+        return "" // no tag whatsoever
+    }
+
+    if (grgit != null) {
+        def head = grgit.head()
+        def id = head.abbreviatedId
+
+        // Flag the build if the build tree is not clean
+        if (!grgit.status().clean) {
+            id += "-dirty"
+        }
+
+        return "+git.${id}"
+    }
+
+    // No tracking information could be found about the build
+    return "+unknown"
+}
+
+// Function to delete bin directory recursively
+def deleteBinDir(dir) {
+    ant.delete(dir: dir, failonerror: false)
+}

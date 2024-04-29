@@ -1,0 +1,28 @@
+{
+    "required": true,
+    "minVersion": "0.8",
+    "package": "dev.tr7zw.exordium.mixin",
+    "compatibilityLevel": "JAVA_16",
+    "mixins": [],
+    "client": [
+        "GlStateManagerMixin",
+        "SignRendererMixin",
+        "SignBlockEntityMixin",
+        "EntityRendererMixin",
+        "MinecraftMixin",
+        "GuiDebugOverlayMixin",
+        "ChatComponentMixin",
+        "GuiHotbarMixin",
+        "GuiExperienceMixin",
+        "GuiHealthMixin",
+        "ScoreboardMixin",
+        "GuiMixin",
+        "GameRendererMixin",
+        "PlayerTabOverlayMixin",
+        "VignetteMixin",
+        "CrosshairMixin"
+    ],
+    "injectors": {
+        "defaultRequire": 1
+    }
+}
