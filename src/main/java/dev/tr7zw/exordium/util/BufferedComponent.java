@@ -77,7 +77,7 @@ public abstract class BufferedComponent {
         if (model == null) {
             refreshModel(screenWidth, screenHeight);
         }
-        boolean updateFrame = forceRender
+        boolean updateFrame = this.shouldForceRender() || forceRender
                 || (System.currentTimeMillis() > cooldown && (settings.get().forceUpdates || needsRenderPaced()));
         if (!updateFrame) {
 //            renderTextureOverlay(guiTarget.getColorTextureId());
@@ -96,6 +96,10 @@ public abstract class BufferedComponent {
             ExordiumModBase.setForceBlend(true);
         }
         guiTarget.bindWrite(false);
+        return false;
+    }
+
+    protected boolean shouldForceRender() {
         return false;
     }
 
@@ -150,14 +154,14 @@ public abstract class BufferedComponent {
             reloadOccurred = true;
         }
 
-        if (reloadOccurred || needsRender()) {
+        if (reloadOccurred || shouldRenderNextCappedFrame()) {
             return true;
         }
         cooldown = System.currentTimeMillis() + (1000 / ExordiumModBase.instance.config.pollRate);
         return false;
     }
 
-    public abstract boolean needsRender();
+    public abstract boolean shouldRenderNextCappedFrame();
 
     /**
      * Take a snapshot of the current stateof the component

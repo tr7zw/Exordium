@@ -36,7 +36,7 @@ public class GuiHotbarMixin implements HotbarOverlayAccess {
             () -> ExordiumModBase.instance.config.hotbarSettings) {
 
         @Override
-        public boolean needsRender() {
+        public boolean shouldRenderNextCappedFrame() {
             return outdated;
         }
 

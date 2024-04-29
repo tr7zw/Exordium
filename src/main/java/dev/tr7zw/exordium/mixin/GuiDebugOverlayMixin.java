@@ -20,7 +20,7 @@ public class GuiDebugOverlayMixin implements DebugOverlayAccess {
             () -> ExordiumModBase.instance.config.debugScreenSettings) {
 
         @Override
-        public boolean needsRender() {
+        public boolean shouldRenderNextCappedFrame() {
             return true;
         }
 

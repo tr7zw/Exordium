@@ -40,7 +40,7 @@ public class VignetteMixin implements VignetteOverlayAccess {
             () -> ExordiumModBase.instance.config.vignetteSettings) {
 
         @Override
-        public boolean needsRender() {
+        public boolean shouldRenderNextCappedFrame() {
             if (exordium_lastVignetteBrightness != exordium_getVignetteBrightness()) {
                 return true;
             }

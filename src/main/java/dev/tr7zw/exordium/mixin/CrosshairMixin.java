@@ -39,7 +39,7 @@ public class CrosshairMixin implements CrosshairOverlayAccess {
             () -> ExordiumModBase.instance.config.crosshairSettings) {
 
         @Override
-        public boolean needsRender() {
+        public boolean shouldRenderNextCappedFrame() {
             if (wasRenderingF3 != debugOverlay.showDebugScreen()) {
                 return true;
             }

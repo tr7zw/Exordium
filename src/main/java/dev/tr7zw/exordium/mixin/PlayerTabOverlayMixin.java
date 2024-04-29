@@ -41,7 +41,7 @@ public abstract class PlayerTabOverlayMixin implements TablistAccess {
             () -> ExordiumModBase.instance.config.tablistSettings) {
 
         @Override
-        public boolean needsRender() {
+        public boolean shouldRenderNextCappedFrame() {
             return outdated;
         }
 

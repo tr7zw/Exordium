@@ -53,9 +53,15 @@ public abstract class GuiHealthMixin {
             () -> ExordiumModBase.instance.config.healthSettings) {
 
         @Override
-        public boolean needsRender() {
+        public boolean shouldRenderNextCappedFrame() {
+            return false;
+        }
+
+        @Override
+        public boolean shouldForceRender() {
             boolean hasVisualEffects = minecraft.player.hasEffect(MobEffects.HUNGER)
                     || minecraft.player.hasEffect(MobEffects.REGENERATION);
+
             boolean blinking = (healthBlinkTime > tickCount && (healthBlinkTime - tickCount) / 3L % 2L == 1L);
             LivingEntity vehicle = getPlayerVehicleWithHealth();
             return healthBlinking != blinking || lastRenderedHealth != lastHealth || lastDisplayHealth != displayHealth

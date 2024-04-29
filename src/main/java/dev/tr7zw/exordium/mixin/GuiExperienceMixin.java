@@ -26,7 +26,7 @@ public class GuiExperienceMixin implements ExperienceBarOverlayAccess {
             () -> ExordiumModBase.instance.config.experienceSettings) {
 
         @Override
-        public boolean needsRender() {
+        public boolean shouldRenderNextCappedFrame() {
             return minecraft.player.experienceLevel != lastlevel || minecraft.player.experienceProgress != lastprogress;
         }
 

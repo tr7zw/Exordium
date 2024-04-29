@@ -33,7 +33,7 @@ public abstract class ChatComponentMixin implements ChatAccess {
             () -> ExordiumModBase.instance.config.chatSettings) {
 
         @Override
-        public boolean needsRender() {
+        public boolean shouldRenderNextCappedFrame() {
             return outdated;
         }
 

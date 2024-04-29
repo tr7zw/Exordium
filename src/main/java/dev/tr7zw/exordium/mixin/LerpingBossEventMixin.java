@@ -54,7 +54,7 @@ public abstract class LerpingBossEventMixin extends BossEvent implements BossEve
             () -> ExordiumModBase.instance.config.bossbarSettings) {
 
         @Override
-        public boolean needsRender() {
+        public boolean shouldRenderNextCappedFrame() {
             return exordium_needsRender();
         }
 

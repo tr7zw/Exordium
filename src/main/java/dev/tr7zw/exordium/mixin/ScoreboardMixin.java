@@ -30,7 +30,7 @@ public class ScoreboardMixin implements ScoreBoardOverlayAccess {
             () -> ExordiumModBase.instance.config.scoreboardSettings) {
 
         @Override
-        public boolean needsRender() {
+        public boolean shouldRenderNextCappedFrame() {
             ScoreboardState cur = ScoreboardHelper.getScoreboardData();
             return !Objects.equals(scoreboardState, "" + cur); // dirty workaround
         }
