@@ -5,7 +5,8 @@
     "name": "Exordium",
     "description": "Render the ingame gui on its own FPS limiter",
     "authors": [
-        "tr7zw"
+        "tr7zw",
+        "katietheqt"
     ],
     "contact": {
         "homepage": "https://github.com/tr7zw",
