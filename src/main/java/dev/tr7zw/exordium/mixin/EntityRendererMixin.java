@@ -29,17 +29,9 @@ public class EntityRendererMixin {
     @Shadow
     private Font font;
 
-    /**
-     * Hooking into the render method to render the nametag. Redirects to the
-     * {@link NametagBufferHolder} class.
-     * 
-     * @author tr7zw
-     * @reason render nametags
-     */
-    @SuppressWarnings("resource")
     @Inject(method = "renderNameTag", at = @At("HEAD"), cancellable = true)
     protected void renderNameTag(Entity entity, Component component, PoseStack tmpPoseStack,
-            MultiBufferSource unusedBuffer, int i, CallbackInfo ci) {
+            MultiBufferSource unusedBuffer, int i, float f2, CallbackInfo ci) {
         NametagScreenBuffer buffer = null;
         ExordiumModBase inst = ExordiumModBase.instance;
         if (inst.config.enableNametagScreenBuffering) {
@@ -67,14 +59,4 @@ public class EntityRendererMixin {
             ci.cancel();
         }
     }
-//    
-//    @Inject(method = "renderNameTag", at = @At("TAIL"), cancellable = true)
-//    protected void renderNameTagEnd(Entity arg, Component arg2, PoseStack poseStack, MultiBufferSource mbs, int k, CallbackInfo ci) {
-//        if(ExordiumModBase.instance.config.enableNametagScreenBuffering) {
-//            mbs.getBuffer(RenderType.endGateway()); // force clear the vertex consumer
-//            NametagScreenBuffer buffer = ExordiumModBase.instance.getNameTagScreenBuffer();
-//            buffer.bindEnd();
-//        }
-//    }
-
 }

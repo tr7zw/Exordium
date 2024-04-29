@@ -21,9 +21,6 @@
         ],
         "modmenu": [
             "dev.tr7zw.exordium.ExordiumModMenu"
-        ],
-        "preLaunch": [
-            "dev.tr7zw.exordium.ExordiumPreLaunch"
         ]
     },
     "mixins": [

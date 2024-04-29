@@ -31,20 +31,20 @@ public class GuiMixin implements GuiAccess {
     @Shadow
     protected int tickCount;
 
-    @WrapOperation(method = "render", at = {
-            @At(value = "INVOKE", target = "Lnet/minecraft/client/gui/components/ChatComponent;render(Lnet/minecraft/client/gui/GuiGraphics;III)V"), })
+    @WrapOperation(method = "renderChat", at = {
+            @At(value = "INVOKE", target = "Lnet/minecraft/client/gui/components/ChatComponent;render(Lnet/minecraft/client/gui/GuiGraphics;IIIZ)V"), })
     private void renderChatWrapper(ChatComponent instance, GuiGraphics guiGraphics, int tickCount, int j, int k,
-            final Operation<Void> operation) {
+            boolean b, final Operation<Void> operation) {
         ChatAccess chatAccess = (ChatAccess) chat;
         chatAccess.updateState(tickCount);
         BufferedComponent bufferedComponent = chatAccess.getChatOverlayBuffer();
         if (!bufferedComponent.render()) {
-            operation.call(instance, guiGraphics, tickCount, j, k);
+            operation.call(instance, guiGraphics, tickCount, j, k, b);
         }
         bufferedComponent.renderEnd();
     }
 
-    @WrapOperation(method = "render", at = {
+    @WrapOperation(method = "renderTabList", at = {
             @At(value = "INVOKE", target = "Lnet/minecraft/client/gui/components/PlayerTabOverlay;render(Lnet/minecraft/client/gui/GuiGraphics;ILnet/minecraft/world/scores/Scoreboard;Lnet/minecraft/world/scores/Objective;)V"), })
     private void renderTablistWrapper(PlayerTabOverlay instance, GuiGraphics guiGraphics, int screenWidth,
             Scoreboard scoreboard, Objective objective2, final Operation<Void> operation) {

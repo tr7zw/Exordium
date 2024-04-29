@@ -41,18 +41,7 @@ processResources {
 	duplicatesStrategy(DuplicatesStrategy.EXCLUDE)
 
 	var replaceProperties = [
-			minecraft_version: minecraft_version,
-			minecraft_version_range_fabric: minecraft_version_range,
-			description: "Allan, please add details!",
-			homepage_url: "https://github.com/tr7zw",
-			sources_url: "https://github.com/tr7zw",
-			issues_url: "https://github.com/tr7zw",
-			license_name: "tr7zw Protective License",
-			mod_id: "exordium",
-			mod_name: "Exordium",
 			version: "1.2.1${getVersionMetadata()}",
-			mod_author: "tr7zw",
-			pack_format_number: pack_format_number,
 	]
 	inputs.properties replaceProperties
 
@@ -97,14 +86,6 @@ dependencies {
 	modImplementation "net.fabricmc:fabric-loader:${project.fabric_loader_version}"
 	modImplementation "net.fabricmc.fabric-api:fabric-api:${project.fabric_api_version}"
 	modImplementation "maven.modrinth:modmenu:${project.mod_menu_version}"
-	modImplementation "maven.modrinth:immediatelyfast:${project.immediatelyfast_version}"
-	modImplementation "maven.modrinth:spark:${project.spark_version}"
-
-	compileOnly 'org.projectlombok:lombok:1.18.30'
-	annotationProcessor 'org.projectlombok:lombok:1.18.30'
-	
-	testCompileOnly 'org.projectlombok:lombok:1.18.30'
-	testAnnotationProcessor 'org.projectlombok:lombok:1.18.30'
 
 	testImplementation "net.fabricmc:fabric-loader-junit:${project.fabric_loader_version}"
 	testImplementation 'org.objenesis:objenesis:3.3'

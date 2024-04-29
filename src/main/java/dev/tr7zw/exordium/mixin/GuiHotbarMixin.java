@@ -1,5 +1,6 @@
 package dev.tr7zw.exordium.mixin;
 
+import net.minecraft.client.gui.components.spectator.SpectatorGui;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Shadow;
 import org.spongepowered.asm.mixin.injection.At;
@@ -21,8 +22,6 @@ import net.minecraft.world.item.ItemStack;
 @Mixin(Gui.class)
 public class GuiHotbarMixin implements HotbarOverlayAccess {
 
-    @Shadow
-    private Minecraft minecraft;
     private boolean outdated = false;
     private float lastAttackState = 0;
     private BakedModel[] hotbarModels = new BakedModel[10];
@@ -45,7 +44,7 @@ public class GuiHotbarMixin implements HotbarOverlayAccess {
         public void captureState() {
             hasEnchantedItem = false;
             cooldownActive = false;
-            lastAttackState = minecraft.player.getAttackStrengthScale(0.0F);
+            lastAttackState = Minecraft.getInstance().player.getAttackStrengthScale(0.0F);
             Player player = getCameraPlayer();
             if (player == null)
                 return;
@@ -59,7 +58,7 @@ public class GuiHotbarMixin implements HotbarOverlayAccess {
 
     private void store(ItemStack item, int id, Player player) {
         if (item != null && !item.isEmpty()) {
-            hotbarModels[id] = minecraft.getItemRenderer().getModel(item, player.level(), player, 0);
+            hotbarModels[id] = Minecraft.getInstance().getItemRenderer().getModel(item, player.level(), player, 0);
             itemPopAnimation[id] = item.getPopTime();
             itemAmount[id] = item.getCount();
             itemDurability[id] = item.getDamageValue();
@@ -88,7 +87,8 @@ public class GuiHotbarMixin implements HotbarOverlayAccess {
             if (itemDurability[id] != item.getDamageValue()) {
                 return true;
             }
-            if (minecraft.getItemRenderer().getModel(item, player.level(), player, 0) != hotbarModels[id]) {
+            if (Minecraft.getInstance().getItemRenderer().getModel(item, player.level(), player,
+                    0) != hotbarModels[id]) {
                 return true;
             }
         } else if (hotbarModels[id] != null) {
@@ -98,8 +98,8 @@ public class GuiHotbarMixin implements HotbarOverlayAccess {
     }
 
     public boolean hasChanged() {
-        if (this.minecraft.options.attackIndicator().get() == AttackIndicatorStatus.HOTBAR) {
-            float g = this.minecraft.player.getAttackStrengthScale(0.0F);
+        if (Minecraft.getInstance().options.attackIndicator().get() == AttackIndicatorStatus.HOTBAR) {
+            float g = Minecraft.getInstance().player.getAttackStrengthScale(0.0F);
             if (g != lastAttackState) {
                 return true;
             }
@@ -126,12 +126,23 @@ public class GuiHotbarMixin implements HotbarOverlayAccess {
         return false;
     }
 
-    @WrapOperation(method = "render", at = {
-            @At(value = "INVOKE", target = "Lnet/minecraft/client/gui/Gui;renderHotbar(FLnet/minecraft/client/gui/GuiGraphics;)V"), })
-    private void renderHotbarWrapper(Gui gui, float f, GuiGraphics guiGraphics, final Operation<Void> operation) {
+    @WrapOperation(method = "renderHotbarAndDecorations", at = {
+            @At(value = "INVOKE", target = "Lnet/minecraft/client/gui/Gui;renderItemHotbar(Lnet/minecraft/client/gui/GuiGraphics;F)V"), })
+    private void renderHotbarWrapper(Gui gui, GuiGraphics guiGraphics, float f, final Operation<Void> operation) {
         outdated = hasChanged();
         if (!hotbarBufferedComponent.render()) {
-            operation.call(gui, f, guiGraphics);
+            operation.call(gui, guiGraphics, f);
+        }
+        hotbarBufferedComponent.renderEnd();
+    }
+
+    @WrapOperation(method = "renderHotbarAndDecorations", at = {
+            @At(value = "INVOKE", target = "Lnet/minecraft/client/gui/components/spectator/SpectatorGui;renderHotbar(Lnet/minecraft/client/gui/GuiGraphics;)V"), })
+    private void renderHotbarWrapperSpectator(SpectatorGui gui, GuiGraphics guiGraphics,
+            final Operation<Void> operation) {
+        outdated = hasChanged();
+        if (!hotbarBufferedComponent.render()) {
+            operation.call(gui, guiGraphics);
         }
         hotbarBufferedComponent.renderEnd();
     }

@@ -19,7 +19,7 @@ public interface VanillaBufferAccess {
 
     public interface CrosshairOverlayAccess extends VanillaBufferAccess {
 
-        public BufferedComponent getCrosshairOverlayBuffer();
+        public BufferedComponent exordium_getCrosshairOverlayBuffer();
     }
 
     public interface ExperienceBarOverlayAccess extends VanillaBufferAccess {

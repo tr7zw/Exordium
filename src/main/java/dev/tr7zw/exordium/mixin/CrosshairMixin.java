@@ -17,6 +17,8 @@ import net.minecraft.client.gui.Gui;
 import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.client.gui.components.DebugScreenOverlay;
 import net.minecraft.world.entity.LivingEntity;
+import org.spongepowered.asm.mixin.injection.Inject;
+import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 
 @Mixin(Gui.class)
 public class CrosshairMixin implements CrosshairOverlayAccess {
@@ -82,17 +84,16 @@ public class CrosshairMixin implements CrosshairOverlayAccess {
         }
     };
 
-    @WrapOperation(method = "render", at = {
-            @At(value = "INVOKE", target = "Lnet/minecraft/client/gui/Gui;renderCrosshair(Lnet/minecraft/client/gui/GuiGraphics;)V"), })
-    private void renderCrosshairWrapper(Gui gui, GuiGraphics guiGraphics, final Operation<Void> operation) {
-        if (!crosshairBufferedComponent.render()) {
-            operation.call(gui, guiGraphics);
+    @Inject(method = "renderCrosshair", at = @At("HEAD"), cancellable = true)
+    private void renderCrosshairWrapper(GuiGraphics guiGraphics, float f, CallbackInfo ci) {
+        if (crosshairBufferedComponent.render()) {
+            ci.cancel();
         }
         crosshairBufferedComponent.renderEnd();
     }
 
     @Override
-    public BufferedComponent getCrosshairOverlayBuffer() {
+    public BufferedComponent exordium_getCrosshairOverlayBuffer() {
         return crosshairBufferedComponent;
     }
 

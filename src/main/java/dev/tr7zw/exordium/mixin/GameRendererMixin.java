@@ -26,7 +26,7 @@ public abstract class GameRendererMixin {
     }
 
     @Redirect(method = "renderLevel", at = @At(value = "INVOKE", target = "Lnet/minecraft/client/renderer/GameRenderer;resetProjectionMatrix(Lorg/joml/Matrix4f;)V"))
-    public void renderLevel(GameRenderer gr, Matrix4f matrix4f, float f, long l, PoseStack poseStack) {
+    public void renderLevel(GameRenderer gr, Matrix4f matrix4f, float f, long l) {
         ExordiumModBase.instance.getDelayedRenderCallManager().setProjectionMatrix(matrix4f);
         resetProjectionMatrix(matrix4f);
     }

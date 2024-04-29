@@ -110,10 +110,8 @@ public class SignBufferRenderer {
         texture.bindWrite(false);
         // cache the current render state
         Matrix4f tmp = RenderSystem.getProjectionMatrix();
-        Matrix3f tmpI = RenderSystem.getInverseViewRotationMatrix();
         // set the renderstate to identity matrices
 //        RenderSystem.disableCull();
-        RenderSystem.setInverseViewRotationMatrix(new Matrix3f());
         RenderSystem.setProjectionMatrix(new Matrix4f(), RenderSystem.getVertexSorting());
         float scale = 1 / ExordiumModBase.signSettings.scaleSize;
         // matrix used for the text
@@ -152,7 +150,6 @@ public class SignBufferRenderer {
         // restore renderlogic
         Minecraft.getInstance().getMainRenderTarget().bindWrite(true);
         RenderSystem.setProjectionMatrix(tmp, RenderSystem.getVertexSorting());
-        RenderSystem.setInverseViewRotationMatrix(tmpI);
     }
 
     private static int getDarkColor(SignText text) {

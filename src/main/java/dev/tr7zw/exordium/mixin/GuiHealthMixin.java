@@ -89,7 +89,7 @@ public abstract class GuiHealthMixin {
         }
     };
 
-    @WrapOperation(method = "render", at = {
+    @WrapOperation(method = "renderHotbarAndDecorations", at = {
             @At(value = "INVOKE", target = "Lnet/minecraft/client/gui/Gui;renderPlayerHealth(Lnet/minecraft/client/gui/GuiGraphics;)V"), })
     private void renderPlayerHealthWrapper(Gui gui, GuiGraphics guiGraphics, final Operation<Void> operation) {
         if (!healthBuffer.render()) {
@@ -101,12 +101,12 @@ public abstract class GuiHealthMixin {
         healthBuffer.renderEnd();
     }
 
-    @Inject(method = "renderVehicleHealth", at = @At("HEAD"), cancellable = true)
-    private void renderVehicleHealthHead(GuiGraphics guiGraphics, CallbackInfo ci) {
-        if (!renderingMountHealth && ExordiumModBase.instance.config.healthSettings.enabled
-                && !minecraft.player.isCreative()) {
+    @WrapOperation(method = "renderHotbarAndDecorations", at = @At(value = "INVOKE", target = "Lnet/minecraft/client/gui/Gui;renderVehicleHealth(Lnet/minecraft/client/gui/GuiGraphics;)V"))
+    private void renderVehicleHealthHead(Gui gui, GuiGraphics guiGraphics, final Operation<Void> operation) {
+        if (renderingMountHealth || !ExordiumModBase.instance.config.healthSettings.enabled
+                || minecraft.player.isCreative()) {
             // prevent rendering multiple times, just render into the texture
-            ci.cancel();
+            operation.call(gui, guiGraphics);
         }
     }
 

@@ -17,18 +17,17 @@ import net.minecraft.client.gui.components.Button.OnPress;
 import net.minecraft.client.gui.components.OptionsList;
 import net.minecraft.client.gui.components.PlainTextButton;
 import net.minecraft.client.gui.components.Tooltip;
+import net.minecraft.client.gui.screens.OptionsSubScreen;
 import net.minecraft.client.gui.screens.Screen;
 import net.minecraft.network.chat.CommonComponents;
 import net.minecraft.network.chat.Component;
 
-public abstract class CustomConfigScreen extends Screen {
+public abstract class CustomConfigScreen extends OptionsSubScreen {
 
-    protected final Screen lastScreen;
     private OptionsList list;
 
     public CustomConfigScreen(Screen lastScreen, String title) {
-        super(Component.translatable(title));
-        this.lastScreen = lastScreen;
+        super(lastScreen, null, Component.translatable(title));
     }
 
     @Override
@@ -36,17 +35,12 @@ public abstract class CustomConfigScreen extends Screen {
         save();
     }
 
-    @Override
-    public void onClose() {
-        this.minecraft.setScreen(this.lastScreen);
-    }
-
     public OptionsList getOptions() {
         return list;
     }
 
     protected void init() {
-        this.list = new OptionsList(this.minecraft, this.width, this.height - 64, 32, 25);
+        this.list = new OptionsList(this.minecraft, this.width, this.height - 64, this);
         this.addWidget(this.list);
         this.createFooter();
         initialize();
@@ -87,12 +81,6 @@ public abstract class CustomConfigScreen extends Screen {
         super.render(guiGraphics, i, j, f);
         this.list.render(guiGraphics, i, j, f);
         guiGraphics.drawCenteredString(this.font, this.title, this.width / 2, 20, 16777215);
-    }
-
-    @Override
-    public void renderTransparentBackground(GuiGraphics guiGraphics) {
-        // we always want the dirt background
-        renderDirtBackground(guiGraphics);
     }
 
     private <T> TooltipSupplier<T> getOptionalTooltip(String translationKey) {

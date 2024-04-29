@@ -34,7 +34,7 @@ public class BufferManager {
         vanillaBuffers.put(new ResourceLocation("debug_text"),
                 gui -> ((DebugOverlayAccess) gui).getDebugOverlayBuffer());
         vanillaBuffers.put(new ResourceLocation("crosshair"),
-                gui -> ((CrosshairOverlayAccess) gui).getCrosshairOverlayBuffer());
+                gui -> ((CrosshairOverlayAccess) gui).exordium_getCrosshairOverlayBuffer());
         vanillaBuffers.put(new ResourceLocation("experience_bar"),
                 gui -> ((ExperienceBarOverlayAccess) gui).getExperienceBarOverlayBuffer());
         vanillaBuffers.put(new ResourceLocation("scoreboard"),
