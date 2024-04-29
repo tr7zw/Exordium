@@ -25,7 +25,7 @@ public abstract class BufferedComponent {
     private int reloadCount = 0;
     private boolean isRendering = false;
     private boolean forceBlending = false;
-    private BlendSateHolder blendSateHolder = new BlendSateHolder();
+    private BlendStateHolder blendStateHolder = new BlendStateHolder();
 
     public static Model getModel() {
         return model;
@@ -60,8 +60,9 @@ public abstract class BufferedComponent {
         if (!settings.get().enabled) {
             return false;
         }
-        if (!blendSateHolder.isBlendStateFetched()) { // the intended blendstate is not know. Skip the buffer logic, let
-                                                      // it render normally, then grab the expected state
+        if (!blendStateHolder.isBlendStateFetched()) { // the intended blendstate is not know. Skip the buffer logic,
+                                                       // let
+                                                       // it render normally, then grab the expected state
             return false;
         }
         int screenWidth = minecraft.getWindow().getGuiScaledWidth();
@@ -82,7 +83,7 @@ public abstract class BufferedComponent {
         if (!updateFrame) {
 //            renderTextureOverlay(guiTarget.getColorTextureId());
             ExordiumModBase.instance.getDelayedRenderCallManager().addBufferedComponent(this);
-            blendSateHolder.apply();
+            blendStateHolder.apply();
             return true;
         }
         guiTarget.setClearColor(0, 0, 0, 0);
@@ -104,9 +105,9 @@ public abstract class BufferedComponent {
     }
 
     public void renderEnd() {
-        if (!blendSateHolder.isBlendStateFetched()) {
+        if (!blendStateHolder.isBlendStateFetched()) {
             // capture the expected blend state
-            blendSateHolder.fetch();
+            blendStateHolder.fetch();
         }
         if (!isRendering) {
             return;
@@ -122,7 +123,7 @@ public abstract class BufferedComponent {
         }
 //        renderTextureOverlay(guiTarget.getColorTextureId());
         ExordiumModBase.instance.getDelayedRenderCallManager().addBufferedComponent(this);
-        blendSateHolder.apply();
+        blendStateHolder.apply();
     }
 
     private void renderTextureOverlay(int textureid) {

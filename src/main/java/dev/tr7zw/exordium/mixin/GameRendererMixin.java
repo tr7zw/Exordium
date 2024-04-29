@@ -20,14 +20,8 @@ import java.io.IOException;
 @Mixin(value = GameRenderer.class, priority = 500) // needs to be lower to cancel Architectury for REI
 public abstract class GameRendererMixin {
 
-    @Inject(method = "render(FJZ)V", at = @At(value = "INVOKE", target = "Lnet/minecraft/client/Minecraft;getWindow()Lcom/mojang/blaze3d/platform/Window;", ordinal = 0, shift = Shift.AFTER))
-    public void postWorldRender(float tickDelta, long startTime, boolean tick, CallbackInfo ci) {
-        ExordiumModBase.instance.getDelayedRenderCallManager().execRenderCalls();
-    }
-
     @Redirect(method = "renderLevel", at = @At(value = "INVOKE", target = "Lnet/minecraft/client/renderer/GameRenderer;resetProjectionMatrix(Lorg/joml/Matrix4f;)V"))
     public void renderLevel(GameRenderer gr, Matrix4f matrix4f, float f, long l) {
-        ExordiumModBase.instance.getDelayedRenderCallManager().setProjectionMatrix(matrix4f);
         resetProjectionMatrix(matrix4f);
     }
 

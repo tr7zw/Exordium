@@ -19,13 +19,6 @@ public class ExordiumConfigScreen extends CustomConfigScreen {
         Config config = ExordiumModBase.instance.config;
         List<OptionInstance<?>> options = new ArrayList<>();
 
-        options.add(getOnOffOption("text.exordium.enableSignBuffering", () -> config.enableSignBuffering,
-                (b) -> config.enableSignBuffering = b));
-
-        options.add(getOnOffOption("text.exordium.enableNametagScreenBuffering",
-                () -> config.enableNametagScreenBuffering, (b) -> config.enableNametagScreenBuffering = b));
-        options.add(getIntOption("text.exordium.targetFPSNameTags", 30, 80, () -> config.targetFPSNameTags,
-                (v) -> config.targetFPSNameTags = v));
         options.add(getIntOption("text.exordium.pollRate", 20, 240, () -> config.pollRate, (v) -> config.pollRate = v));
 
         addSettings(options, config.chatSettings, "chat", false);
