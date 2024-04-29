@@ -73,5 +73,11 @@
     "text.exordium.setting.crosshair.fps": "Buffer Crosshair Max. FPS",
     "text.exordium.setting.crosshair.fps.tooltip": "The maximum framerate for the crosshair(used during F3 mode)",
     "text.exordium.setting.crosshair.forceupdates": "Force Crosshair Updates",
-    "text.exordium.setting.crosshair.forceupdates.tooltip": "Force the crosshair to update every possible update frame(keeping in mind the fps limit). Might fix some issues with other mods."
+    "text.exordium.setting.crosshair.forceupdates.tooltip": "Force the crosshair to update every possible update frame(keeping in mind the fps limit). Might fix some issues with other mods.",
+    "text.exordium.setting.bossbar.enabled": "Fast Bossbars",
+    "text.exordium.setting.bossbar.enabled.tooltip": "Enable/Disable a buffering bossbars",
+    "text.exordium.setting.bossbar.fps": "Fast Bossbars Max. FPS",
+    "text.exordium.setting.bossbar.fps.tooltip": "The maximum framerate for bossbars",
+    "text.exordium.setting.bossbar.forceupdates": "Force Bossbar Updates",
+    "text.exordium.setting.bossbar.forceupdates.tooltip": "Force bossbars to update every possible update frame (keeping in mind the fps limit). Might fix some issues with other mods."
 }

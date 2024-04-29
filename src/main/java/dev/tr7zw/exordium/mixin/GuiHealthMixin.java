@@ -46,6 +46,7 @@ public abstract class GuiHealthMixin {
     private float lastPlayerHealth;
     private float lastFoodLevel;
     private float lastExhaustionLevel;
+    private float lastPlayerAbsorption;
     private boolean hadVisualEffects;
 
     private BufferedComponent healthBuffer = new BufferedComponent(
@@ -66,7 +67,8 @@ public abstract class GuiHealthMixin {
                     || (hasVisualEffects || (hasVisualEffects != hadVisualEffects && lastRenderedTick != tickCount))
                     || lastFoodLevel != minecraft.player.getFoodData().getFoodLevel()
                     || lastExhaustionLevel != minecraft.player.getFoodData().getExhaustionLevel()
-                    || lastPlayerHealth != minecraft.player.getHealth() || Mth.ceil(lastPlayerHealth) <= 4;
+                    || lastPlayerHealth != minecraft.player.getHealth() || Mth.ceil(lastPlayerHealth) <= 4
+                    || lastPlayerAbsorption != minecraft.player.getAbsorptionAmount();
         }
 
         @Override
@@ -82,6 +84,7 @@ public abstract class GuiHealthMixin {
             lastSaturation = minecraft.player.getFoodData().getSaturationLevel();
             lastRenderedTick = tickCount;
             lastPlayerHealth = minecraft.player.getHealth();
+            lastPlayerAbsorption = minecraft.player.getAbsorptionAmount();
             lastFoodLevel = minecraft.player.getFoodData().getFoodLevel();
             lastExhaustionLevel = minecraft.player.getFoodData().getExhaustionLevel();
             hadVisualEffects = minecraft.player.hasEffect(MobEffects.HUNGER)

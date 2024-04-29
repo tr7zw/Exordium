@@ -22,6 +22,7 @@ public abstract class BufferedComponent {
     private RenderTarget guiTarget = new TextureTarget(100, 100, true, false);
     private long cooldown = System.currentTimeMillis();
     private int guiScale = 0;
+    private int reloadCount = 0;
     private boolean isRendering = false;
     private boolean forceBlending = false;
     private BlendSateHolder blendSateHolder = new BlendSateHolder();
@@ -143,7 +144,13 @@ public abstract class BufferedComponent {
     }
 
     private boolean needsRenderPaced() {
-        if (needsRender()) {
+        boolean reloadOccurred = false;
+        if (reloadCount != ReloadTracker.reloadCount) {
+            reloadCount = ReloadTracker.reloadCount;
+            reloadOccurred = true;
+        }
+
+        if (reloadOccurred || needsRender()) {
             return true;
         }
         cooldown = System.currentTimeMillis() + (1000 / ExordiumModBase.instance.config.pollRate);

@@ -37,6 +37,7 @@ public class ExordiumConfigScreen extends CustomConfigScreen {
         addSettings(options, config.tablistSettings, "tablist", false);
         addSettings(options, config.vignetteSettings, "vignette", true);
         addSettings(options, config.crosshairSettings, "crosshair", true);
+        addSettings(options, config.bossbarSettings, "bossbar", true);
 
         getOptions().addSmall(options.toArray(new OptionInstance[0]));
 

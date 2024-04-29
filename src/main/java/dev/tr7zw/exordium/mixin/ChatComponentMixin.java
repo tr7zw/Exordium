@@ -12,6 +12,7 @@ import dev.tr7zw.exordium.util.BufferedComponent;
 import net.minecraft.client.GuiMessage;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.components.ChatComponent;
+import org.spongepowered.asm.mixin.injection.Inject;
 
 @Mixin(ChatComponent.class)
 public abstract class ChatComponentMixin implements ChatAccess {
