@@ -1,11 +1,5 @@
 {
     "text.exordium.title": "Exordium",
-    "text.exordium.enableSignBuffering": "Sign Buffering",
-    "text.exordium.enableSignBuffering.tooltip": "Enable/Disable buffering sign text",
-    "text.exordium.enableNametagScreenBuffering": "Enable Nametag Buffering",
-    "text.exordium.enableNametagScreenBuffering.tooltip": "Enable/Disable buffering nametags on the screen",
-    "text.exordium.targetFPSNameTags": "Framerate Nametags",
-    "text.exordium.targetFPSNameTags.tooltip": "The target framerate for nametags on the screen",
     "text.exordium.setting.chat.enabled": "Buffer Chat",
     "text.exordium.setting.chat.enabled.tooltip": "Enable/Disable buffering the chat overlay",
     "text.exordium.setting.chat.fps": "Buffer Chat Max. FPS",

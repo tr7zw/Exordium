@@ -1,11 +1,5 @@
 {
     "text.exordium.title": "Exordium",
-    "text.exordium.enableSignBuffering": "告示牌文本缓冲",
-    "text.exordium.enableSignBuffering.tooltip": "启用/禁用告示牌文本缓冲",
-    "text.exordium.enableNametagScreenBuffering": "命名标签缓冲",
-    "text.exordium.enableNametagScreenBuffering.tooltip": "启用或禁用屏幕内命名标签缓冲",
-    "text.exordium.targetFPSNameTags": "命名标签最大帧率",
-    "text.exordium.targetFPSNameTags.tooltip": "屏幕内命名标签的目标帧率",
     "text.exordium.setting.chat.enabled": "聊天栏缓冲",
     "text.exordium.setting.chat.enabled.tooltip": "启用/禁用聊天栏叠加层缓冲",
     "text.exordium.setting.chat.fps": "聊天栏最大帧率",
