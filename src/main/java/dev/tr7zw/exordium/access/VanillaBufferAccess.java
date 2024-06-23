@@ -49,4 +49,8 @@ public interface VanillaBufferAccess {
         public BufferedComponent getHotbarOverlayBuffer();
     }
 
+    interface BossHealthOverlayAccess extends VanillaBufferAccess {
+        BufferedComponent getHotbarOverlayBuffer();
+    }
+
 }
