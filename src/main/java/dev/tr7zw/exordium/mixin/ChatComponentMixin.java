@@ -10,9 +10,8 @@ import dev.tr7zw.exordium.ExordiumModBase;
 import dev.tr7zw.exordium.access.ChatAccess;
 import dev.tr7zw.exordium.util.BufferedComponent;
 import net.minecraft.client.GuiMessage;
-import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.components.ChatComponent;
-import org.spongepowered.asm.mixin.injection.Inject;
+import org.spongepowered.asm.mixin.Unique;
 
 @Mixin(ChatComponent.class)
 public abstract class ChatComponentMixin implements ChatAccess {
@@ -22,14 +21,20 @@ public abstract class ChatComponentMixin implements ChatAccess {
     @Shadow
     private int chatScrollbarPos;
 
+    @Unique
     private int lastScrollbarPos = 0;
+    @Unique
     private int messageCount = 0;
+    @Unique
     private boolean wasFocused = false;
+    @Unique
     private GuiMessage.Line lastMessage = null;
 
+    @Unique
     boolean outdated = false;
 
-    private BufferedComponent chatBufferedComponent = new BufferedComponent(
+    @Unique
+    private final BufferedComponent chatBufferedComponent = new BufferedComponent(
             () -> ExordiumModBase.instance.config.chatSettings) {
 
         @Override
@@ -46,6 +51,7 @@ public abstract class ChatComponentMixin implements ChatAccess {
         }
     };
 
+    @Unique
     public boolean hasChanged(int i) {
         GuiMessage.Line msg = trimmedMessages.isEmpty() ? null : trimmedMessages.get(0);
         boolean changed = chatScrollbarPos != lastScrollbarPos || messageCount != trimmedMessages.size()
