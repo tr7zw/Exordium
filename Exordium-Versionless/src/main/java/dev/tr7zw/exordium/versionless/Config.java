@@ -1,4 +1,4 @@
-package dev.tr7zw.exordium.config;
+package dev.tr7zw.exordium.versionless;
 
 public class Config {
 

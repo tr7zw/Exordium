@@ -5,48 +5,48 @@ import net.minecraft.client.gui.GuiGraphics;
 
 public interface VanillaBufferAccess {
 
-    public interface DebugOverlayAccess extends VanillaBufferAccess {
+    interface DebugOverlayAccess extends VanillaBufferAccess {
 
-        public BufferedComponent getDebugOverlayBuffer();
-
-    }
-
-    public interface ChatOverlayAccess extends VanillaBufferAccess {
-
-        public BufferedComponent getChatOverlayBuffer();
+        BufferedComponent getDebugOverlayBuffer();
 
     }
 
-    public interface CrosshairOverlayAccess extends VanillaBufferAccess {
+    interface ChatOverlayAccess extends VanillaBufferAccess {
 
-        public BufferedComponent exordium_getCrosshairOverlayBuffer();
+        BufferedComponent getChatOverlayBuffer();
+
     }
 
-    public interface ExperienceBarOverlayAccess extends VanillaBufferAccess {
+    interface CrosshairOverlayAccess extends VanillaBufferAccess {
 
-        public BufferedComponent getExperienceBarOverlayBuffer();
+        BufferedComponent exordium_getCrosshairOverlayBuffer();
     }
 
-    public interface PlayerListOverlayAccess extends VanillaBufferAccess {
+    interface ExperienceBarOverlayAccess extends VanillaBufferAccess {
 
-        public BufferedComponent getPlayerListOverlayBuffer();
+        BufferedComponent getExperienceBarOverlayBuffer();
     }
 
-    public interface ScoreBoardOverlayAccess extends VanillaBufferAccess {
+    interface PlayerListOverlayAccess extends VanillaBufferAccess {
 
-        public BufferedComponent getScoreBoardOverlayBuffer();
+        BufferedComponent getPlayerListOverlayBuffer();
     }
 
-    public interface VignetteOverlayAccess extends VanillaBufferAccess {
+    interface ScoreBoardOverlayAccess extends VanillaBufferAccess {
 
-        public BufferedComponent getVignetteOverlayBuffer();
-
-        public void renderCustomVignette(GuiGraphics guiGraphics);
+        BufferedComponent getScoreBoardOverlayBuffer();
     }
 
-    public interface HotbarOverlayAccess extends VanillaBufferAccess {
+    interface VignetteOverlayAccess extends VanillaBufferAccess {
 
-        public BufferedComponent getHotbarOverlayBuffer();
+        BufferedComponent getVignetteOverlayBuffer();
+
+        void renderCustomVignette(GuiGraphics guiGraphics);
+    }
+
+    interface HotbarOverlayAccess extends VanillaBufferAccess {
+
+        BufferedComponent getHotbarOverlayBuffer();
     }
 
     interface BossHealthOverlayAccess extends VanillaBufferAccess {

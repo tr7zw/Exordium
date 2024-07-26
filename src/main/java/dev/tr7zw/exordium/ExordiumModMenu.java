@@ -7,9 +7,7 @@ public class ExordiumModMenu implements ModMenuApi {
 
     @Override
     public ConfigScreenFactory<?> getModConfigScreenFactory() {
-        return parent -> {
-            return ExordiumModBase.instance.createConfigScreen(parent);
-        };
+        return parent -> ExordiumModBase.instance.createConfigScreen(parent);
     }
 
 }

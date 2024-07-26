@@ -5,11 +5,13 @@ import com.google.gson.GsonBuilder;
 import com.mojang.blaze3d.pipeline.RenderTarget;
 import com.mojang.blaze3d.platform.GlStateManager;
 import com.mojang.blaze3d.systems.RenderSystem;
-import dev.tr7zw.exordium.config.Config;
-import dev.tr7zw.exordium.config.ConfigUpgrader;
+import dev.tr7zw.exordium.versionless.Config;
+import dev.tr7zw.exordium.versionless.ConfigUpgrader;
 import dev.tr7zw.exordium.config.ExordiumConfigScreen;
 import dev.tr7zw.exordium.util.CustomShaderManager;
 import dev.tr7zw.exordium.util.DelayedRenderCallManager;
+import lombok.Getter;
+import lombok.Setter;
 import net.minecraft.client.gui.screens.Screen;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
@@ -22,15 +24,21 @@ import java.nio.file.Files;
 public abstract class ExordiumModBase {
 
     public static final Logger LOGGER = LogManager.getLogger("Exordium");
-    public static ExordiumModBase instance = new PreLoadedMod();
+    public static ExordiumModBase instance;
+    @Getter
     private static boolean forceBlend;
 
     public Config config;
     private final File settingsFile = new File("config", "exordium.json");
     private final Gson gson = new GsonBuilder().setPrettyPrinting().create();
+    @Setter
+    @Getter
     private RenderTarget temporaryScreenOverwrite = null;
+    @Getter
     private final DelayedRenderCallManager delayedRenderCallManager = new DelayedRenderCallManager();
+    @Getter
     private final CustomShaderManager customShaderManager = new CustomShaderManager();
+    @Getter
     private final BufferManager bufferManager = new BufferManager();
 
     public void onInitialize() {
@@ -60,24 +68,16 @@ public abstract class ExordiumModBase {
         if (settingsFile.exists())
             settingsFile.delete();
         try {
-            Files.write(settingsFile.toPath(), gson.toJson(config).getBytes(StandardCharsets.UTF_8));
+            Files.writeString(settingsFile.toPath(), gson.toJson(config));
         } catch (IOException e1) {
             e1.printStackTrace();
         }
-    }
-
-    public DelayedRenderCallManager getDelayedRenderCallManager() {
-        return delayedRenderCallManager;
     }
 
     public abstract void initModloader();
 
     public Screen createConfigScreen(Screen parent) {
         return new ExordiumConfigScreen(parent);
-    }
-
-    public static boolean isForceBlend() {
-        return forceBlend;
     }
 
     public static void setForceBlend(boolean forceBlend) {
@@ -89,22 +89,6 @@ public abstract class ExordiumModBase {
         RenderSystem.blendFuncSeparate(GlStateManager.SourceFactor.SRC_ALPHA,
                 GlStateManager.DestFactor.ONE_MINUS_SRC_ALPHA, GlStateManager.SourceFactor.ONE,
                 GlStateManager.DestFactor.ONE_MINUS_SRC_ALPHA);
-    }
-
-    public RenderTarget getTemporaryScreenOverwrite() {
-        return temporaryScreenOverwrite;
-    }
-
-    public void setTemporaryScreenOverwrite(RenderTarget temporaryScreenOverwrite) {
-        this.temporaryScreenOverwrite = temporaryScreenOverwrite;
-    }
-
-    public CustomShaderManager getCustomShaderManager() {
-        return customShaderManager;
-    }
-
-    public BufferManager getBufferManager() {
-        return bufferManager;
     }
 
 }

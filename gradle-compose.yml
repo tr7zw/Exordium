@@ -1,0 +1,35 @@
+version: '0.0.2'
+source: "https://github.com/tr7zw/ProcessedModTemplate/tree/legacy12006"
+replacements:
+  name: "Exordium"
+  id: "exordium"
+  version: "1.2.1"
+  description: "UI Frames go die"
+  homepageUrl: "https://modrinth.com/mod/exordium"
+  sourcesUrl: "https://github.com/tr7zw/Exordium"
+  issuesUrl: "https://github.com/tr7zw/Exordium/issues"
+  fabric_entrypoint: "dev.tr7zw.exordium.ExordiumMod"
+  fabric_modmenu_entrypoint: "dev.tr7zw.exordium.ExordiumModMenu"
+  relocationpackage: "dev.tr7zw.exordium"
+  licensename: "LICENSE-Exordium"
+  modrinthid: DynYZEae
+  curseforgeid: 681953
+  versionlessname: "Exordium-Versionless"
+enabledFlags:
+  - autopublish
+  - publishFabric
+  - modrinth
+  - curseforge
+  - versionless
+rootProject:
+  template: "."
+subProjects:
+  Exordium-Versionless:
+    template: "Versionless"
+    replacements:
+      dependencies: '
+
+      compileOnly "com.google.code.gson:gson:2.10.1"
+
+      compileOnly "org.apache.logging.log4j:log4j-core:2.20.0"
+      '

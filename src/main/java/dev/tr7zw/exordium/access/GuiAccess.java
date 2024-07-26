@@ -5,10 +5,10 @@ import net.minecraft.client.gui.components.PlayerTabOverlay;
 
 public interface GuiAccess {
 
-    public ChatComponent getChatComponent();
+    ChatComponent getChatComponent();
 
-    public PlayerTabOverlay getPlayerTabOverlay();
+    PlayerTabOverlay getPlayerTabOverlay();
 
-    public int getTickCount();
+    int getTickCount();
 
 }

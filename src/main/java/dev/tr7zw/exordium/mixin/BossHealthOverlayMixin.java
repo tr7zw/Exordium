@@ -1,16 +1,12 @@
 package dev.tr7zw.exordium.mixin;
 
-import com.llamalad7.mixinextras.injector.wrapoperation.Operation;
-import com.llamalad7.mixinextras.injector.wrapoperation.WrapOperation;
 import dev.tr7zw.exordium.ExordiumModBase;
 import dev.tr7zw.exordium.access.BossEventBufferAccess;
 import dev.tr7zw.exordium.access.VanillaBufferAccess;
 import dev.tr7zw.exordium.util.BufferedComponent;
-import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.client.gui.components.BossHealthOverlay;
 import net.minecraft.client.gui.components.LerpingBossEvent;
 import net.minecraft.network.protocol.game.ClientboundBossEventPacket;
-import net.minecraft.world.BossEvent;
 import org.spongepowered.asm.mixin.Final;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Shadow;
@@ -38,7 +34,7 @@ public class BossHealthOverlayMixin implements VanillaBufferAccess.BossHealthOve
 
     @Shadow
     @Final
-    private Map<UUID, LerpingBossEvent> events;
+    Map<UUID, LerpingBossEvent> events;
     @Unique
     private final BufferedComponent chatBufferedComponent = new BufferedComponent(
             () -> ExordiumModBase.instance.config.bossbarSettings) {
