@@ -31,7 +31,7 @@ public abstract class LerpingBossEventMixin extends BossEvent implements BossEve
     }
 
     @Unique
-    private void exordium_captureState() {
+    public void exordium_captureState() {
         this.exordium_storedId = this.getId();
         this.exordium_storedName = this.getName();
         this.exordium_storedProgress = this.getProgress();
@@ -41,32 +41,11 @@ public abstract class LerpingBossEventMixin extends BossEvent implements BossEve
     }
 
     @Unique
-    private boolean exordium_needsRender() {
+    public boolean exordium_needsRender() {
         return this.exordium_storedId != this.getId() || !this.exordium_storedName.equals(this.getName())
                 || this.exordium_storedProgress != this.getProgress()
                 || !this.exordium_storedColor.equals(this.getColor())
-                || this.exordium_storedOverlay.equals(this.getOverlay())
+                || !this.exordium_storedOverlay.equals(this.getOverlay())
                 || this.exordium_storedDarkenScreen != this.darkenScreen;
-    }
-
-    @Unique
-    private final BufferedComponent exordium_buffered = new BufferedComponent(true,
-            () -> ExordiumModBase.instance.config.bossbarSettings) {
-
-        @Override
-        public boolean shouldRenderNextCappedFrame() {
-            return exordium_needsRender();
-        }
-
-        @Override
-        public void captureState() {
-            exordium_captureState();
-        }
-    };
-
-    @Override
-    @Unique
-    public BufferedComponent exordium_getBuffered() {
-        return this.exordium_buffered;
     }
 }

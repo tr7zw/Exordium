@@ -3,6 +3,7 @@ package dev.tr7zw.exordium.mixin;
 import net.minecraft.client.gui.components.spectator.SpectatorGui;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Shadow;
+import org.spongepowered.asm.mixin.Unique;
 import org.spongepowered.asm.mixin.injection.At;
 
 import com.llamalad7.mixinextras.injector.wrapoperation.Operation;
@@ -22,17 +23,27 @@ import net.minecraft.world.item.ItemStack;
 @Mixin(Gui.class)
 public class GuiHotbarMixin implements HotbarOverlayAccess {
 
+    @Unique
     private boolean outdated = false;
+    @Unique
     private float lastAttackState = 0;
-    private BakedModel[] hotbarModels = new BakedModel[10];
-    private int[] itemPopAnimation = new int[10];
-    private int[] itemAmount = new int[10];
-    private int[] itemDurability = new int[10];
+    @Unique
+    private final BakedModel[] hotbarModels = new BakedModel[10];
+    @Unique
+    private final int[] itemPopAnimation = new int[10];
+    @Unique
+    private final int[] itemAmount = new int[10];
+    @Unique
+    private final int[] itemDurability = new int[10];
+    @Unique
     private int selectedSlot = 0;
+    @Unique
     private boolean hasEnchantedItem = false;
+    @Unique
     private boolean cooldownActive = false;
 
-    private BufferedComponent hotbarBufferedComponent = new BufferedComponent(
+    @Unique
+    private final BufferedComponent hotbarBufferedComponent = new BufferedComponent(
             () -> ExordiumModBase.instance.config.hotbarSettings) {
 
         @Override
@@ -56,6 +67,7 @@ public class GuiHotbarMixin implements HotbarOverlayAccess {
         }
     };
 
+    @Unique
     private void store(ItemStack item, int id, Player player) {
         if (item != null && !item.isEmpty()) {
             hotbarModels[id] = Minecraft.getInstance().getItemRenderer().getModel(item, player.level(), player, 0);
@@ -76,6 +88,7 @@ public class GuiHotbarMixin implements HotbarOverlayAccess {
         }
     }
 
+    @Unique
     private boolean hasChanged(ItemStack item, int id, Player player) {
         if (item != null && !item.isEmpty()) {
             if (itemAmount[id] != item.getCount()) {
@@ -97,6 +110,7 @@ public class GuiHotbarMixin implements HotbarOverlayAccess {
         return false;
     }
 
+    @Unique
     public boolean hasChanged() {
         if (Minecraft.getInstance().options.attackIndicator().get() == AttackIndicatorStatus.HOTBAR) {
             float g = Minecraft.getInstance().player.getAttackStrengthScale(0.0F);

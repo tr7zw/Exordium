@@ -55,7 +55,7 @@ public class ScoreboardHelper {
         return new ScoreboardState(title, list2);
     }
 
-    public static record ScoreboardState(Component title, List<Pair<Component, Component>> entries) {
+    public record ScoreboardState(Component title, List<Pair<Component, Component>> entries) {
     }
 
 }

@@ -1,5 +1,7 @@
 package dev.tr7zw.exordium.mixin;
 
+import dev.tr7zw.exordium.access.VanillaBufferAccess;
+import net.minecraft.client.gui.components.BossHealthOverlay;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Shadow;
 import org.spongepowered.asm.mixin.injection.At;
@@ -22,7 +24,7 @@ import net.minecraft.world.scores.Objective;
 import net.minecraft.world.scores.Scoreboard;
 
 @Mixin(Gui.class)
-public class GuiMixin implements GuiAccess {
+public abstract class GuiMixin implements GuiAccess {
 
     @Shadow
     private ChatComponent chat;
@@ -30,6 +32,9 @@ public class GuiMixin implements GuiAccess {
     private PlayerTabOverlay tabList;
     @Shadow
     protected int tickCount;
+
+    @Shadow
+    public abstract BossHealthOverlay getBossOverlay();
 
     @WrapOperation(method = "renderChat", at = {
             @At(value = "INVOKE", target = "Lnet/minecraft/client/gui/components/ChatComponent;render(Lnet/minecraft/client/gui/GuiGraphics;IIIZ)V"), })
@@ -55,6 +60,18 @@ public class GuiMixin implements GuiAccess {
             operation.call(instance, guiGraphics, screenWidth, scoreboard, objective2);
         }
         bufferedComponent.renderEnd();
+    }
+
+    @WrapOperation(method = "method_55808", at = @At(value = "INVOKE", target = "Lnet/minecraft/client/gui/components/BossHealthOverlay;render(Lnet/minecraft/client/gui/GuiGraphics;)V"))
+    private void renderBossBarWrapper(BossHealthOverlay instance, GuiGraphics guiGraphics, Operation<Void> original) {
+        VanillaBufferAccess.BossHealthOverlayAccess overlayAccess = (VanillaBufferAccess.BossHealthOverlayAccess) this
+                .getBossOverlay();
+        BufferedComponent hotbarOverlayBuffer = overlayAccess.getHotbarOverlayBuffer();
+        if (!hotbarOverlayBuffer.render()) {
+            System.out.println("Re rendering");
+            original.call(instance, guiGraphics);
+        }
+        hotbarOverlayBuffer.renderEnd();
     }
 
     @Inject(method = "render", at = @At(value = "TAIL"))

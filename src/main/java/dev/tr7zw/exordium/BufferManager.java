@@ -25,9 +25,9 @@ import net.minecraft.world.scores.Scoreboard;
 
 public class BufferManager {
 
-    private Map<ResourceLocation, Function<Gui, BufferedComponent>> vanillaBuffers = new HashMap<>();
-    private Map<ResourceLocation, Consumer<HandlerData>> customHandlers = new HashMap<>();
-    private Map<ResourceLocation, Runnable> customEndHandlers = new HashMap<>();
+    private final Map<ResourceLocation, Function<Gui, BufferedComponent>> vanillaBuffers = new HashMap<>();
+    private final Map<ResourceLocation, Consumer<HandlerData>> customHandlers = new HashMap<>();
+    private final Map<ResourceLocation, Runnable> customEndHandlers = new HashMap<>();
 
     public void initialize() {
         Minecraft minecraft = Minecraft.getInstance();

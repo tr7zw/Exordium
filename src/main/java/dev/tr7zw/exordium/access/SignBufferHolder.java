@@ -6,6 +6,6 @@ import net.minecraft.client.renderer.MultiBufferSource;
 
 public interface SignBufferHolder {
 
-    public boolean renderBuffered(PoseStack poseStack, MultiBufferSource multiBufferSource, boolean front, int light);
+    boolean renderBuffered(PoseStack poseStack, MultiBufferSource multiBufferSource, boolean front, int light);
 
 }

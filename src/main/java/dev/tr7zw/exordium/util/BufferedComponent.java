@@ -3,7 +3,8 @@ package dev.tr7zw.exordium.util;
 import java.util.function.Supplier;
 
 import dev.tr7zw.exordium.ExordiumModBase;
-import dev.tr7zw.exordium.config.Config;
+import dev.tr7zw.exordium.versionless.Config;
+import lombok.Getter;
 import org.joml.Vector3f;
 
 import com.mojang.blaze3d.pipeline.RenderTarget;
@@ -17,19 +18,16 @@ import net.minecraft.client.renderer.GameRenderer;
 public abstract class BufferedComponent {
 
     private static final Minecraft minecraft = Minecraft.getInstance();
+    @Getter
     private static Model model = null;
     private final Supplier<Config.ComponentSettings> settings;
-    private RenderTarget guiTarget = new TextureTarget(100, 100, true, false);
+    private final RenderTarget guiTarget = new TextureTarget(100, 100, true, false);
     private long cooldown = System.currentTimeMillis();
     private int guiScale = 0;
     private int reloadCount = 0;
     private boolean isRendering = false;
     private boolean forceBlending = false;
-    private BlendStateHolder blendStateHolder = new BlendStateHolder();
-
-    public static Model getModel() {
-        return model;
-    }
+    private final BlendStateHolder blendStateHolder = new BlendStateHolder();
 
     public BufferedComponent(Supplier<Config.ComponentSettings> settings) {
         this(false, settings);
