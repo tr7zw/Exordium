@@ -1,7 +1,5 @@
 package dev.tr7zw.exordium.mixin;
 
-import dev.tr7zw.exordium.access.VanillaBufferAccess;
-import net.minecraft.client.gui.components.BossHealthOverlay;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Shadow;
 import org.spongepowered.asm.mixin.injection.At;
@@ -15,9 +13,11 @@ import dev.tr7zw.exordium.ExordiumModBase;
 import dev.tr7zw.exordium.access.ChatAccess;
 import dev.tr7zw.exordium.access.GuiAccess;
 import dev.tr7zw.exordium.access.TablistAccess;
+import dev.tr7zw.exordium.access.VanillaBufferAccess;
 import dev.tr7zw.exordium.util.BufferedComponent;
 import net.minecraft.client.gui.Gui;
 import net.minecraft.client.gui.GuiGraphics;
+import net.minecraft.client.gui.components.BossHealthOverlay;
 import net.minecraft.client.gui.components.ChatComponent;
 import net.minecraft.client.gui.components.PlayerTabOverlay;
 import net.minecraft.world.scores.Objective;

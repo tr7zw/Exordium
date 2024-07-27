@@ -1,25 +1,27 @@
 package dev.tr7zw.exordium;
 
+import java.io.File;
+import java.io.IOException;
+import java.nio.charset.StandardCharsets;
+import java.nio.file.Files;
+
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
+
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.mojang.blaze3d.pipeline.RenderTarget;
 import com.mojang.blaze3d.platform.GlStateManager;
 import com.mojang.blaze3d.systems.RenderSystem;
-import dev.tr7zw.exordium.versionless.Config;
-import dev.tr7zw.exordium.versionless.ConfigUpgrader;
+
 import dev.tr7zw.exordium.config.ExordiumConfigScreen;
 import dev.tr7zw.exordium.util.CustomShaderManager;
 import dev.tr7zw.exordium.util.DelayedRenderCallManager;
+import dev.tr7zw.exordium.versionless.config.Config;
+import dev.tr7zw.exordium.versionless.config.ConfigUpgrader;
 import lombok.Getter;
 import lombok.Setter;
 import net.minecraft.client.gui.screens.Screen;
-import org.apache.logging.log4j.LogManager;
-import org.apache.logging.log4j.Logger;
-
-import java.io.File;
-import java.io.IOException;
-import java.nio.charset.StandardCharsets;
-import java.nio.file.Files;
 
 public abstract class ExordiumModBase {
 

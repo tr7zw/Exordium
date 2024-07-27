@@ -1,5 +1,8 @@
 package dev.tr7zw.exordium;
 
+import java.util.concurrent.CompletableFuture;
+import java.util.concurrent.Executor;
+
 import dev.tr7zw.exordium.util.ReloadTracker;
 import net.fabricmc.api.ClientModInitializer;
 import net.fabricmc.fabric.api.resource.ResourceManagerHelper;
@@ -8,9 +11,6 @@ import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.packs.PackType;
 import net.minecraft.server.packs.resources.ResourceManager;
 import net.minecraft.util.profiling.ProfilerFiller;
-
-import java.util.concurrent.CompletableFuture;
-import java.util.concurrent.Executor;
 
 public class ExordiumMod extends ExordiumModBase implements ClientModInitializer {
 

@@ -1,12 +1,8 @@
 package dev.tr7zw.exordium.mixin;
 
-import dev.tr7zw.exordium.ExordiumModBase;
-import dev.tr7zw.exordium.access.BossEventBufferAccess;
-import dev.tr7zw.exordium.access.VanillaBufferAccess;
-import dev.tr7zw.exordium.util.BufferedComponent;
-import net.minecraft.client.gui.components.BossHealthOverlay;
-import net.minecraft.client.gui.components.LerpingBossEvent;
-import net.minecraft.network.protocol.game.ClientboundBossEventPacket;
+import java.util.Map;
+import java.util.UUID;
+
 import org.spongepowered.asm.mixin.Final;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Shadow;
@@ -15,8 +11,13 @@ import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 
-import java.util.Map;
-import java.util.UUID;
+import dev.tr7zw.exordium.ExordiumModBase;
+import dev.tr7zw.exordium.access.BossEventBufferAccess;
+import dev.tr7zw.exordium.access.VanillaBufferAccess;
+import dev.tr7zw.exordium.util.BufferedComponent;
+import net.minecraft.client.gui.components.BossHealthOverlay;
+import net.minecraft.client.gui.components.LerpingBossEvent;
+import net.minecraft.network.protocol.game.ClientboundBossEventPacket;
 
 @Mixin(BossHealthOverlay.class)
 public class BossHealthOverlayMixin implements VanillaBufferAccess.BossHealthOverlayAccess {

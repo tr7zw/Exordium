@@ -5,7 +5,7 @@ import java.util.List;
 
 import dev.tr7zw.config.CustomConfigScreen;
 import dev.tr7zw.exordium.ExordiumModBase;
-import dev.tr7zw.exordium.versionless.Config;
+import dev.tr7zw.exordium.versionless.config.Config;
 import net.minecraft.client.OptionInstance;
 import net.minecraft.client.gui.screens.Screen;
 

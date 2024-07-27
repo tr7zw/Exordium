@@ -5,13 +5,13 @@ import java.util.List;
 import org.spongepowered.asm.mixin.Final;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Shadow;
+import org.spongepowered.asm.mixin.Unique;
 
 import dev.tr7zw.exordium.ExordiumModBase;
 import dev.tr7zw.exordium.access.ChatAccess;
 import dev.tr7zw.exordium.util.BufferedComponent;
 import net.minecraft.client.GuiMessage;
 import net.minecraft.client.gui.components.ChatComponent;
-import org.spongepowered.asm.mixin.Unique;
 
 @Mixin(ChatComponent.class)
 public abstract class ChatComponentMixin implements ChatAccess {

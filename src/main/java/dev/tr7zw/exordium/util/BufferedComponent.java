@@ -2,9 +2,6 @@ package dev.tr7zw.exordium.util;
 
 import java.util.function.Supplier;
 
-import dev.tr7zw.exordium.ExordiumModBase;
-import dev.tr7zw.exordium.versionless.Config;
-import lombok.Getter;
 import org.joml.Vector3f;
 
 import com.mojang.blaze3d.pipeline.RenderTarget;
@@ -12,6 +9,9 @@ import com.mojang.blaze3d.pipeline.TextureTarget;
 import com.mojang.blaze3d.platform.GlStateManager;
 import com.mojang.blaze3d.systems.RenderSystem;
 
+import dev.tr7zw.exordium.ExordiumModBase;
+import dev.tr7zw.exordium.versionless.config.Config;
+import lombok.Getter;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.GameRenderer;
 

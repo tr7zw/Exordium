@@ -1,15 +1,14 @@
 package dev.tr7zw.exordium.mixin;
 
-import dev.tr7zw.exordium.ExordiumModBase;
-import dev.tr7zw.exordium.access.BossEventBufferAccess;
-import dev.tr7zw.exordium.util.BufferedComponent;
-import net.minecraft.client.gui.components.LerpingBossEvent;
-import net.minecraft.network.chat.Component;
-import net.minecraft.world.BossEvent;
+import java.util.UUID;
+
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Unique;
 
-import java.util.UUID;
+import dev.tr7zw.exordium.access.BossEventBufferAccess;
+import net.minecraft.client.gui.components.LerpingBossEvent;
+import net.minecraft.network.chat.Component;
+import net.minecraft.world.BossEvent;
 
 @Mixin(LerpingBossEvent.class)
 public abstract class LerpingBossEventMixin extends BossEvent implements BossEventBufferAccess {
