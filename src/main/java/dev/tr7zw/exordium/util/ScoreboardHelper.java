@@ -1,25 +1,32 @@
 package dev.tr7zw.exordium.util;
 
-import com.google.common.collect.Iterables;
-import com.google.common.collect.Lists;
-import com.mojang.datafixers.util.Pair;
-import net.minecraft.client.Minecraft;
-import net.minecraft.network.chat.Component;
-import net.minecraft.network.chat.numbers.NumberFormat;
-import net.minecraft.world.scores.*;
-
 import java.util.Collection;
 import java.util.List;
 import java.util.stream.Collectors;
 
+import com.google.common.collect.Iterables;
+import com.google.common.collect.Lists;
+import com.mojang.datafixers.util.Pair;
+
+import lombok.experimental.UtilityClass;
+import net.minecraft.client.Minecraft;
+import net.minecraft.network.chat.Component;
+import net.minecraft.network.chat.numbers.NumberFormat;
+import net.minecraft.world.scores.DisplaySlot;
+import net.minecraft.world.scores.Objective;
+import net.minecraft.world.scores.PlayerScoreEntry;
+import net.minecraft.world.scores.PlayerTeam;
+import net.minecraft.world.scores.Scoreboard;
+
+@UtilityClass
 public class ScoreboardHelper {
 
-    private static final Minecraft minecraft = Minecraft.getInstance();
+    private static final Minecraft MINECRAFT = Minecraft.getInstance();
 
     public static ScoreboardState getScoreboardData() {
-        Scoreboard scoreboard = minecraft.level.getScoreboard();
+        Scoreboard scoreboard = MINECRAFT.level.getScoreboard();
         Objective objective = null;
-        PlayerTeam playerTeam = scoreboard.getPlayersTeam(minecraft.player.getScoreboardName());
+        PlayerTeam playerTeam = scoreboard.getPlayersTeam(MINECRAFT.player.getScoreboardName());
         if (playerTeam != null) {
             int n = playerTeam.getColor().getId();
             if (n >= 0)
@@ -48,7 +55,7 @@ public class ScoreboardHelper {
             Component component2 = PlayerTeam.formatNameForTeam(playerTeam2, score.ownerName());
             NumberFormat format = score.numberFormatOverride() == null ? objective.numberFormat()
                     : score.numberFormatOverride();
-            list2.add(Pair.of(format == null ? Component.literal(score.value() + "") : format.format(score.value()),
+            list2.add(Pair.of(format == null ? Component.literal(Integer.toString(score.value())) : format.format(score.value()),
                     component2));
 
         }

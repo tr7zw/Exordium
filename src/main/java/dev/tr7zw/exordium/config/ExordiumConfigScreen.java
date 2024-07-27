@@ -39,17 +39,17 @@ public class ExordiumConfigScreen extends CustomConfigScreen {
 
     private void addSettings(List<OptionInstance<?>> options, Config.ComponentSettings settings, String name,
             boolean hideBlending) {
-        options.add(getOnOffOption("text.exordium.setting." + name + ".enabled", () -> settings.enabled,
-                (b) -> settings.enabled = b));
-        options.add(getIntOption("text.exordium.setting." + name + ".fps", 5, 60, () -> settings.maxFps,
-                (v) -> settings.maxFps = v));
+        options.add(getOnOffOption("text.exordium.setting." + name + ".enabled", () -> settings.isEnabled(),
+                (b) -> settings.setEnabled(b)));
+        options.add(getIntOption("text.exordium.setting." + name + ".fps", 5, 60, () -> settings.getMaxFps(),
+                (v) -> settings.setMaxFps(v)));
         if (!hideBlending) {
-            options.add(getOnOffOption("text.exordium.setting." + name + ".forceblend", () -> settings.forceBlend,
-                    (b) -> settings.forceBlend = b));
+            options.add(getOnOffOption("text.exordium.setting." + name + ".forceblend", () -> settings.isForceBlend(),
+                    (b) -> settings.setForceBlend(b)));
         }
         if (!name.equals("debug")) { // debug has that already built in and on
-            options.add(getOnOffOption("text.exordium.setting." + name + ".forceupdates", () -> settings.forceUpdates,
-                    (b) -> settings.forceUpdates = b));
+            options.add(getOnOffOption("text.exordium.setting." + name + ".forceupdates", () -> settings.isForceUpdates(),
+                    (b) -> settings.setForceUpdates(b)));
         }
     }
 

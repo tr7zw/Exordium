@@ -110,7 +110,7 @@ public abstract class GuiHealthMixin {
 
     @WrapOperation(method = "renderHotbarAndDecorations", at = @At(value = "INVOKE", target = "Lnet/minecraft/client/gui/Gui;renderVehicleHealth(Lnet/minecraft/client/gui/GuiGraphics;)V"))
     private void renderVehicleHealthHead(Gui gui, GuiGraphics guiGraphics, final Operation<Void> operation) {
-        if (renderingMountHealth || !ExordiumModBase.instance.config.healthSettings.enabled
+        if (renderingMountHealth || !ExordiumModBase.instance.config.healthSettings.isEnabled()
                 || minecraft.player.isCreative()) {
             // prevent rendering multiple times, just render into the texture
             operation.call(gui, guiGraphics);

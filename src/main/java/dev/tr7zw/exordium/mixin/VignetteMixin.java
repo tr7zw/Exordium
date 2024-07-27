@@ -78,7 +78,7 @@ public class VignetteMixin implements VignetteOverlayAccess {
     private void renderVignetteWrapper(Gui gui, GuiGraphics guiGraphics, Entity entity,
             final Operation<Void> operation) {
         if (!exordium_vignetteBuffer.render()) {
-            if (ExordiumModBase.instance.config.vignetteSettings.enabled) {
+            if (ExordiumModBase.instance.config.vignetteSettings.isEnabled()) {
                 renderCustomVignette(guiGraphics);
             } else {
                 operation.call(gui, guiGraphics, entity);

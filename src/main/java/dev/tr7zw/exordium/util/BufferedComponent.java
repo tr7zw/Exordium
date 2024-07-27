@@ -6,18 +6,14 @@ import org.joml.Vector3f;
 
 import com.mojang.blaze3d.pipeline.RenderTarget;
 import com.mojang.blaze3d.pipeline.TextureTarget;
-import com.mojang.blaze3d.platform.GlStateManager;
-import com.mojang.blaze3d.systems.RenderSystem;
-
 import dev.tr7zw.exordium.ExordiumModBase;
 import dev.tr7zw.exordium.versionless.config.Config;
 import lombok.Getter;
 import net.minecraft.client.Minecraft;
-import net.minecraft.client.renderer.GameRenderer;
 
 public abstract class BufferedComponent {
 
-    private static final Minecraft minecraft = Minecraft.getInstance();
+    private static final Minecraft MINECRAFT = Minecraft.getInstance();
     @Getter
     private static Model model = null;
     private final Supplier<Config.ComponentSettings> settings;
@@ -55,7 +51,7 @@ public abstract class BufferedComponent {
      * @return true if the buffer was used. False = render as usual
      */
     public boolean render() {
-        if (!settings.get().enabled) {
+        if (!settings.get().isEnabled()) {
             return false;
         }
         if (!blendStateHolder.isBlendStateFetched()) { // the intended blendstate is not know. Skip the buffer logic,
@@ -63,21 +59,21 @@ public abstract class BufferedComponent {
                                                        // it render normally, then grab the expected state
             return false;
         }
-        int screenWidth = minecraft.getWindow().getGuiScaledWidth();
-        int screenHeight = minecraft.getWindow().getGuiScaledHeight();
+        int screenWidth = MINECRAFT.getWindow().getGuiScaledWidth();
+        int screenHeight = MINECRAFT.getWindow().getGuiScaledHeight();
         boolean forceRender = false;
-        if (guiTarget.width != minecraft.getWindow().getWidth() || guiTarget.height != minecraft.getWindow().getHeight()
-                || minecraft.options.guiScale().get() != guiScale) {
-            guiTarget.resize(minecraft.getWindow().getWidth(), minecraft.getWindow().getHeight(), true);
+        if (guiTarget.width != MINECRAFT.getWindow().getWidth() || guiTarget.height != MINECRAFT.getWindow().getHeight()
+                || MINECRAFT.options.guiScale().get() != guiScale) {
+            guiTarget.resize(MINECRAFT.getWindow().getWidth(), MINECRAFT.getWindow().getHeight(), true);
             refreshModel(screenWidth, screenHeight);
-            guiScale = minecraft.options.guiScale().get();
+            guiScale = MINECRAFT.options.guiScale().get();
             forceRender = true;
         }
         if (model == null) {
             refreshModel(screenWidth, screenHeight);
         }
         boolean updateFrame = this.shouldForceRender() || forceRender
-                || (System.currentTimeMillis() > cooldown && (settings.get().forceUpdates || needsRenderPaced()));
+                || (System.currentTimeMillis() > cooldown && (settings.get().isForceUpdates() || needsRenderPaced()));
         if (!updateFrame) {
 //            renderTextureOverlay(guiTarget.getColorTextureId());
             ExordiumModBase.instance.getDelayedRenderCallManager().addBufferedComponent(this);
@@ -91,7 +87,7 @@ public abstract class BufferedComponent {
         ExordiumModBase.instance.setTemporaryScreenOverwrite(guiTarget);
 
         ExordiumModBase.correctBlendMode();
-        if (forceBlending || settings.get().forceBlend) {
+        if (forceBlending || settings.get().isForceBlend()) {
             ExordiumModBase.setForceBlend(true);
         }
         guiTarget.bindWrite(false);
@@ -114,9 +110,9 @@ public abstract class BufferedComponent {
         ExordiumModBase.instance.setTemporaryScreenOverwrite(null);
         guiTarget.unbindWrite();
         Minecraft.getInstance().getMainRenderTarget().bindWrite(true);
-        cooldown = System.currentTimeMillis() + (1000 / settings.get().maxFps);
+        cooldown = System.currentTimeMillis() + (1000 / settings.get().getMaxFps());
         isRendering = false;
-        if (forceBlending || settings.get().forceBlend) {
+        if (forceBlending || settings.get().isForceBlend()) {
             ExordiumModBase.setForceBlend(false);
         }
 //        renderTextureOverlay(guiTarget.getColorTextureId());
@@ -124,19 +120,19 @@ public abstract class BufferedComponent {
         blendStateHolder.apply();
     }
 
-    private void renderTextureOverlay(int textureid) {
-        RenderSystem.disableDepthTest();
-        RenderSystem.depthMask(false);
-        RenderSystem.enableBlend();
-        RenderSystem.blendFunc(GlStateManager.SourceFactor.ONE, GlStateManager.DestFactor.ONE_MINUS_SRC_ALPHA);
-        RenderSystem.setShader(GameRenderer::getPositionTexShader);
-        RenderSystem.setShaderColor(1.0F, 1.0F, 1.0F, 1.0F);
-        RenderSystem.setShaderTexture(0, textureid);
-        model.draw(RenderSystem.getModelViewMatrix());
-        RenderSystem.depthMask(true);
-        RenderSystem.enableDepthTest();
-        RenderSystem.setShaderColor(1.0F, 1.0F, 1.0F, 1.0F);
-    }
+//    private void renderTextureOverlay(int textureid) {
+//        RenderSystem.disableDepthTest();
+//        RenderSystem.depthMask(false);
+//        RenderSystem.enableBlend();
+//        RenderSystem.blendFunc(GlStateManager.SourceFactor.ONE, GlStateManager.DestFactor.ONE_MINUS_SRC_ALPHA);
+//        RenderSystem.setShader(GameRenderer::getPositionTexShader);
+//        RenderSystem.setShaderColor(1.0F, 1.0F, 1.0F, 1.0F);
+//        RenderSystem.setShaderTexture(0, textureid);
+//        model.draw(RenderSystem.getModelViewMatrix());
+//        RenderSystem.depthMask(true);
+//        RenderSystem.enableDepthTest();
+//        RenderSystem.setShaderColor(1.0F, 1.0F, 1.0F, 1.0F);
+//    }
 
     public int getTextureId() {
         return guiTarget.getColorTextureId();
@@ -148,8 +144,8 @@ public abstract class BufferedComponent {
 
     private boolean needsRenderPaced() {
         boolean reloadOccurred = false;
-        if (reloadCount != ReloadTracker.reloadCount) {
-            reloadCount = ReloadTracker.reloadCount;
+        if (reloadCount != ReloadTracker.getReloadCount()) {
+            reloadCount = ReloadTracker.getReloadCount();
             reloadOccurred = true;
         }
 

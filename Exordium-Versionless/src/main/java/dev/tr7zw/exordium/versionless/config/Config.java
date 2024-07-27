@@ -1,5 +1,8 @@
 package dev.tr7zw.exordium.versionless.config;
 
+import lombok.Getter;
+import lombok.Setter;
+
 public class Config {
 
     public int configVersion = 2;
@@ -15,11 +18,14 @@ public class Config {
     public ComponentSettings crosshairSettings = new ComponentSettings(false, 20);
     public ComponentSettings bossbarSettings = new ComponentSettings(true, 5);
 
+    
+    @Getter
+    @Setter
     public static class ComponentSettings {
-        public boolean enabled = true;
-        public int maxFps = 10;
-        public boolean forceBlend = false;
-        public boolean forceUpdates = false;
+        private boolean enabled = true;
+        private int maxFps = 10;
+        private boolean forceBlend = false;
+        private boolean forceUpdates = false;
 
         public ComponentSettings(boolean enabled, int maxFps) {
             this.enabled = enabled;

@@ -43,15 +43,14 @@ public abstract class ExordiumModBase {
     @Getter
     private final BufferManager bufferManager = new BufferManager();
 
-    public void onInitialize() {
+    void onInitialize() {
         instance = this;
         if (settingsFile.exists()) {
             try {
                 config = gson.fromJson(new String(Files.readAllBytes(settingsFile.toPath()), StandardCharsets.UTF_8),
                         Config.class);
             } catch (Exception ex) {
-                System.out.println("Error while loading config! Creating a new one!");
-                ex.printStackTrace();
+                LOGGER.error("Error while loading config! Creating a new one!", ex);
             }
         }
         if (config == null) {
@@ -78,7 +77,7 @@ public abstract class ExordiumModBase {
 
     public abstract void initModloader();
 
-    public Screen createConfigScreen(Screen parent) {
+    Screen createConfigScreen(Screen parent) {
         return new ExordiumConfigScreen(parent);
     }
 

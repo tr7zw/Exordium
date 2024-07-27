@@ -16,6 +16,7 @@ import dev.tr7zw.exordium.access.VanillaBufferAccess.HotbarOverlayAccess;
 import dev.tr7zw.exordium.access.VanillaBufferAccess.ScoreBoardOverlayAccess;
 import dev.tr7zw.exordium.access.VanillaBufferAccess.VignetteOverlayAccess;
 import dev.tr7zw.exordium.util.BufferedComponent;
+import lombok.NoArgsConstructor;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.Gui;
 import net.minecraft.client.gui.GuiGraphics;
@@ -23,6 +24,7 @@ import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.scores.DisplaySlot;
 import net.minecraft.world.scores.Scoreboard;
 
+@NoArgsConstructor
 public class BufferManager {
 
     private final Map<ResourceLocation, Function<Gui, BufferedComponent>> vanillaBuffers = new HashMap<>();
@@ -42,7 +44,7 @@ public class BufferManager {
         vanillaBuffers.put(new ResourceLocation("hotbar"), gui -> ((HotbarOverlayAccess) gui).getHotbarOverlayBuffer());
         registerCustomHandler(new ResourceLocation("vignette"), data -> {
             VignetteOverlayAccess vignette = (VignetteOverlayAccess) minecraft.gui;
-            if (ExordiumModBase.instance.config.vignetteSettings.enabled) {
+            if (ExordiumModBase.instance.config.vignetteSettings.isEnabled()) {
                 if (!vignette.getVignetteOverlayBuffer().render()) {
                     vignette.renderCustomVignette(data.gui());
                 }

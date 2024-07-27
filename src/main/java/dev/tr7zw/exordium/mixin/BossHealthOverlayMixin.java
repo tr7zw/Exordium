@@ -35,7 +35,7 @@ public class BossHealthOverlayMixin implements VanillaBufferAccess.BossHealthOve
 
     @Shadow
     @Final
-    Map<UUID, LerpingBossEvent> events;
+    private Map<UUID, LerpingBossEvent> events;
     @Unique
     private final BufferedComponent chatBufferedComponent = new BufferedComponent(
             () -> ExordiumModBase.instance.config.bossbarSettings) {

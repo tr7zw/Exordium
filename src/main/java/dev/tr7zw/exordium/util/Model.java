@@ -12,8 +12,7 @@ import com.mojang.blaze3d.vertex.VertexFormat;
 import net.minecraft.client.renderer.ShaderInstance;
 
 public class Model {
-    VertexBuffer toDraw;
-    int vertexCount;
+    private VertexBuffer toDraw;
 
     public Model(Vector3f[] modelData, Vector2f[] uvData) {
         // 4 bytes per float, 5 floats per entry
