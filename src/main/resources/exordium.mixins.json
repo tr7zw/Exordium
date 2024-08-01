@@ -20,7 +20,8 @@
         "MinecraftMixin",
         "PlayerTabOverlayMixin",
         "ScoreboardMixin",
-        "VignetteMixin"
+        "VignetteMixin",
+        "support/XaerosMinimapMixin"
     ],
     "injectors": {
         "defaultRequire": 1

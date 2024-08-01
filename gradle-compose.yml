@@ -15,6 +15,9 @@ replacements:
   modrinthid: DynYZEae
   curseforgeid: 681953
   versionlessname: "Exordium-Versionless"
+  fabric_dependencies: "
+    modCompileOnly 'curse.maven:xaerominimap-263420:5394788'\n
+    "
 enabledFlags:
   - autopublish
   - publishFabric

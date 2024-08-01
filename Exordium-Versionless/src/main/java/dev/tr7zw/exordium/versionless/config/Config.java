@@ -17,6 +17,7 @@ public class Config {
     public ComponentSettings vignetteSettings = new ComponentSettings(true, 5);
     public ComponentSettings crosshairSettings = new ComponentSettings(false, 20);
     public ComponentSettings bossbarSettings = new ComponentSettings(true, 5);
+    public ComponentSettings xaerosMinimapSettings = new ComponentSettings(true, 30);
 
     @Getter
     @Setter

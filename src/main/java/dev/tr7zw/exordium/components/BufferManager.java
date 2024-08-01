@@ -17,6 +17,7 @@ import dev.tr7zw.exordium.access.VanillaBufferAccess.ExperienceBarOverlayAccess;
 import dev.tr7zw.exordium.access.VanillaBufferAccess.HotbarOverlayAccess;
 import dev.tr7zw.exordium.access.VanillaBufferAccess.ScoreBoardOverlayAccess;
 import dev.tr7zw.exordium.access.VanillaBufferAccess.VignetteOverlayAccess;
+import dev.tr7zw.exordium.components.support.XaerosMinimapComponent;
 import dev.tr7zw.exordium.components.vanilla.ChatComponent;
 import dev.tr7zw.exordium.util.BufferedComponent;
 import dev.tr7zw.exordium.versionless.config.Config;
@@ -68,6 +69,8 @@ public class BufferManager {
 //            }
 //        });
         registerBuffer(ChatComponent.getId(), new ChatComponent(), () -> inst.config.chatSettings);
+        registerBuffer(XaerosMinimapComponent.getId(), new XaerosMinimapComponent(),
+                () -> inst.config.xaerosMinimapSettings);
 
 //        registerCustomEndHandler(new ResourceLocation("chat_panel"), () -> {
 //            GuiAccess guiAccess = (GuiAccess) minecraft.gui;
