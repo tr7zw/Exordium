@@ -55,7 +55,8 @@ public class ScoreboardHelper {
             Component component2 = PlayerTeam.formatNameForTeam(playerTeam2, score.ownerName());
             NumberFormat format = score.numberFormatOverride() == null ? objective.numberFormat()
                     : score.numberFormatOverride();
-            list2.add(Pair.of(format == null ? Component.literal(Integer.toString(score.value())) : format.format(score.value()),
+            list2.add(Pair.of(
+                    format == null ? Component.literal(Integer.toString(score.value())) : format.format(score.value()),
                     component2));
 
         }

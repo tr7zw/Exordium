@@ -48,8 +48,8 @@ public class ExordiumConfigScreen extends CustomConfigScreen {
                     (b) -> settings.setForceBlend(b)));
         }
         if (!name.equals("debug")) { // debug has that already built in and on
-            options.add(getOnOffOption("text.exordium.setting." + name + ".forceupdates", () -> settings.isForceUpdates(),
-                    (b) -> settings.setForceUpdates(b)));
+            options.add(getOnOffOption("text.exordium.setting." + name + ".forceupdates",
+                    () -> settings.isForceUpdates(), (b) -> settings.setForceUpdates(b)));
         }
     }
 

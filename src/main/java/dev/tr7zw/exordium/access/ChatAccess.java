@@ -1,9 +1,19 @@
 package dev.tr7zw.exordium.access;
 
-import dev.tr7zw.exordium.access.VanillaBufferAccess.ChatOverlayAccess;
+import java.util.List;
 
-public interface ChatAccess extends ChatOverlayAccess {
+import net.minecraft.client.GuiMessage;
 
-    void updateState(int tickCount);
+public interface ChatAccess {
+
+    List<GuiMessage.Line> getTrimmedMessages();
+
+    int getChatScollbarPos();
+
+    boolean isChatFocused();
+
+    boolean isChatHidden();
+
+    int getLinesPerPage();
 
 }

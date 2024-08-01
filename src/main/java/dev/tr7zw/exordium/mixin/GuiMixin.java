@@ -14,6 +14,7 @@ import dev.tr7zw.exordium.access.ChatAccess;
 import dev.tr7zw.exordium.access.GuiAccess;
 import dev.tr7zw.exordium.access.TablistAccess;
 import dev.tr7zw.exordium.access.VanillaBufferAccess;
+import dev.tr7zw.exordium.components.BufferInstance;
 import dev.tr7zw.exordium.util.BufferedComponent;
 import net.minecraft.client.gui.Gui;
 import net.minecraft.client.gui.GuiGraphics;
@@ -41,12 +42,12 @@ public abstract class GuiMixin implements GuiAccess {
     private void renderChatWrapper(ChatComponent instance, GuiGraphics guiGraphics, int tickCount, int j, int k,
             boolean b, final Operation<Void> operation) {
         ChatAccess chatAccess = (ChatAccess) chat;
-        chatAccess.updateState(tickCount);
-        BufferedComponent bufferedComponent = chatAccess.getChatOverlayBuffer();
-        if (!bufferedComponent.render()) {
+        BufferInstance<ChatAccess> buffer = ExordiumModBase.instance.getBufferManager()
+                .getBufferInstance(dev.tr7zw.exordium.components.vanilla.ChatComponent.getId(), ChatAccess.class);
+        if (!buffer.renderBuffer(tickCount, chatAccess)) {
             operation.call(instance, guiGraphics, tickCount, j, k, b);
         }
-        bufferedComponent.renderEnd();
+        buffer.postRender(chatAccess);
     }
 
     @WrapOperation(method = "renderTabList", at = {

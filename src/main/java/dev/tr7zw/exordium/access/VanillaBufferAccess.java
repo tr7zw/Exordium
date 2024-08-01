@@ -11,12 +11,6 @@ public interface VanillaBufferAccess {
 
     }
 
-    interface ChatOverlayAccess extends VanillaBufferAccess {
-
-        BufferedComponent getChatOverlayBuffer();
-
-    }
-
     interface CrosshairOverlayAccess extends VanillaBufferAccess {
 
         BufferedComponent exordium_getCrosshairOverlayBuffer();

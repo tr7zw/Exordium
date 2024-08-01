@@ -11,7 +11,7 @@ import dev.tr7zw.exordium.versionless.config.Config;
 import lombok.Getter;
 import net.minecraft.client.Minecraft;
 
-public abstract class BufferedComponent {
+public class BufferedComponent {
 
     private static final Minecraft MINECRAFT = Minecraft.getInstance();
     @Getter
@@ -47,10 +47,15 @@ public abstract class BufferedComponent {
         model = new Model(modelData, uvData);
     }
 
+    @Deprecated
+    public boolean render() {
+        return render(this::shouldRenderNextCappedFrame);
+    }
+
     /**
      * @return true if the buffer was used. False = render as usual
      */
-    public boolean render() {
+    public boolean render(Supplier<Boolean> hasChanged) {
         if (!settings.get().isEnabled()) {
             return false;
         }
@@ -72,10 +77,10 @@ public abstract class BufferedComponent {
         if (model == null) {
             refreshModel(screenWidth, screenHeight);
         }
-        boolean updateFrame = this.shouldForceRender() || forceRender
-                || (System.currentTimeMillis() > cooldown && (settings.get().isForceUpdates() || needsRenderPaced()));
+        boolean updateFrame = this.shouldForceRender() || forceRender || (System.currentTimeMillis() > cooldown
+                && (settings.get().isForceUpdates() || needsRenderPaced(hasChanged)));
         if (!updateFrame) {
-//            renderTextureOverlay(guiTarget.getColorTextureId());
+            // renderTextureOverlay(guiTarget.getColorTextureId());
             ExordiumModBase.instance.getDelayedRenderCallManager().addBufferedComponent(this);
             blendStateHolder.apply();
             return true;
@@ -98,7 +103,12 @@ public abstract class BufferedComponent {
         return false;
     }
 
+    @Deprecated
     public void renderEnd() {
+        renderEnd(this::captureState);
+    }
+
+    public void renderEnd(Runnable capture) {
         if (!blendStateHolder.isBlendStateFetched()) {
             // capture the expected blend state
             blendStateHolder.fetch();
@@ -106,7 +116,7 @@ public abstract class BufferedComponent {
         if (!isRendering) {
             return;
         }
-        captureState(); // take the current state of the component
+        capture.run(); // take the current state of the component
         ExordiumModBase.instance.setTemporaryScreenOverwrite(null);
         guiTarget.unbindWrite();
         Minecraft.getInstance().getMainRenderTarget().bindWrite(true);
@@ -115,24 +125,10 @@ public abstract class BufferedComponent {
         if (forceBlending || settings.get().isForceBlend()) {
             ExordiumModBase.setForceBlend(false);
         }
-//        renderTextureOverlay(guiTarget.getColorTextureId());
+        // renderTextureOverlay(guiTarget.getColorTextureId());
         ExordiumModBase.instance.getDelayedRenderCallManager().addBufferedComponent(this);
         blendStateHolder.apply();
     }
-
-//    private void renderTextureOverlay(int textureid) {
-//        RenderSystem.disableDepthTest();
-//        RenderSystem.depthMask(false);
-//        RenderSystem.enableBlend();
-//        RenderSystem.blendFunc(GlStateManager.SourceFactor.ONE, GlStateManager.DestFactor.ONE_MINUS_SRC_ALPHA);
-//        RenderSystem.setShader(GameRenderer::getPositionTexShader);
-//        RenderSystem.setShaderColor(1.0F, 1.0F, 1.0F, 1.0F);
-//        RenderSystem.setShaderTexture(0, textureid);
-//        model.draw(RenderSystem.getModelViewMatrix());
-//        RenderSystem.depthMask(true);
-//        RenderSystem.enableDepthTest();
-//        RenderSystem.setShaderColor(1.0F, 1.0F, 1.0F, 1.0F);
-//    }
 
     public int getTextureId() {
         return guiTarget.getColorTextureId();
@@ -142,25 +138,36 @@ public abstract class BufferedComponent {
         return isRendering;
     }
 
-    private boolean needsRenderPaced() {
+    /**
+     * Checks for changes
+     * 
+     * @return
+     */
+    private boolean needsRenderPaced(Supplier<Boolean> hasChanged) {
         boolean reloadOccurred = false;
         if (reloadCount != ReloadTracker.getReloadCount()) {
             reloadCount = ReloadTracker.getReloadCount();
             reloadOccurred = true;
         }
 
-        if (reloadOccurred || shouldRenderNextCappedFrame()) {
+        if (reloadOccurred || hasChanged.get()) {
             return true;
         }
         cooldown = System.currentTimeMillis() + (1000 / ExordiumModBase.instance.config.pollRate);
         return false;
     }
 
-    public abstract boolean shouldRenderNextCappedFrame();
+    @Deprecated
+    public boolean shouldRenderNextCappedFrame() {
+        throw new IllegalAccessError("Method not implemented");
+    }
 
     /**
-     * Take a snapshot of the current stateof the component
+     * Take a snapshot of the current state of the component
      */
-    public abstract void captureState();
+    @Deprecated
+    public void captureState() {
+        throw new IllegalAccessError("Method not implemented");
+    }
 
 }

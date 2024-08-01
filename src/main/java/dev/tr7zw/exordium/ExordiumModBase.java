@@ -14,6 +14,7 @@ import com.mojang.blaze3d.pipeline.RenderTarget;
 import com.mojang.blaze3d.platform.GlStateManager;
 import com.mojang.blaze3d.systems.RenderSystem;
 
+import dev.tr7zw.exordium.components.BufferManager;
 import dev.tr7zw.exordium.config.ExordiumConfigScreen;
 import dev.tr7zw.exordium.util.CustomShaderManager;
 import dev.tr7zw.exordium.util.DelayedRenderCallManager;
@@ -40,8 +41,8 @@ public abstract class ExordiumModBase {
     private final DelayedRenderCallManager delayedRenderCallManager = new DelayedRenderCallManager();
     @Getter
     private final CustomShaderManager customShaderManager = new CustomShaderManager();
-    @Getter
     private final BufferManager bufferManager = new BufferManager();
+    private boolean lateInit = true;
 
     void onInitialize() {
         instance = this;
@@ -61,7 +62,6 @@ public abstract class ExordiumModBase {
                 writeConfig(); // Config got modified
             }
         }
-        bufferManager.initialize();
         initModloader();
     }
 
@@ -90,6 +90,15 @@ public abstract class ExordiumModBase {
         RenderSystem.blendFuncSeparate(GlStateManager.SourceFactor.SRC_ALPHA,
                 GlStateManager.DestFactor.ONE_MINUS_SRC_ALPHA, GlStateManager.SourceFactor.ONE,
                 GlStateManager.DestFactor.ONE_MINUS_SRC_ALPHA);
+    }
+
+    public BufferManager getBufferManager() {
+        // FIXME
+        if (lateInit) {
+            bufferManager.initialize();
+            lateInit = false;
+        }
+        return bufferManager;
     }
 
 }
