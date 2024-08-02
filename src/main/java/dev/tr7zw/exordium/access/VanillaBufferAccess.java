@@ -20,13 +20,6 @@ public interface VanillaBufferAccess {
         LegacyBuffer getScoreBoardOverlayBuffer();
     }
 
-    interface VignetteOverlayAccess extends VanillaBufferAccess {
-
-        LegacyBuffer getVignetteOverlayBuffer();
-
-        void renderCustomVignette(GuiGraphics guiGraphics);
-    }
-
     interface HotbarOverlayAccess extends VanillaBufferAccess {
 
         LegacyBuffer getHotbarOverlayBuffer();

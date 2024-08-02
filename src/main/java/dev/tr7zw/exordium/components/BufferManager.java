@@ -8,6 +8,7 @@ import dev.tr7zw.exordium.ExordiumModBase;
 import dev.tr7zw.exordium.components.vanilla.ChatComponent;
 import dev.tr7zw.exordium.components.vanilla.CrosshairComponent;
 import dev.tr7zw.exordium.components.vanilla.DebugOverlayComponent;
+import dev.tr7zw.exordium.components.vanilla.VignetteComponent;
 import dev.tr7zw.exordium.versionless.config.Config;
 import lombok.NoArgsConstructor;
 import net.minecraft.client.Minecraft;
@@ -24,24 +25,13 @@ public class BufferManager {
         registerBuffer(DebugOverlayComponent.getId(), new DebugOverlayComponent(),
                 () -> inst.config.debugScreenSettings);
         registerBuffer(CrosshairComponent.getId(), new CrosshairComponent(), () -> inst.config.crosshairSettings);
+        registerBuffer(VignetteComponent.getId(), new VignetteComponent(), () -> inst.config.vignetteSettings);
 
-//        vanillaBuffers.put(new ResourceLocation("crosshair"),
-//                gui -> ((CrosshairOverlayAccess) gui).exordium_getCrosshairOverlayBuffer());
 //        vanillaBuffers.put(new ResourceLocation("experience_bar"),
 //                gui -> ((ExperienceBarOverlayAccess) gui).getExperienceBarOverlayBuffer());
 //        vanillaBuffers.put(new ResourceLocation("scoreboard"),
 //                gui -> ((ScoreBoardOverlayAccess) gui).getScoreBoardOverlayBuffer());
 //        vanillaBuffers.put(new ResourceLocation("hotbar"), gui -> ((HotbarOverlayAccess) gui).getHotbarOverlayBuffer());
-//        registerCustomHandler(new ResourceLocation("vignette"), data -> {
-//            VignetteOverlayAccess vignette = (VignetteOverlayAccess) minecraft.gui;
-//            if (ExordiumModBase.instance.config.vignetteSettings.isEnabled()) {
-//                if (!vignette.getVignetteOverlayBuffer().render()) {
-//                    vignette.renderCustomVignette(data.gui());
-//                }
-//                data.cancel().set(true);
-//            }
-//            vignette.getVignetteOverlayBuffer().renderEnd();
-//        });
 
         registerBuffer(ChatComponent.getId(), new ChatComponent(), () -> inst.config.chatSettings);
 

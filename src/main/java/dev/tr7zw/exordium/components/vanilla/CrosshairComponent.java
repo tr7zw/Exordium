@@ -1,7 +1,5 @@
 package dev.tr7zw.exordium.components.vanilla;
 
-import org.spongepowered.asm.mixin.Shadow;
-
 import dev.tr7zw.exordium.components.BufferComponent;
 import dev.tr7zw.util.NMSHelper;
 import lombok.Getter;
