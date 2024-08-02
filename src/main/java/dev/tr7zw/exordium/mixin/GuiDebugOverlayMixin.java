@@ -8,7 +8,8 @@ import com.llamalad7.mixinextras.injector.wrapoperation.WrapOperation;
 
 import dev.tr7zw.exordium.ExordiumModBase;
 import dev.tr7zw.exordium.access.VanillaBufferAccess.DebugOverlayAccess;
-import dev.tr7zw.exordium.util.BufferedComponent;
+import dev.tr7zw.exordium.render.BufferedComponent;
+import dev.tr7zw.exordium.render.LegacyBuffer;
 import net.minecraft.client.gui.Gui;
 import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.client.gui.components.DebugScreenOverlay;
@@ -16,7 +17,7 @@ import net.minecraft.client.gui.components.DebugScreenOverlay;
 @Mixin(Gui.class)
 public class GuiDebugOverlayMixin implements DebugOverlayAccess {
 
-    private BufferedComponent debugBufferedComponent = new BufferedComponent(true,
+    private LegacyBuffer debugBufferedComponent = new LegacyBuffer(true,
             () -> ExordiumModBase.instance.config.debugScreenSettings) {
 
         @Override
@@ -40,7 +41,7 @@ public class GuiDebugOverlayMixin implements DebugOverlayAccess {
     }
 
     @Override
-    public BufferedComponent getDebugOverlayBuffer() {
+    public LegacyBuffer getDebugOverlayBuffer() {
         return debugBufferedComponent;
     }
 

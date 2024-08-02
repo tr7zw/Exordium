@@ -11,7 +11,8 @@ import org.spongepowered.asm.mixin.Shadow;
 
 import dev.tr7zw.exordium.ExordiumModBase;
 import dev.tr7zw.exordium.access.TablistAccess;
-import dev.tr7zw.exordium.util.BufferedComponent;
+import dev.tr7zw.exordium.render.BufferedComponent;
+import dev.tr7zw.exordium.render.LegacyBuffer;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.Gui;
 import net.minecraft.client.gui.components.PlayerTabOverlay;
@@ -44,7 +45,7 @@ public abstract class PlayerTabOverlayMixin implements TablistAccess {
     private Component footer;
     private Objective lastTrackedObjective;
     private boolean outdated;
-    private BufferedComponent playerlistBufferedComponent = new BufferedComponent(true,
+    private LegacyBuffer playerlistBufferedComponent = new LegacyBuffer(true,
             () -> ExordiumModBase.instance.config.tablistSettings) {
 
         @Override
@@ -132,7 +133,7 @@ public abstract class PlayerTabOverlayMixin implements TablistAccess {
     public abstract List<PlayerInfo> getPlayerInfos();
 
     @Override
-    public BufferedComponent getPlayerListOverlayBuffer() {
+    public LegacyBuffer getPlayerListOverlayBuffer() {
         return playerlistBufferedComponent;
     }
 

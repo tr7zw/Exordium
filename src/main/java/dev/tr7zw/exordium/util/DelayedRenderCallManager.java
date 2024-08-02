@@ -7,6 +7,8 @@ import com.mojang.blaze3d.platform.GlStateManager;
 import com.mojang.blaze3d.systems.RenderSystem;
 
 import dev.tr7zw.exordium.ExordiumModBase;
+import dev.tr7zw.exordium.render.BufferedComponent;
+import dev.tr7zw.exordium.render.Model;
 
 /**
  * Iris causes issues when trying to switch render buffers during world

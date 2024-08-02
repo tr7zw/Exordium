@@ -2,7 +2,7 @@ package dev.tr7zw.exordium.components;
 
 import java.util.function.Supplier;
 
-import dev.tr7zw.exordium.util.BufferedComponent;
+import dev.tr7zw.exordium.render.BufferedComponent;
 import dev.tr7zw.exordium.versionless.config.Config;
 import lombok.Getter;
 import net.minecraft.resources.ResourceLocation;

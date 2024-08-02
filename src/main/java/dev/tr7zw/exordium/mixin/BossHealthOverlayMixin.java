@@ -14,7 +14,7 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 import dev.tr7zw.exordium.ExordiumModBase;
 import dev.tr7zw.exordium.access.BossEventBufferAccess;
 import dev.tr7zw.exordium.access.VanillaBufferAccess;
-import dev.tr7zw.exordium.util.BufferedComponent;
+import dev.tr7zw.exordium.render.LegacyBuffer;
 import net.minecraft.client.gui.components.BossHealthOverlay;
 import net.minecraft.client.gui.components.LerpingBossEvent;
 import net.minecraft.network.protocol.game.ClientboundBossEventPacket;
@@ -37,7 +37,7 @@ public class BossHealthOverlayMixin implements VanillaBufferAccess.BossHealthOve
     @Final
     private Map<UUID, LerpingBossEvent> events;
     @Unique
-    private final BufferedComponent chatBufferedComponent = new BufferedComponent(
+    private final LegacyBuffer chatBufferedComponent = new LegacyBuffer(
             () -> ExordiumModBase.instance.config.bossbarSettings) {
 
         @Override
@@ -61,7 +61,7 @@ public class BossHealthOverlayMixin implements VanillaBufferAccess.BossHealthOve
     boolean outdated = false;
 
     @Override
-    public BufferedComponent getHotbarOverlayBuffer() {
+    public LegacyBuffer getHotbarOverlayBuffer() {
         return chatBufferedComponent;
     }
 

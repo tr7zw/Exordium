@@ -1,50 +1,50 @@
 package dev.tr7zw.exordium.access;
 
-import dev.tr7zw.exordium.util.BufferedComponent;
+import dev.tr7zw.exordium.render.LegacyBuffer;
 import net.minecraft.client.gui.GuiGraphics;
 
 public interface VanillaBufferAccess {
 
     interface DebugOverlayAccess extends VanillaBufferAccess {
 
-        BufferedComponent getDebugOverlayBuffer();
+        LegacyBuffer getDebugOverlayBuffer();
 
     }
 
     interface CrosshairOverlayAccess extends VanillaBufferAccess {
 
-        BufferedComponent exordium_getCrosshairOverlayBuffer();
+        LegacyBuffer exordium_getCrosshairOverlayBuffer();
     }
 
     interface ExperienceBarOverlayAccess extends VanillaBufferAccess {
 
-        BufferedComponent getExperienceBarOverlayBuffer();
+        LegacyBuffer getExperienceBarOverlayBuffer();
     }
 
     interface PlayerListOverlayAccess extends VanillaBufferAccess {
 
-        BufferedComponent getPlayerListOverlayBuffer();
+        LegacyBuffer getPlayerListOverlayBuffer();
     }
 
     interface ScoreBoardOverlayAccess extends VanillaBufferAccess {
 
-        BufferedComponent getScoreBoardOverlayBuffer();
+        LegacyBuffer getScoreBoardOverlayBuffer();
     }
 
     interface VignetteOverlayAccess extends VanillaBufferAccess {
 
-        BufferedComponent getVignetteOverlayBuffer();
+        LegacyBuffer getVignetteOverlayBuffer();
 
         void renderCustomVignette(GuiGraphics guiGraphics);
     }
 
     interface HotbarOverlayAccess extends VanillaBufferAccess {
 
-        BufferedComponent getHotbarOverlayBuffer();
+        LegacyBuffer getHotbarOverlayBuffer();
     }
 
     interface BossHealthOverlayAccess extends VanillaBufferAccess {
-        BufferedComponent getHotbarOverlayBuffer();
+        LegacyBuffer getHotbarOverlayBuffer();
     }
 
 }

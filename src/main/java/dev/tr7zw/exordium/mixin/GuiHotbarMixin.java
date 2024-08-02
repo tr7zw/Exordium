@@ -10,7 +10,8 @@ import com.llamalad7.mixinextras.injector.wrapoperation.WrapOperation;
 
 import dev.tr7zw.exordium.ExordiumModBase;
 import dev.tr7zw.exordium.access.VanillaBufferAccess.HotbarOverlayAccess;
-import dev.tr7zw.exordium.util.BufferedComponent;
+import dev.tr7zw.exordium.render.BufferedComponent;
+import dev.tr7zw.exordium.render.LegacyBuffer;
 import net.minecraft.client.AttackIndicatorStatus;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.Gui;
@@ -43,7 +44,7 @@ public class GuiHotbarMixin implements HotbarOverlayAccess {
     private boolean cooldownActive = false;
 
     @Unique
-    private final BufferedComponent hotbarBufferedComponent = new BufferedComponent(
+    private final LegacyBuffer hotbarBufferedComponent = new LegacyBuffer(
             () -> ExordiumModBase.instance.config.hotbarSettings) {
 
         @Override
@@ -167,7 +168,7 @@ public class GuiHotbarMixin implements HotbarOverlayAccess {
     }
 
     @Override
-    public BufferedComponent getHotbarOverlayBuffer() {
+    public LegacyBuffer getHotbarOverlayBuffer() {
         return hotbarBufferedComponent;
     }
 

@@ -18,7 +18,7 @@ import dev.tr7zw.exordium.access.VanillaBufferAccess.HotbarOverlayAccess;
 import dev.tr7zw.exordium.access.VanillaBufferAccess.ScoreBoardOverlayAccess;
 import dev.tr7zw.exordium.access.VanillaBufferAccess.VignetteOverlayAccess;
 import dev.tr7zw.exordium.components.vanilla.ChatComponent;
-import dev.tr7zw.exordium.util.BufferedComponent;
+import dev.tr7zw.exordium.render.BufferedComponent;
 import dev.tr7zw.exordium.versionless.config.Config;
 import lombok.NoArgsConstructor;
 import net.minecraft.client.Minecraft;

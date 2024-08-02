@@ -11,7 +11,8 @@ import com.llamalad7.mixinextras.injector.wrapoperation.WrapOperation;
 
 import dev.tr7zw.exordium.ExordiumModBase;
 import dev.tr7zw.exordium.access.VanillaBufferAccess.ScoreBoardOverlayAccess;
-import dev.tr7zw.exordium.util.BufferedComponent;
+import dev.tr7zw.exordium.render.BufferedComponent;
+import dev.tr7zw.exordium.render.LegacyBuffer;
 import dev.tr7zw.exordium.util.ScoreboardHelper;
 import dev.tr7zw.exordium.util.ScoreboardHelper.ScoreboardState;
 import net.minecraft.client.Minecraft;
@@ -26,7 +27,7 @@ public class ScoreboardMixin implements ScoreBoardOverlayAccess {
     private Minecraft minecraft;
     private String scoreboardState = null;
 
-    private BufferedComponent scoreboardBuffer = new BufferedComponent(true,
+    private LegacyBuffer scoreboardBuffer = new LegacyBuffer(true,
             () -> ExordiumModBase.instance.config.scoreboardSettings) {
 
         @Override
@@ -52,7 +53,7 @@ public class ScoreboardMixin implements ScoreBoardOverlayAccess {
     }
 
     @Override
-    public BufferedComponent getScoreBoardOverlayBuffer() {
+    public LegacyBuffer getScoreBoardOverlayBuffer() {
         return scoreboardBuffer;
     }
 

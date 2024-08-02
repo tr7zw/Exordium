@@ -8,7 +8,7 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 
 import dev.tr7zw.exordium.ExordiumModBase;
 import dev.tr7zw.exordium.access.VanillaBufferAccess.CrosshairOverlayAccess;
-import dev.tr7zw.exordium.util.BufferedComponent;
+import dev.tr7zw.exordium.render.LegacyBuffer;
 import net.minecraft.client.AttackIndicatorStatus;
 import net.minecraft.client.CameraType;
 import net.minecraft.client.Minecraft;
@@ -32,7 +32,7 @@ public class CrosshairMixin implements CrosshairOverlayAccess {
     private boolean lastHighlight = false;
     private boolean lastHidden = false;
 
-    private BufferedComponent crosshairBufferedComponent = new BufferedComponent(true,
+    private LegacyBuffer crosshairBufferedComponent = new LegacyBuffer(true,
             () -> ExordiumModBase.instance.config.crosshairSettings) {
 
         @Override
@@ -90,7 +90,7 @@ public class CrosshairMixin implements CrosshairOverlayAccess {
     }
 
     @Override
-    public BufferedComponent exordium_getCrosshairOverlayBuffer() {
+    public LegacyBuffer exordium_getCrosshairOverlayBuffer() {
         return crosshairBufferedComponent;
     }
 

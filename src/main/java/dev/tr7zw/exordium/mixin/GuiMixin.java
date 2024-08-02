@@ -15,7 +15,7 @@ import dev.tr7zw.exordium.access.GuiAccess;
 import dev.tr7zw.exordium.access.TablistAccess;
 import dev.tr7zw.exordium.access.VanillaBufferAccess;
 import dev.tr7zw.exordium.components.BufferInstance;
-import dev.tr7zw.exordium.util.BufferedComponent;
+import dev.tr7zw.exordium.render.LegacyBuffer;
 import net.minecraft.client.gui.Gui;
 import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.client.gui.components.BossHealthOverlay;
@@ -56,7 +56,7 @@ public abstract class GuiMixin implements GuiAccess {
             Scoreboard scoreboard, Objective objective2, final Operation<Void> operation) {
         TablistAccess tablistAccess = (TablistAccess) tabList;
         tablistAccess.updateState(scoreboard, objective2);
-        BufferedComponent bufferedComponent = tablistAccess.getPlayerListOverlayBuffer();
+        LegacyBuffer bufferedComponent = tablistAccess.getPlayerListOverlayBuffer();
         if (!bufferedComponent.render()) {
             operation.call(instance, guiGraphics, screenWidth, scoreboard, objective2);
         }
@@ -67,7 +67,7 @@ public abstract class GuiMixin implements GuiAccess {
     private void renderBossBarWrapper(BossHealthOverlay instance, GuiGraphics guiGraphics, Operation<Void> original) {
         VanillaBufferAccess.BossHealthOverlayAccess overlayAccess = (VanillaBufferAccess.BossHealthOverlayAccess) this
                 .getBossOverlay();
-        BufferedComponent hotbarOverlayBuffer = overlayAccess.getHotbarOverlayBuffer();
+        LegacyBuffer hotbarOverlayBuffer = overlayAccess.getHotbarOverlayBuffer();
         if (!hotbarOverlayBuffer.render()) {
             System.out.println("Re rendering");
             original.call(instance, guiGraphics);

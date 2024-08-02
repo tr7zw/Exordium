@@ -8,7 +8,7 @@ import com.llamalad7.mixinextras.injector.wrapoperation.Operation;
 import com.llamalad7.mixinextras.injector.wrapoperation.WrapOperation;
 
 import dev.tr7zw.exordium.ExordiumModBase;
-import dev.tr7zw.exordium.util.BufferedComponent;
+import dev.tr7zw.exordium.render.LegacyBuffer;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.Gui;
 import net.minecraft.client.gui.GuiGraphics;
@@ -47,8 +47,7 @@ public abstract class GuiHealthMixin {
     private float lastPlayerAbsorption;
     private boolean hadVisualEffects;
 
-    private BufferedComponent healthBuffer = new BufferedComponent(
-            () -> ExordiumModBase.instance.config.healthSettings) {
+    private LegacyBuffer healthBuffer = new LegacyBuffer(() -> ExordiumModBase.instance.config.healthSettings) {
 
         @Override
         public boolean shouldRenderNextCappedFrame() {

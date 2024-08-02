@@ -9,7 +9,7 @@ import com.llamalad7.mixinextras.injector.wrapoperation.WrapOperation;
 
 import dev.tr7zw.exordium.ExordiumModBase;
 import dev.tr7zw.exordium.access.VanillaBufferAccess.ExperienceBarOverlayAccess;
-import dev.tr7zw.exordium.util.BufferedComponent;
+import dev.tr7zw.exordium.render.LegacyBuffer;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.Gui;
 import net.minecraft.client.gui.GuiGraphics;
@@ -22,8 +22,7 @@ public class GuiExperienceMixin implements ExperienceBarOverlayAccess {
     private int lastlevel = 0;
     private float lastprogress = 0;
 
-    private BufferedComponent experienceBuffer = new BufferedComponent(
-            () -> ExordiumModBase.instance.config.experienceSettings) {
+    private LegacyBuffer experienceBuffer = new LegacyBuffer(() -> ExordiumModBase.instance.config.experienceSettings) {
 
         @Override
         public boolean shouldRenderNextCappedFrame() {
@@ -47,7 +46,7 @@ public class GuiExperienceMixin implements ExperienceBarOverlayAccess {
     }
 
     @Override
-    public BufferedComponent getExperienceBarOverlayBuffer() {
+    public LegacyBuffer getExperienceBarOverlayBuffer() {
         return experienceBuffer;
     }
 

@@ -10,7 +10,8 @@ import com.mojang.blaze3d.systems.RenderSystem;
 
 import dev.tr7zw.exordium.ExordiumModBase;
 import dev.tr7zw.exordium.access.VanillaBufferAccess.VignetteOverlayAccess;
-import dev.tr7zw.exordium.util.BufferedComponent;
+import dev.tr7zw.exordium.render.BufferedComponent;
+import dev.tr7zw.exordium.render.LegacyBuffer;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.Gui;
 import net.minecraft.client.gui.GuiGraphics;
@@ -35,7 +36,7 @@ public class VignetteMixin implements VignetteOverlayAccess {
     }
 
     @Unique
-    private BufferedComponent exordium_vignetteBuffer = new BufferedComponent(false,
+    private LegacyBuffer exordium_vignetteBuffer = new LegacyBuffer(false,
             () -> ExordiumModBase.instance.config.vignetteSettings) {
 
         @Override
@@ -117,7 +118,7 @@ public class VignetteMixin implements VignetteOverlayAccess {
     }
 
     @Override
-    public BufferedComponent getVignetteOverlayBuffer() {
+    public LegacyBuffer getVignetteOverlayBuffer() {
         return exordium_vignetteBuffer;
     }
 
