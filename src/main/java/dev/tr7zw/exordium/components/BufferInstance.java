@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.function.Supplier;
 
+import dev.tr7zw.exordium.ExordiumModBase;
 import dev.tr7zw.exordium.render.BufferedComponent;
 import dev.tr7zw.exordium.util.PacingTracker;
 import dev.tr7zw.exordium.util.ReloadListener;
@@ -50,8 +51,7 @@ public final class BufferInstance<T> {
             return false;
         }
 
-        boolean updateFrame = buffer.screenChanged()
-                || (pacing.isCooldownOver() && (hasUpdate() || component.hasChanged(ticks, context)));
+        boolean updateFrame = buffer.screenChanged() || (pacing.isCooldownOver() && hasUpdate(ticks, context));
 
         if (updateFrame) {
             // start capturing
@@ -64,12 +64,17 @@ public final class BufferInstance<T> {
         return true;
     }
 
-    private boolean hasUpdate() {
+    private boolean hasUpdate(int ticks, T context) {
         for (Supplier<Boolean> listener : updateListeners) {
             if (listener.get()) {
                 return true;
             }
         }
+        if (component.hasChanged(ticks, context)) {
+            return true;
+        }
+        // nothing changed, so wait the poll rate for the next check
+        pacing.setCooldown(System.currentTimeMillis() + (1000 / ExordiumModBase.instance.config.pollRate));
         return false;
     }
 
