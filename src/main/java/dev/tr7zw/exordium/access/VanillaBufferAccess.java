@@ -5,12 +5,6 @@ import net.minecraft.client.gui.GuiGraphics;
 
 public interface VanillaBufferAccess {
 
-    interface DebugOverlayAccess extends VanillaBufferAccess {
-
-        LegacyBuffer getDebugOverlayBuffer();
-
-    }
-
     interface CrosshairOverlayAccess extends VanillaBufferAccess {
 
         LegacyBuffer exordium_getCrosshairOverlayBuffer();

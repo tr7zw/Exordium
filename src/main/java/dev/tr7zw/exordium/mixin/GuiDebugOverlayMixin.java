@@ -7,42 +7,25 @@ import com.llamalad7.mixinextras.injector.wrapoperation.Operation;
 import com.llamalad7.mixinextras.injector.wrapoperation.WrapOperation;
 
 import dev.tr7zw.exordium.ExordiumModBase;
-import dev.tr7zw.exordium.access.VanillaBufferAccess.DebugOverlayAccess;
-import dev.tr7zw.exordium.render.BufferedComponent;
-import dev.tr7zw.exordium.render.LegacyBuffer;
+import dev.tr7zw.exordium.components.BufferInstance;
+import dev.tr7zw.exordium.components.vanilla.DebugOverlayComponent;
 import net.minecraft.client.gui.Gui;
 import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.client.gui.components.DebugScreenOverlay;
 
 @Mixin(Gui.class)
-public class GuiDebugOverlayMixin implements DebugOverlayAccess {
-
-    private LegacyBuffer debugBufferedComponent = new LegacyBuffer(true,
-            () -> ExordiumModBase.instance.config.debugScreenSettings) {
-
-        @Override
-        public boolean shouldRenderNextCappedFrame() {
-            return true;
-        }
-
-        @Override
-        public void captureState() {
-        }
-    };
+public class GuiDebugOverlayMixin {
 
     @WrapOperation(method = "method_55807", at = {
             @At(value = "INVOKE", target = "Lnet/minecraft/client/gui/components/DebugScreenOverlay;render(Lnet/minecraft/client/gui/GuiGraphics;)V"), })
     private void renderExperienceBarWrapper(DebugScreenOverlay overlay, GuiGraphics guiGraphics,
             final Operation<Void> operation) {
-        if (!debugBufferedComponent.render()) {
+        BufferInstance<Void> buffer = ExordiumModBase.instance.getBufferManager()
+                .getBufferInstance(DebugOverlayComponent.getId(), Void.class);
+        if (!buffer.renderBuffer(0, null)) {
             operation.call(overlay, guiGraphics);
         }
-        debugBufferedComponent.renderEnd();
-    }
-
-    @Override
-    public LegacyBuffer getDebugOverlayBuffer() {
-        return debugBufferedComponent;
+        buffer.postRender(null);
     }
 
 }
