@@ -8,25 +8,23 @@ import com.mojang.blaze3d.pipeline.RenderTarget;
 import com.mojang.blaze3d.pipeline.TextureTarget;
 import dev.tr7zw.exordium.ExordiumModBase;
 import dev.tr7zw.exordium.util.BlendStateHolder;
-import dev.tr7zw.exordium.util.ReloadTracker;
 import dev.tr7zw.exordium.util.ScreenTracker;
 import dev.tr7zw.exordium.versionless.config.Config;
 import lombok.Getter;
 import net.minecraft.client.Minecraft;
 
+//TODO: replace all protected to private once LegacyBuffer gets removed
+
 public class BufferedComponent {
 
     private static final Minecraft MINECRAFT = Minecraft.getInstance();
     @Getter
-    private static Model model = null;
-    private final Supplier<Config.ComponentSettings> settings;
-    private final RenderTarget guiTarget = new TextureTarget(100, 100, true, false);
-    private final ScreenTracker screenTracker = new ScreenTracker(guiTarget);
-    private final BlendStateHolder blendStateHolder = new BlendStateHolder();
-    private long cooldown = System.currentTimeMillis();
-    private int reloadCount = 0;
-    private boolean isRendering = false;
-    private boolean forceBlending = false;
+    protected static Model model = null;
+    protected final Supplier<Config.ComponentSettings> settings;
+    protected final RenderTarget guiTarget = new TextureTarget(100, 100, true, false);
+    protected final ScreenTracker screenTracker = new ScreenTracker(guiTarget);
+    protected final BlendStateHolder blendStateHolder = new BlendStateHolder();
+    protected boolean forceBlending = false;
 
     public BufferedComponent(Supplier<Config.ComponentSettings> settings) {
         this(false, settings);
@@ -37,7 +35,7 @@ public class BufferedComponent {
         this.settings = settings;
     }
 
-    private static void refreshModel(int screenWidth, int screenHeight) {
+    protected static void refreshModel(int screenWidth, int screenHeight) {
         if (model != null) {
             model.close();
         }
@@ -50,42 +48,19 @@ public class BufferedComponent {
         model = new Model(modelData, uvData);
     }
 
-    /**
-     * @return true if the buffer was used. False = render as usual
-     */
-    public boolean render(Supplier<Boolean> hasChanged) {
-        if (!settings.get().isEnabled()) {
-            return false;
-        }
-        if (!blendStateHolder.isBlendStateFetched()) { // the intended blendstate is not know. Skip the buffer logic,
-                                                       // let
-                                                       // it render normally, then grab the expected state
-            return false;
-        }
-        boolean forceRender = false;
+    public void captureComponent() {
         // Check for Screen size/scaling changes
         if (screenTracker.hasChanged()) {
             screenTracker.updateState();
             refreshModel(MINECRAFT.getWindow().getGuiScaledWidth(), MINECRAFT.getWindow().getGuiScaledHeight());
-            forceRender = true;
         }
-        //
         if (model == null) {
             refreshModel(MINECRAFT.getWindow().getGuiScaledWidth(), MINECRAFT.getWindow().getGuiScaledHeight());
         }
-        boolean updateFrame = forceRender || (System.currentTimeMillis() > cooldown
-                && (settings.get().isForceUpdates() || needsRenderPaced(hasChanged)));
 
-        if (!updateFrame) {
-            // we just render this component
-            ExordiumModBase.instance.getDelayedRenderCallManager().addBufferedComponent(this);
-            blendStateHolder.apply();
-            return true;
-        }
         guiTarget.setClearColor(0, 0, 0, 0);
         guiTarget.clear(false);
         guiTarget.bindWrite(false);
-        isRendering = true;
         ExordiumModBase.instance.setTemporaryScreenOverwrite(guiTarget);
 
         ExordiumModBase.correctBlendMode();
@@ -93,56 +68,40 @@ public class BufferedComponent {
             ExordiumModBase.setForceBlend(true);
         }
         guiTarget.bindWrite(false);
-        return false;
     }
 
-    public void renderEnd(Runnable capture) {
-        if (!blendStateHolder.isBlendStateFetched()) {
-            // capture the expected blend state
-            blendStateHolder.fetch();
-        }
-        if (!isRendering) {
-            // the buffer was used, nothing to do
-            return;
-        }
-        capture.run(); // capture the current state of the component as the current rendered state
+    public void renderBuffer() {
+        ExordiumModBase.instance.getDelayedRenderCallManager().addBufferedComponent(this);
+        // set the blendstate to what it would be if the normal render logic had run
+        blendStateHolder.apply();
+    }
+
+    public void finishCapture() {
         ExordiumModBase.instance.setTemporaryScreenOverwrite(null);
         guiTarget.unbindWrite();
         Minecraft.getInstance().getMainRenderTarget().bindWrite(true);
-        cooldown = System.currentTimeMillis() + (1000 / settings.get().getMaxFps());
-        isRendering = false;
         if (forceBlending || settings.get().isForceBlend()) {
             ExordiumModBase.setForceBlend(false);
         }
-        ExordiumModBase.instance.getDelayedRenderCallManager().addBufferedComponent(this);
-        blendStateHolder.apply();
+        renderBuffer();
     }
 
     public int getTextureId() {
         return guiTarget.getColorTextureId();
     }
 
-    public boolean isRendering() {
-        return isRendering;
+    public boolean needsBlendstateSample() {
+        return !blendStateHolder.isBlendStateFetched();
     }
 
-    /**
-     * Checks for changes
-     * 
-     * @return
-     */
-    private boolean needsRenderPaced(Supplier<Boolean> hasChanged) {
-        boolean reloadOccurred = false;
-        if (reloadCount != ReloadTracker.getReloadCount()) {
-            reloadCount = ReloadTracker.getReloadCount();
-            reloadOccurred = true;
+    public void captureBlendstateSample() {
+        if (needsBlendstateSample()) {
+            blendStateHolder.fetch();
         }
+    }
 
-        if (reloadOccurred || hasChanged.get()) {
-            return true;
-        }
-        cooldown = System.currentTimeMillis() + (1000 / ExordiumModBase.instance.config.pollRate);
-        return false;
+    public boolean screenChanged() {
+        return screenTracker.hasChanged();
     }
 
 }

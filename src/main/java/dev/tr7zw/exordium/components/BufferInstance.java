@@ -1,8 +1,12 @@
 package dev.tr7zw.exordium.components;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.function.Supplier;
 
 import dev.tr7zw.exordium.render.BufferedComponent;
+import dev.tr7zw.exordium.util.PacingTracker;
+import dev.tr7zw.exordium.util.ReloadListener;
 import dev.tr7zw.exordium.versionless.config.Config;
 import lombok.Getter;
 import net.minecraft.resources.ResourceLocation;
@@ -13,11 +17,19 @@ public final class BufferInstance<T> {
     private final ResourceLocation id;
     private final BufferComponent<T> component;
     private final BufferedComponent buffer;
+    private final PacingTracker pacing = new PacingTracker();
+    private final Supplier<Config.ComponentSettings> settings;
+    private final List<Supplier<Boolean>> updateListeners = new ArrayList<>();
+
+    private boolean isCapturing = false;
 
     BufferInstance(ResourceLocation id, BufferComponent<T> component, Supplier<Config.ComponentSettings> settings) {
         this.id = id;
         this.component = component;
         this.buffer = new BufferedComponent(settings);
+        this.settings = settings;
+        registerUpdateListener(() -> settings.get().isForceUpdates());
+        registerUpdateListener(new ReloadListener());
     }
 
     /**
@@ -28,7 +40,37 @@ public final class BufferInstance<T> {
      * @return
      */
     public boolean renderBuffer(int ticks, T context) {
-        return buffer.render(() -> component.hasChanged(ticks, context));
+        if (!settings.get().isEnabled()) {
+            // not enabled, skip
+            return false;
+        }
+        if (buffer.needsBlendstateSample()) {
+            // the intended blendstate is not know. Skip the buffer logic, let
+            // it render normally, then grab the expected state
+            return false;
+        }
+
+        boolean updateFrame = buffer.screenChanged()
+                || (pacing.isCooldownOver() && (hasUpdate() || component.hasChanged(ticks, context)));
+
+        if (updateFrame) {
+            // start capturing
+            isCapturing = true;
+            buffer.captureComponent();
+            return false;
+        }
+        // we just render this buffered component
+        buffer.renderBuffer();
+        return true;
+    }
+
+    private boolean hasUpdate() {
+        for (Supplier<Boolean> listener : updateListeners) {
+            if (listener.get()) {
+                return true;
+            }
+        }
+        return false;
     }
 
     /**
@@ -38,7 +80,19 @@ public final class BufferInstance<T> {
      * @param context
      */
     public void postRender(T context) {
-        buffer.renderEnd(() -> component.captureState(context));
+        buffer.captureBlendstateSample();
+        if (!isCapturing) {
+            // we were not capturing, so nothing to do
+            return;
+        }
+        isCapturing = false;
+        component.captureState(context);
+        pacing.setCooldown(System.currentTimeMillis() + (1000 / settings.get().getMaxFps()));
+        buffer.finishCapture();
+    }
+
+    public void registerUpdateListener(Supplier<Boolean> hasChanged) {
+        updateListeners.add(hasChanged);
     }
 
 }
