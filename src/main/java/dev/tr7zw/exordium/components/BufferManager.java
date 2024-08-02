@@ -6,6 +6,7 @@ import java.util.function.Supplier;
 
 import dev.tr7zw.exordium.ExordiumModBase;
 import dev.tr7zw.exordium.components.vanilla.ChatComponent;
+import dev.tr7zw.exordium.components.vanilla.CrosshairComponent;
 import dev.tr7zw.exordium.components.vanilla.DebugOverlayComponent;
 import dev.tr7zw.exordium.versionless.config.Config;
 import lombok.NoArgsConstructor;
@@ -22,6 +23,7 @@ public class BufferManager {
         Minecraft minecraft = Minecraft.getInstance();
         registerBuffer(DebugOverlayComponent.getId(), new DebugOverlayComponent(),
                 () -> inst.config.debugScreenSettings);
+        registerBuffer(CrosshairComponent.getId(), new CrosshairComponent(), () -> inst.config.crosshairSettings);
 
 //        vanillaBuffers.put(new ResourceLocation("crosshair"),
 //                gui -> ((CrosshairOverlayAccess) gui).exordium_getCrosshairOverlayBuffer());
