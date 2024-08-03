@@ -13,18 +13,16 @@ import dev.tr7zw.exordium.versionless.config.Config;
 import lombok.Getter;
 import net.minecraft.client.Minecraft;
 
-//TODO: replace all protected to private once LegacyBuffer gets removed
-
 public class BufferedComponent {
 
     private static final Minecraft MINECRAFT = Minecraft.getInstance();
     @Getter
-    protected static Model model = null;
-    protected final Supplier<Config.ComponentSettings> settings;
-    protected final RenderTarget guiTarget = new TextureTarget(100, 100, true, false);
-    protected final ScreenTracker screenTracker = new ScreenTracker(guiTarget);
-    protected final BlendStateHolder blendStateHolder = new BlendStateHolder();
-    protected boolean forceBlending = false;
+    private static Model model = null;
+    private final Supplier<Config.ComponentSettings> settings;
+    private final RenderTarget guiTarget = new TextureTarget(100, 100, true, false);
+    private final ScreenTracker screenTracker = new ScreenTracker(guiTarget);
+    private final BlendStateHolder blendStateHolder = new BlendStateHolder();
+    private boolean forceBlending = false;
 
     public BufferedComponent(Supplier<Config.ComponentSettings> settings) {
         this(false, settings);
@@ -35,7 +33,7 @@ public class BufferedComponent {
         this.settings = settings;
     }
 
-    protected static void refreshModel(int screenWidth, int screenHeight) {
+    private static void refreshModel(int screenWidth, int screenHeight) {
         if (model != null) {
             model.close();
         }

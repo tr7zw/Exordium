@@ -58,12 +58,8 @@ public class VignetteMixin {
             guiGraphics.setColor(0, 0, 0, ((Gui) (Object) this).vignetteBrightness);
         }
 
-        Screen screen = Minecraft.getInstance().screen;
-
-        if (screen == null) {
-            guiGraphics.blit(FAST_VIGNETTE_LOCATION, 0, 0, -90, 0.0F, 0.0F, screen.width, screen.height, screen.width,
-                    screen.height);
-        }
+        guiGraphics.blit(FAST_VIGNETTE_LOCATION, 0, 0, -90, 0.0F, 0.0F, guiGraphics.guiWidth(), guiGraphics.guiHeight(),
+                guiGraphics.guiWidth(), guiGraphics.guiHeight());
 
         RenderSystem.depthMask(true);
         RenderSystem.enableDepthTest();

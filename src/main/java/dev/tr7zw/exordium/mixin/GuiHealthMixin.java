@@ -8,103 +8,47 @@ import com.llamalad7.mixinextras.injector.wrapoperation.Operation;
 import com.llamalad7.mixinextras.injector.wrapoperation.WrapOperation;
 
 import dev.tr7zw.exordium.ExordiumModBase;
-import dev.tr7zw.exordium.render.LegacyBuffer;
+import dev.tr7zw.exordium.access.HealthAccess;
+import dev.tr7zw.exordium.components.BufferInstance;
+import dev.tr7zw.exordium.components.vanilla.HealthComponent;
+import lombok.Getter;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.Gui;
 import net.minecraft.client.gui.GuiGraphics;
-import net.minecraft.util.Mth;
-import net.minecraft.world.effect.MobEffects;
 import net.minecraft.world.entity.LivingEntity;
 
 @Mixin(Gui.class)
-public abstract class GuiHealthMixin {
+public class GuiHealthMixin implements HealthAccess {
 
     @Shadow
     private Minecraft minecraft;
     @Shadow
+    @Getter
     private long healthBlinkTime;
     @Shadow
+    @Getter
     private int lastHealth;
     @Shadow
+    @Getter
     private int displayHealth;
     @Shadow
+    @Getter
     private int tickCount;
 
     private boolean renderingMountHealth = false;
 
-    private boolean healthBlinking;
-    private int lastRenderedHealth;
-    private int lastDisplayHealth;
-    private int lastArmorValue;
-    private float lastVehicleHearts;
-    private int lastMaxVehicleHearts;
-    private int lastAirSupply;
-    private float lastSaturation;
-    private float lastRenderedTick;
-    private float lastPlayerHealth;
-    private float lastFoodLevel;
-    private float lastExhaustionLevel;
-    private float lastPlayerAbsorption;
-    private boolean hadVisualEffects;
-
-    private LegacyBuffer healthBuffer = new LegacyBuffer(() -> ExordiumModBase.instance.config.healthSettings) {
-
-        @Override
-        public boolean shouldRenderNextCappedFrame() {
-            return false;
-        }
-
-        @Override
-        public boolean shouldForceRender() {
-            boolean hasVisualEffects = minecraft.player.hasEffect(MobEffects.HUNGER)
-                    || minecraft.player.hasEffect(MobEffects.REGENERATION);
-
-            boolean blinking = (healthBlinkTime > tickCount && (healthBlinkTime - tickCount) / 3L % 2L == 1L);
-            LivingEntity vehicle = getPlayerVehicleWithHealth();
-            return healthBlinking != blinking || lastRenderedHealth != lastHealth || lastDisplayHealth != displayHealth
-                    || lastArmorValue != minecraft.player.getArmorValue()
-                    || lastMaxVehicleHearts != getVehicleMaxHearts(vehicle)
-                    || lastVehicleHearts != (vehicle == null ? -1 : vehicle.getHealth())
-                    || lastAirSupply != minecraft.player.getAirSupply()
-                    || lastSaturation != minecraft.player.getFoodData().getSaturationLevel()
-                    || (hasVisualEffects || (hasVisualEffects != hadVisualEffects && lastRenderedTick != tickCount))
-                    || lastFoodLevel != minecraft.player.getFoodData().getFoodLevel()
-                    || lastExhaustionLevel != minecraft.player.getFoodData().getExhaustionLevel()
-                    || lastPlayerHealth != minecraft.player.getHealth() || Mth.ceil(lastPlayerHealth) <= 4
-                    || lastPlayerAbsorption != minecraft.player.getAbsorptionAmount();
-        }
-
-        @Override
-        public void captureState() {
-            LivingEntity vehicle = getPlayerVehicleWithHealth();
-            healthBlinking = (healthBlinkTime > tickCount && (healthBlinkTime - tickCount) / 3L % 2L == 1L);
-            lastRenderedHealth = lastHealth;
-            lastDisplayHealth = displayHealth;
-            lastArmorValue = minecraft.player.getArmorValue();
-            lastMaxVehicleHearts = getVehicleMaxHearts(vehicle);
-            lastVehicleHearts = vehicle == null ? -1 : vehicle.getHealth();
-            lastAirSupply = minecraft.player.getAirSupply();
-            lastSaturation = minecraft.player.getFoodData().getSaturationLevel();
-            lastRenderedTick = tickCount;
-            lastPlayerHealth = minecraft.player.getHealth();
-            lastPlayerAbsorption = minecraft.player.getAbsorptionAmount();
-            lastFoodLevel = minecraft.player.getFoodData().getFoodLevel();
-            lastExhaustionLevel = minecraft.player.getFoodData().getExhaustionLevel();
-            hadVisualEffects = minecraft.player.hasEffect(MobEffects.HUNGER)
-                    || minecraft.player.hasEffect(MobEffects.REGENERATION);
-        }
-    };
-
     @WrapOperation(method = "renderHotbarAndDecorations", at = {
             @At(value = "INVOKE", target = "Lnet/minecraft/client/gui/Gui;renderPlayerHealth(Lnet/minecraft/client/gui/GuiGraphics;)V"), })
     private void renderPlayerHealthWrapper(Gui gui, GuiGraphics guiGraphics, final Operation<Void> operation) {
-        if (!healthBuffer.render()) {
+        BufferInstance<HealthAccess> buffer = ExordiumModBase.instance.getBufferManager()
+                .getBufferInstance(HealthComponent.getId(), HealthAccess.class);
+        if (!buffer.renderBuffer(tickCount, this)) {
             operation.call(gui, guiGraphics);
             renderingMountHealth = true;
             renderVehicleHealth(guiGraphics);
             renderingMountHealth = false;
         }
-        healthBuffer.renderEnd();
+        buffer.postRender(this);
     }
 
     @WrapOperation(method = "renderHotbarAndDecorations", at = @At(value = "INVOKE", target = "Lnet/minecraft/client/gui/Gui;renderVehicleHealth(Lnet/minecraft/client/gui/GuiGraphics;)V"))
@@ -117,12 +61,25 @@ public abstract class GuiHealthMixin {
     }
 
     @Shadow
-    public abstract void renderVehicleHealth(GuiGraphics guiGraphics);
+    public void renderVehicleHealth(GuiGraphics guiGraphics) {
+    };
 
     @Shadow
-    protected abstract LivingEntity getPlayerVehicleWithHealth();
+    private LivingEntity getPlayerVehicleWithHealth() {
+        return null;
+    };
 
     @Shadow
-    protected abstract int getVehicleMaxHearts(LivingEntity livingEntity);
+    public int getVehicleMaxHearts(LivingEntity livingEntity) {
+        return 0;
+    }
+
+    public LivingEntity getExordiumPlayerVehicleWithHealth() {
+        return getPlayerVehicleWithHealth();
+    }
+
+    public int getExordiumVehicleMaxHearts(LivingEntity livingEntity) {
+        return getVehicleMaxHearts(livingEntity);
+    }
 
 }

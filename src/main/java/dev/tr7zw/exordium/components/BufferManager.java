@@ -10,6 +10,7 @@ import dev.tr7zw.exordium.components.vanilla.ChatComponent;
 import dev.tr7zw.exordium.components.vanilla.CrosshairComponent;
 import dev.tr7zw.exordium.components.vanilla.DebugOverlayComponent;
 import dev.tr7zw.exordium.components.vanilla.ExperienceComponent;
+import dev.tr7zw.exordium.components.vanilla.HealthComponent;
 import dev.tr7zw.exordium.components.vanilla.HotbarComponent;
 import dev.tr7zw.exordium.components.vanilla.PlayerListComponent;
 import dev.tr7zw.exordium.components.vanilla.ScoreboardComponent;
@@ -37,6 +38,7 @@ public class BufferManager {
         registerBuffer(ChatComponent.getId(), new ChatComponent(), () -> inst.config.chatSettings);
         registerBuffer(PlayerListComponent.getId(), new PlayerListComponent(), () -> inst.config.tablistSettings);
         registerBuffer(BossHealthBarComponent.getId(), new BossHealthBarComponent(), () -> inst.config.bossbarSettings);
+        registerBuffer(HealthComponent.getId(), new HealthComponent(), () -> inst.config.healthSettings);
 
     }
 
