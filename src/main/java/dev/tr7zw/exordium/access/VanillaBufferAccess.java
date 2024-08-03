@@ -10,11 +10,6 @@ public interface VanillaBufferAccess {
         LegacyBuffer getPlayerListOverlayBuffer();
     }
 
-    interface ScoreBoardOverlayAccess extends VanillaBufferAccess {
-
-        LegacyBuffer getScoreBoardOverlayBuffer();
-    }
-
     interface BossHealthOverlayAccess extends VanillaBufferAccess {
         LegacyBuffer getHotbarOverlayBuffer();
     }

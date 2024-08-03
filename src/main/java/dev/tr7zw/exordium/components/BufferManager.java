@@ -10,6 +10,7 @@ import dev.tr7zw.exordium.components.vanilla.CrosshairComponent;
 import dev.tr7zw.exordium.components.vanilla.DebugOverlayComponent;
 import dev.tr7zw.exordium.components.vanilla.ExperienceComponent;
 import dev.tr7zw.exordium.components.vanilla.HotbarComponent;
+import dev.tr7zw.exordium.components.vanilla.ScoreboardComponent;
 import dev.tr7zw.exordium.components.vanilla.VignetteComponent;
 import dev.tr7zw.exordium.versionless.config.Config;
 import lombok.NoArgsConstructor;
@@ -29,10 +30,7 @@ public class BufferManager {
         registerBuffer(CrosshairComponent.getId(), new CrosshairComponent(), () -> inst.config.crosshairSettings);
         registerBuffer(VignetteComponent.getId(), new VignetteComponent(), () -> inst.config.vignetteSettings);
         registerBuffer(ExperienceComponent.getId(), new ExperienceComponent(), () -> inst.config.experienceSettings);
-
-//        vanillaBuffers.put(new ResourceLocation("scoreboard"),
-//                gui -> ((ScoreBoardOverlayAccess) gui).getScoreBoardOverlayBuffer());
-
+        registerBuffer(ScoreboardComponent.getId(), new ScoreboardComponent(), () -> inst.config.scoreboardSettings);
         registerBuffer(HotbarComponent.getId(), new HotbarComponent(), () -> inst.config.hotbarSettings);
         registerBuffer(ChatComponent.getId(), new ChatComponent(), () -> inst.config.chatSettings);
 
