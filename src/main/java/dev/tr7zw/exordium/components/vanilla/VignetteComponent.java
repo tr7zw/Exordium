@@ -1,7 +1,5 @@
 package dev.tr7zw.exordium.components.vanilla;
 
-import org.spongepowered.asm.mixin.Unique;
-
 import dev.tr7zw.exordium.components.BufferComponent;
 import dev.tr7zw.util.NMSHelper;
 import lombok.Getter;
@@ -11,6 +9,7 @@ import net.minecraft.world.level.border.WorldBorder;
 
 public class VignetteComponent implements BufferComponent<Float> {
 
+    private static final Minecraft MINECRAFT = Minecraft.getInstance();
     @Getter
     private static final ResourceLocation id = NMSHelper.getResourceLocation("minecraft", "crosshair");
 
@@ -19,7 +18,7 @@ public class VignetteComponent implements BufferComponent<Float> {
 
     @Override
     public void captureState(Float vignetteBrightness) {
-        WorldBorder worldBorder = Minecraft.getInstance().level.getWorldBorder();
+        WorldBorder worldBorder = MINECRAFT.level.getWorldBorder();
         float f = (float) worldBorder.getDistanceToBorder(Minecraft.getInstance().getCameraEntity());
         double d = Math.min(worldBorder.getLerpSpeed() * (double) worldBorder.getWarningTime() * 1000.0D,
                 Math.abs(worldBorder.getLerpTarget() - worldBorder.getSize()));
@@ -38,7 +37,7 @@ public class VignetteComponent implements BufferComponent<Float> {
         if (exordium_lastVignetteBrightness != vignetteBrightness) {
             return true;
         }
-        WorldBorder worldBorder = Minecraft.getInstance().level.getWorldBorder();
+        WorldBorder worldBorder = MINECRAFT.level.getWorldBorder();
         float f = (float) worldBorder.getDistanceToBorder(Minecraft.getInstance().getCameraEntity());
         double d = Math.min(worldBorder.getLerpSpeed() * (double) worldBorder.getWarningTime() * 1000.0D,
                 Math.abs(worldBorder.getLerpTarget() - worldBorder.getSize()));
