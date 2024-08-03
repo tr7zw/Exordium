@@ -27,16 +27,17 @@ public class GuiHotbarMixin {
         buffer.postRender(null);
     }
 
-    @WrapOperation(method = "renderHotbarAndDecorations", at = {
-            @At(value = "INVOKE", target = "Lnet/minecraft/client/gui/components/spectator/SpectatorGui;renderHotbar(Lnet/minecraft/client/gui/GuiGraphics;)V"), })
-    private void renderHotbarWrapperSpectator(SpectatorGui gui, GuiGraphics guiGraphics,
-            final Operation<Void> operation) {
-        BufferInstance<Void> buffer = ExordiumModBase.instance.getBufferManager()
-                .getBufferInstance(HotbarComponent.getId(), Void.class);
-        if (!buffer.renderBuffer(0, null)) {
-            operation.call(gui, guiGraphics);
-        }
-        buffer.postRender(null);
-    }
+    // FIXME broken
+//    @WrapOperation(method = "renderHotbarAndDecorations", at = {
+//            @At(value = "INVOKE", target = "Lnet/minecraft/client/gui/components/spectator/SpectatorGui;renderHotbar(Lnet/minecraft/client/gui/GuiGraphics;)V"), })
+//    private void renderHotbarWrapperSpectator(SpectatorGui gui, GuiGraphics guiGraphics,
+//            final Operation<Void> operation) {
+//        BufferInstance<Void> buffer = ExordiumModBase.instance.getBufferManager()
+//                .getBufferInstance(HotbarComponent.getId(), Void.class);
+//        if (!buffer.renderBuffer(0, null)) {
+//            operation.call(gui, guiGraphics);
+//        }
+//        buffer.postRender(null);
+//    }
 
 }
