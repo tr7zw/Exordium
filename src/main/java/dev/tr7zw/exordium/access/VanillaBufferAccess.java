@@ -5,11 +5,6 @@ import net.minecraft.client.gui.GuiGraphics;
 
 public interface VanillaBufferAccess {
 
-    interface PlayerListOverlayAccess extends VanillaBufferAccess {
-
-        LegacyBuffer getPlayerListOverlayBuffer();
-    }
-
     interface BossHealthOverlayAccess extends VanillaBufferAccess {
         LegacyBuffer getHotbarOverlayBuffer();
     }

@@ -15,6 +15,8 @@ import dev.tr7zw.exordium.access.GuiAccess;
 import dev.tr7zw.exordium.access.TablistAccess;
 import dev.tr7zw.exordium.access.VanillaBufferAccess;
 import dev.tr7zw.exordium.components.BufferInstance;
+import dev.tr7zw.exordium.components.vanilla.PlayerListComponent;
+import dev.tr7zw.exordium.components.vanilla.PlayerListComponent.PlayerListContext;
 import dev.tr7zw.exordium.render.LegacyBuffer;
 import net.minecraft.client.gui.Gui;
 import net.minecraft.client.gui.GuiGraphics;
@@ -55,12 +57,13 @@ public abstract class GuiMixin implements GuiAccess {
     private void renderTablistWrapper(PlayerTabOverlay instance, GuiGraphics guiGraphics, int screenWidth,
             Scoreboard scoreboard, Objective objective2, final Operation<Void> operation) {
         TablistAccess tablistAccess = (TablistAccess) tabList;
-        tablistAccess.updateState(scoreboard, objective2);
-        LegacyBuffer bufferedComponent = tablistAccess.getPlayerListOverlayBuffer();
-        if (!bufferedComponent.render()) {
+        BufferInstance<PlayerListContext> buffer = ExordiumModBase.instance.getBufferManager()
+                .getBufferInstance(PlayerListComponent.getId(), PlayerListContext.class);
+        PlayerListContext context = new PlayerListContext(tablistAccess, scoreboard, objective2);
+        if (!buffer.renderBuffer(tickCount, context)) {
             operation.call(instance, guiGraphics, screenWidth, scoreboard, objective2);
         }
-        bufferedComponent.renderEnd();
+        buffer.postRender(context);
     }
 
     @WrapOperation(method = "method_55808", at = @At(value = "INVOKE", target = "Lnet/minecraft/client/gui/components/BossHealthOverlay;render(Lnet/minecraft/client/gui/GuiGraphics;)V"))
@@ -69,7 +72,6 @@ public abstract class GuiMixin implements GuiAccess {
                 .getBossOverlay();
         LegacyBuffer hotbarOverlayBuffer = overlayAccess.getHotbarOverlayBuffer();
         if (!hotbarOverlayBuffer.render()) {
-            System.out.println("Re rendering");
             original.call(instance, guiGraphics);
         }
         hotbarOverlayBuffer.renderEnd();
