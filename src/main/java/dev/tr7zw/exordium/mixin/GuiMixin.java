@@ -10,14 +10,14 @@ import com.llamalad7.mixinextras.injector.wrapoperation.Operation;
 import com.llamalad7.mixinextras.injector.wrapoperation.WrapOperation;
 
 import dev.tr7zw.exordium.ExordiumModBase;
+import dev.tr7zw.exordium.access.BossOverlayAccess;
 import dev.tr7zw.exordium.access.ChatAccess;
 import dev.tr7zw.exordium.access.GuiAccess;
 import dev.tr7zw.exordium.access.TablistAccess;
-import dev.tr7zw.exordium.access.VanillaBufferAccess;
 import dev.tr7zw.exordium.components.BufferInstance;
+import dev.tr7zw.exordium.components.vanilla.BossHealthBarComponent;
 import dev.tr7zw.exordium.components.vanilla.PlayerListComponent;
 import dev.tr7zw.exordium.components.vanilla.PlayerListComponent.PlayerListContext;
-import dev.tr7zw.exordium.render.LegacyBuffer;
 import net.minecraft.client.gui.Gui;
 import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.client.gui.components.BossHealthOverlay;
@@ -68,13 +68,14 @@ public abstract class GuiMixin implements GuiAccess {
 
     @WrapOperation(method = "method_55808", at = @At(value = "INVOKE", target = "Lnet/minecraft/client/gui/components/BossHealthOverlay;render(Lnet/minecraft/client/gui/GuiGraphics;)V"))
     private void renderBossBarWrapper(BossHealthOverlay instance, GuiGraphics guiGraphics, Operation<Void> original) {
-        VanillaBufferAccess.BossHealthOverlayAccess overlayAccess = (VanillaBufferAccess.BossHealthOverlayAccess) this
-                .getBossOverlay();
-        LegacyBuffer hotbarOverlayBuffer = overlayAccess.getHotbarOverlayBuffer();
-        if (!hotbarOverlayBuffer.render()) {
+        BossOverlayAccess overlayAccess = (BossOverlayAccess) this.getBossOverlay();
+        @SuppressWarnings("unchecked")
+        BufferInstance<BossOverlayAccess> buffer = ExordiumModBase.instance.getBufferManager()
+                .getBufferInstance(BossHealthBarComponent.getId(), BossOverlayAccess.class);
+        if (!buffer.renderBuffer(tickCount, overlayAccess)) {
             original.call(instance, guiGraphics);
         }
-        hotbarOverlayBuffer.renderEnd();
+        buffer.postRender(overlayAccess);
     }
 
     @Inject(method = "render", at = @At(value = "TAIL"))

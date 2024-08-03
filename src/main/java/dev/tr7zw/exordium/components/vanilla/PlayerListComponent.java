@@ -26,7 +26,7 @@ public class PlayerListComponent
 
     private static final Minecraft minecraft = Minecraft.getInstance();
     @Getter
-    private static final ResourceLocation id = NMSHelper.getResourceLocation("minecraft", "crosshair");
+    private static final ResourceLocation id = NMSHelper.getResourceLocation("minecraft", "player_list");
 
     private List<Integer> playerInfoHashes = new ArrayList<>();
     private int headerHash = 0;

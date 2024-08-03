@@ -11,7 +11,7 @@ public class VignetteComponent implements BufferComponent<Float> {
 
     private static final Minecraft MINECRAFT = Minecraft.getInstance();
     @Getter
-    private static final ResourceLocation id = NMSHelper.getResourceLocation("minecraft", "crosshair");
+    private static final ResourceLocation id = NMSHelper.getResourceLocation("minecraft", "vignette");
 
     private float exordium_state = 0f;
     private float exordium_lastVignetteBrightness = 1.0F;

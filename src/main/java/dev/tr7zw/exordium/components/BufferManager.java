@@ -5,11 +5,13 @@ import java.util.Map;
 import java.util.function.Supplier;
 
 import dev.tr7zw.exordium.ExordiumModBase;
+import dev.tr7zw.exordium.components.vanilla.BossHealthBarComponent;
 import dev.tr7zw.exordium.components.vanilla.ChatComponent;
 import dev.tr7zw.exordium.components.vanilla.CrosshairComponent;
 import dev.tr7zw.exordium.components.vanilla.DebugOverlayComponent;
 import dev.tr7zw.exordium.components.vanilla.ExperienceComponent;
 import dev.tr7zw.exordium.components.vanilla.HotbarComponent;
+import dev.tr7zw.exordium.components.vanilla.PlayerListComponent;
 import dev.tr7zw.exordium.components.vanilla.ScoreboardComponent;
 import dev.tr7zw.exordium.components.vanilla.VignetteComponent;
 import dev.tr7zw.exordium.versionless.config.Config;
@@ -33,23 +35,9 @@ public class BufferManager {
         registerBuffer(ScoreboardComponent.getId(), new ScoreboardComponent(), () -> inst.config.scoreboardSettings);
         registerBuffer(HotbarComponent.getId(), new HotbarComponent(), () -> inst.config.hotbarSettings);
         registerBuffer(ChatComponent.getId(), new ChatComponent(), () -> inst.config.chatSettings);
+        registerBuffer(PlayerListComponent.getId(), new PlayerListComponent(), () -> inst.config.tablistSettings);
+        registerBuffer(BossHealthBarComponent.getId(), new BossHealthBarComponent(), () -> inst.config.bossbarSettings);
 
-//        registerCustomHandler(new ResourceLocation("player_list"), data -> {
-//            GuiAccess guiAccess = (GuiAccess) minecraft.gui;
-//            TablistAccess tablistAccess = (TablistAccess) guiAccess.getPlayerTabOverlay();
-//            Scoreboard scoreboard = minecraft.level.getScoreboard();
-//            tablistAccess.updateState(scoreboard, scoreboard.getDisplayObjective(DisplaySlot.LIST));
-//            BufferedComponent bufferedComponent = tablistAccess.getPlayerListOverlayBuffer();
-//            if (bufferedComponent.render()) {
-//                data.cancel().set(true);
-//            }
-//        });
-//        registerCustomEndHandler(new ResourceLocation("player_list"), () -> {
-//            GuiAccess guiAccess = (GuiAccess) minecraft.gui;
-//            TablistAccess tabAccess = (TablistAccess) guiAccess.getPlayerTabOverlay();
-//            BufferedComponent bufferedComponent = tabAccess.getPlayerListOverlayBuffer();
-//            bufferedComponent.renderEnd();
-//        });
     }
 
     @SuppressWarnings("unchecked")
