@@ -9,6 +9,7 @@ import dev.tr7zw.exordium.components.vanilla.ChatComponent;
 import dev.tr7zw.exordium.components.vanilla.CrosshairComponent;
 import dev.tr7zw.exordium.components.vanilla.DebugOverlayComponent;
 import dev.tr7zw.exordium.components.vanilla.ExperienceComponent;
+import dev.tr7zw.exordium.components.vanilla.HotbarComponent;
 import dev.tr7zw.exordium.components.vanilla.VignetteComponent;
 import dev.tr7zw.exordium.versionless.config.Config;
 import lombok.NoArgsConstructor;
@@ -31,8 +32,8 @@ public class BufferManager {
 
 //        vanillaBuffers.put(new ResourceLocation("scoreboard"),
 //                gui -> ((ScoreBoardOverlayAccess) gui).getScoreBoardOverlayBuffer());
-//        vanillaBuffers.put(new ResourceLocation("hotbar"), gui -> ((HotbarOverlayAccess) gui).getHotbarOverlayBuffer());
 
+        registerBuffer(HotbarComponent.getId(), new HotbarComponent(), () -> inst.config.hotbarSettings);
         registerBuffer(ChatComponent.getId(), new ChatComponent(), () -> inst.config.chatSettings);
 
 //        registerCustomHandler(new ResourceLocation("player_list"), data -> {
