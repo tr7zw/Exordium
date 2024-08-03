@@ -3,6 +3,7 @@ package dev.tr7zw.exordium;
 import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.Executor;
 
+import dev.tr7zw.util.NMSHelper;
 import dev.tr7zw.exordium.util.ReloadTracker;
 import net.fabricmc.api.ClientModInitializer;
 import net.fabricmc.fabric.api.resource.ResourceManagerHelper;
@@ -22,7 +23,7 @@ public class ExordiumMod extends ExordiumModBase implements ClientModInitializer
                 .registerReloadListener(new SimpleResourceReloadListener<>() {
                     @Override
                     public ResourceLocation getFabricId() {
-                        return new ResourceLocation("exordium", "reload_listener");
+                        return NMSHelper.getResourceLocation("exordium", "reload_listener");
                     }
 
                     @Override

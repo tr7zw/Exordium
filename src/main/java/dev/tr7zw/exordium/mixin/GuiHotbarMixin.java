@@ -11,14 +11,27 @@ import dev.tr7zw.exordium.components.BufferInstance;
 import dev.tr7zw.exordium.components.vanilla.HotbarComponent;
 import net.minecraft.client.gui.Gui;
 import net.minecraft.client.gui.GuiGraphics;
-import net.minecraft.client.gui.components.spectator.SpectatorGui;
+
+//spotless:off
+//#if MC >= 12100
+import net.minecraft.client.DeltaTracker;
+//#endif
+//spotless:on
 
 @Mixin(Gui.class)
 public class GuiHotbarMixin {
 
+    //spotless:off
+    //#if MC >= 12100
     @WrapOperation(method = "renderHotbarAndDecorations", at = {
-            @At(value = "INVOKE", target = "Lnet/minecraft/client/gui/Gui;renderItemHotbar(Lnet/minecraft/client/gui/GuiGraphics;F)V"), })
-    private void renderHotbarWrapper(Gui gui, GuiGraphics guiGraphics, float f, final Operation<Void> operation) {
+            @At(value = "INVOKE", target = "Lnet/minecraft/client/gui/Gui;renderItemHotbar(Lnet/minecraft/client/gui/GuiGraphics;Lnet/minecraft/client/DeltaTracker;)V")})
+    private void renderHotbarWrapper(Gui gui, GuiGraphics guiGraphics, DeltaTracker f, final Operation<Void> operation) {
+    //#else
+    //$$     @WrapOperation(method = "renderHotbarAndDecorations", at = {
+    //$$         @At(value = "INVOKE", target = "Lnet/minecraft/client/gui/Gui;renderItemHotbar(Lnet/minecraft/client/gui/GuiGraphics;F)V")})
+    //$$ private void renderHotbarWrapper(Gui gui, GuiGraphics guiGraphics, float f, final Operation<Void> operation) {
+    //#endif
+    //spotless:on
         BufferInstance<Void> buffer = ExordiumModBase.instance.getBufferManager()
                 .getBufferInstance(HotbarComponent.getId(), Void.class);
         if (!buffer.renderBuffer(0, null)) {

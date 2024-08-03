@@ -12,6 +12,7 @@ import com.mojang.blaze3d.systems.RenderSystem;
 import dev.tr7zw.exordium.ExordiumModBase;
 import dev.tr7zw.exordium.components.BufferInstance;
 import dev.tr7zw.exordium.components.vanilla.VignetteComponent;
+import dev.tr7zw.util.NMSHelper;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.Gui;
 import net.minecraft.client.gui.GuiGraphics;
@@ -27,9 +28,9 @@ public class VignetteMixin {
     @Final
     private Minecraft minecraft;
 
-    private static ResourceLocation FAST_VIGNETTE_LOCATION = new ResourceLocation("exordium",
+    private static ResourceLocation FAST_VIGNETTE_LOCATION = NMSHelper.getResourceLocation("exordium",
             "textures/misc/fast_vignette.png");
-    private static ResourceLocation FAST_VIGNETTE_DARK_LOCATION = new ResourceLocation("exordium",
+    private static ResourceLocation FAST_VIGNETTE_DARK_LOCATION = NMSHelper.getResourceLocation("exordium",
             "textures/misc/fast_vignette_dark.png");
 
     @WrapOperation(method = "renderCameraOverlays", at = {

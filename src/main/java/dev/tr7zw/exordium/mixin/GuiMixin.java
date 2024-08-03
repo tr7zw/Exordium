@@ -26,6 +26,12 @@ import net.minecraft.client.gui.components.PlayerTabOverlay;
 import net.minecraft.world.scores.Objective;
 import net.minecraft.world.scores.Scoreboard;
 
+//spotless:off
+//#if MC >= 12100
+import net.minecraft.client.DeltaTracker;
+//#endif
+//spotless:on
+
 @Mixin(Gui.class)
 public abstract class GuiMixin implements GuiAccess {
 
@@ -79,7 +85,13 @@ public abstract class GuiMixin implements GuiAccess {
     }
 
     @Inject(method = "render", at = @At(value = "TAIL"))
-    public void render(GuiGraphics guiGraphics, float partialTick, CallbackInfo ci) {
+    //spotless:off
+    //#if MC >= 12100
+    public void render(GuiGraphics guiGraphics, DeltaTracker partialTick, CallbackInfo ci) {
+    //#else
+    //$$ public void render(GuiGraphics guiGraphics, float partialTick, CallbackInfo ci) {
+    //#endif
+    //spotless:on
         ExordiumModBase.instance.getDelayedRenderCallManager().renderComponents();
     }
 

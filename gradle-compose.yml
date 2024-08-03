@@ -1,5 +1,5 @@
 version: '0.0.2'
-source: "https://github.com/tr7zw/ProcessedModTemplate/tree/legacy12006"
+source: "https://github.com/tr7zw/ProcessedModTemplate/tree/master"
 replacements:
   name: "Exordium"
   id: "exordium"
