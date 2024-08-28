@@ -26,7 +26,7 @@ public class CrosshairMixin {
     private DebugScreenOverlay debugOverlay;
 
     @Inject(method = "renderCrosshair", at = @At("HEAD"), cancellable = true)
-    //spotless:off
+    // spotless:off
     //#if MC >= 12100
     private void renderCrosshairStart(GuiGraphics guiGraphics, DeltaTracker delta, CallbackInfo ci) {
     //#else
@@ -42,7 +42,7 @@ public class CrosshairMixin {
     }
 
     @Inject(method = "renderCrosshair", at = @At("TAIL"))
-    //spotless:off
+    // spotless:off
     //#if MC >= 12100
     private void renderCrosshairEnd(GuiGraphics guiGraphics, DeltaTracker delta, CallbackInfo ci) {
     //#else

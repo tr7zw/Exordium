@@ -33,6 +33,11 @@ public class PlayerTabOverlayMixin implements TablistAccess {
     @Shadow
     public List<PlayerInfo> getPlayerInfos() {
         return null;
-    };
+    }
+
+    @Override
+    public List<PlayerInfo> getPlayerInfosExordium() {
+        return getPlayerInfos();
+    }
 
 }

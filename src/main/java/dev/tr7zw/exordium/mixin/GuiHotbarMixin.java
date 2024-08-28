@@ -21,7 +21,7 @@ import net.minecraft.client.DeltaTracker;
 @Mixin(Gui.class)
 public class GuiHotbarMixin {
 
-    //spotless:off
+    // spotless:off
     //#if MC >= 12100
     @WrapOperation(method = "renderHotbarAndDecorations", at = {
             @At(value = "INVOKE", target = "Lnet/minecraft/client/gui/Gui;renderItemHotbar(Lnet/minecraft/client/gui/GuiGraphics;Lnet/minecraft/client/DeltaTracker;)V")})

@@ -85,7 +85,7 @@ public abstract class GuiMixin implements GuiAccess {
     }
 
     @Inject(method = "render", at = @At(value = "TAIL"))
-    //spotless:off
+    // spotless:off
     //#if MC >= 12100
     public void render(GuiGraphics guiGraphics, DeltaTracker partialTick, CallbackInfo ci) {
     //#else

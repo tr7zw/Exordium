@@ -40,7 +40,7 @@ public class PlayerListComponent
 
     @Override
     public void captureState(PlayerListContext context) {
-        playerInfoHashes = fastGetPlayerInfoListHashCode(context, context.tablist().getPlayerInfos());
+        playerInfoHashes = fastGetPlayerInfoListHashCode(context, context.tablist().getPlayerInfosExordium());
         headerHash = context.tablist().getHeader() == null ? 0 : context.tablist().getHeader().getString().hashCode();
         footerHash = context.tablist().getFooter() == null ? 0 : context.tablist().getFooter().getString().hashCode();
     }
@@ -53,7 +53,7 @@ public class PlayerListComponent
         int newFooterHash = context.tablist().getFooter() == null ? 0
                 : context.tablist().getFooter().getString().hashCode();
         boolean plaverInfoOutdated = !playerInfoHashes
-                .equals(fastGetPlayerInfoListHashCode(context, context.tablist().getPlayerInfos()));
+                .equals(fastGetPlayerInfoListHashCode(context, context.tablist().getPlayerInfosExordium()));
         return plaverInfoOutdated || headerHash != newHeaderHash || footerHash != newFooterHash
                 || scoreboardOrObjectiveChange;
     }

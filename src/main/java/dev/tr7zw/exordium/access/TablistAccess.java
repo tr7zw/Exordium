@@ -19,6 +19,6 @@ public interface TablistAccess {
 
     Component getFooter();
 
-    List<PlayerInfo> getPlayerInfos();
+    List<PlayerInfo> getPlayerInfosExordium();
 
 }
