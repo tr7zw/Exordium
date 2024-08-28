@@ -1,6 +1,7 @@
 package dev.tr7zw.exordium.components.vanilla;
 
 import dev.tr7zw.exordium.components.BufferComponent;
+import dev.tr7zw.exordium.versionless.config.Config.ComponentSettings;
 import dev.tr7zw.util.NMSHelper;
 import lombok.Getter;
 import net.minecraft.client.Minecraft;
@@ -48,6 +49,15 @@ public class VignetteComponent implements BufferComponent<Float> {
             f = 0.0F;
         }
         return exordium_state == f;
+    }
+
+    @Override
+    public boolean enabled(ComponentSettings settings) {
+        if (MINECRAFT.screen != null) {
+            // during screens disable due to issues with the blur
+            return false;
+        }
+        return BufferComponent.super.enabled(settings);
     }
 
 }

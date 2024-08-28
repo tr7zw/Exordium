@@ -33,6 +33,10 @@ public final class BufferInstance<T> {
         registerUpdateListener(new ReloadListener());
     }
 
+    public boolean enabled() {
+        return component.enabled(settings.get());
+    }
+    
     /**
      * Tries to render the buffer. Returns false if the buffer was not rendered and
      * the normal render logic should be used.
@@ -41,7 +45,7 @@ public final class BufferInstance<T> {
      * @return
      */
     public boolean renderBuffer(int ticks, T context) {
-        if (!settings.get().isEnabled()) {
+        if (!enabled()) {
             // not enabled, skip
             return false;
         }

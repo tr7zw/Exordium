@@ -41,7 +41,7 @@ public class VignetteMixin {
                 .getBufferInstance(VignetteComponent.getId(), Float.class);
         float brightness = ((Gui) (Object) this).vignetteBrightness;
         if (!buffer.renderBuffer(0, brightness)) {
-            if (ExordiumModBase.instance.config.vignetteSettings.isEnabled()) {
+            if (buffer.enabled()) {
                 renderCustomVignette(guiGraphics);
             } else {
                 operation.call(gui, guiGraphics, entity);
@@ -51,6 +51,7 @@ public class VignetteMixin {
     }
 
     public void renderCustomVignette(GuiGraphics guiGraphics) {
+        // FIXME: breaks the 1.21 pause menu blur
         WorldBorder worldBorder = minecraft.level.getWorldBorder();
         float f = 0.0F;
         float g = (float) worldBorder.getDistanceToBorder(minecraft.player);

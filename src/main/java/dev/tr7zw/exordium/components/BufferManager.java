@@ -47,9 +47,11 @@ public class BufferManager {
         return (BufferInstance<T>) buffers.get(id);
     }
 
-    public void registerBuffer(ResourceLocation id, BufferComponent<?> component,
+    public BufferInstance<?> registerBuffer(ResourceLocation id, BufferComponent<?> component,
             Supplier<Config.ComponentSettings> settings) {
-        this.buffers.put(id, new BufferInstance<>(id, component, settings));
+        BufferInstance<?> buffer = new BufferInstance<>(id, component, settings);
+        this.buffers.put(id, buffer);
+        return buffer;
     }
 
 }
