@@ -30,9 +30,9 @@ public class MinecraftMixin {
         }
     }
 
-//    @Inject(at = @At(value = "INVOKE", target = "Lnet/minecraft/client/Minecraft;allowsMultiplayer()Z", shift = Shift.BEFORE), method = "Lnet/minecraft/client/Minecraft;<init>(Lnet/minecraft/client/main/GameConfig;)V")
-//    private void init(GameConfig config, CallbackInfo info) {
-//       System.loadLibrary("renderdoc");
-//    }
+    //    @Inject(at = @At(value = "INVOKE", target = "Lnet/minecraft/client/Minecraft;allowsMultiplayer()Z", shift = Shift.BEFORE), method = "Lnet/minecraft/client/Minecraft;<init>(Lnet/minecraft/client/main/GameConfig;)V")
+    //    private void init(GameConfig config, CallbackInfo info) {
+    //       System.loadLibrary("renderdoc");
+    //    }
 
 }

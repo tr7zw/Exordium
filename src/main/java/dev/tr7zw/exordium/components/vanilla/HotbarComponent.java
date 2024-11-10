@@ -82,9 +82,9 @@ public class HotbarComponent implements BufferComponent<Void> {
             }
             //#if MC >= 12102
             if (player.getCooldowns().isOnCooldown(item)) {
-            //#else
-            //$$if (player.getCooldowns().isOnCooldown(item.getItem())) {
-            //#endif
+                //#else
+                //$$if (player.getCooldowns().isOnCooldown(item.getItem())) {
+                //#endif
                 this.cooldownActive = true;
             }
         } else {

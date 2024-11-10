@@ -20,14 +20,19 @@ import dev.tr7zw.exordium.ExordiumModBase;
 
 @Mixin(ShaderManager.class)
 public abstract class GameRendererMixin {
-    @Shadow public abstract @Nullable CompiledShaderProgram getProgram(ShaderProgram shaderProgram);
+    @Shadow
+    public abstract @Nullable CompiledShaderProgram getProgram(ShaderProgram shaderProgram);
 
     @Inject(method = "apply(Lnet/minecraft/client/renderer/ShaderManager$Configs;Lnet/minecraft/server/packs/resources/ResourceManager;Lnet/minecraft/util/profiling/ProfilerFiller;)V", at = @At("TAIL"))
-    private void reloadCustomShader(ShaderManager.Configs configs, ResourceManager resourceManager, ProfilerFiller profilerFiller, CallbackInfo ci) {
+    private void reloadCustomShader(ShaderManager.Configs configs, ResourceManager resourceManager,
+            ProfilerFiller profilerFiller, CallbackInfo ci) {
         ResourceLocation resourceLocation = ResourceLocation.withDefaultNamespace("core/position_multi_tex");
-        CompiledShaderProgram shaderProgram = getProgram(new ShaderProgram(resourceLocation, DefaultVertexFormat.POSITION_TEX, ShaderDefines.EMPTY));
-        if (shaderProgram != null) ExordiumModBase.instance.getCustomShaderManager().registerShaderInstance(shaderProgram);
-        else throw new RuntimeException("Unable to load Exordium shader, see above error.");
+        CompiledShaderProgram shaderProgram = getProgram(
+                new ShaderProgram(resourceLocation, DefaultVertexFormat.POSITION_TEX, ShaderDefines.EMPTY));
+        if (shaderProgram != null)
+            ExordiumModBase.instance.getCustomShaderManager().registerShaderInstance(shaderProgram);
+        else
+            throw new RuntimeException("Unable to load Exordium shader, see above error.");
     }
 }
 

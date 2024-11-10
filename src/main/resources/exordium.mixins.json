@@ -1,29 +1,29 @@
 {
-  "required": true,
-  "minVersion": "0.8",
-  "package": "dev.tr7zw.exordium.mixin",
-  "compatibilityLevel": "JAVA_16",
-  "mixins": [
-    "BossHealthOverlayMixin",
-    "FoodDataAccessor",
-    "LerpingBossEventMixin"
-  ],
-  "client": [
-    "ChatComponentMixin",
-    "CrosshairMixin",
-    "GameRendererMixin",
-    "GlStateManagerMixin",
-    "GuiDebugOverlayMixin",
-    "GuiExperienceMixin",
-    "GuiHealthMixin",
-    "GuiHotbarMixin",
-    "GuiMixin",
-    "MinecraftMixin",
-    "PlayerTabOverlayMixin",
-    "ScoreboardMixin",
-    "VignetteMixin"
-  ],
-  "injectors": {
-    "defaultRequire": 1
-  }
+    "required": true,
+    "minVersion": "0.8",
+    "package": "dev.tr7zw.exordium.mixin",
+    "compatibilityLevel": "JAVA_16",
+    "mixins": [
+        "BossHealthOverlayMixin",
+        "FoodDataAccessor",
+        "LerpingBossEventMixin"
+    ],
+    "client": [
+        "ChatComponentMixin",
+        "CrosshairMixin",
+        "GameRendererMixin",
+        "GlStateManagerMixin",
+        "GuiDebugOverlayMixin",
+        "GuiExperienceMixin",
+        "GuiHealthMixin",
+        "GuiHotbarMixin",
+        "GuiMixin",
+        "MinecraftMixin",
+        "PlayerTabOverlayMixin",
+        "ScoreboardMixin",
+        "VignetteMixin"
+    ],
+    "injectors": {
+        "defaultRequire": 1
+    }
 }

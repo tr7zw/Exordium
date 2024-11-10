@@ -1,6 +1,5 @@
 package dev.tr7zw.exordium.render;
 
-
 import org.joml.Matrix4f;
 import org.joml.Vector3f;
 

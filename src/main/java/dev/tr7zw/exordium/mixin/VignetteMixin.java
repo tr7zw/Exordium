@@ -94,8 +94,8 @@ public class VignetteMixin {
         }
 
         //#if MC >= 12102
-        guiGraphics.blit(RenderType::guiTextured, texture, 0, 0, 0.0F, 0.0F, guiGraphics.guiWidth(), guiGraphics.guiHeight(),
-                guiGraphics.guiWidth(), guiGraphics.guiHeight(), color);
+        guiGraphics.blit(RenderType::guiTextured, texture, 0, 0, 0.0F, 0.0F, guiGraphics.guiWidth(),
+                guiGraphics.guiHeight(), guiGraphics.guiWidth(), guiGraphics.guiHeight(), color);
         //#else
         //$$guiGraphics.blit(texture, 0, 0, -90, 0.0F, 0.0F, guiGraphics.guiWidth(), guiGraphics.guiHeight(),
         //$$                guiGraphics.guiWidth(), guiGraphics.guiHeight());
