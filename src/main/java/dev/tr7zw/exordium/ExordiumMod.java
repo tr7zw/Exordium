@@ -19,6 +19,7 @@ public class ExordiumMod extends ExordiumModBase implements ClientModInitializer
     public void onInitializeClient() {
         super.onInitialize();
 
+        //#if MC >= 12102
         ResourceManagerHelper.get(PackType.CLIENT_RESOURCES)
                 .registerReloadListener(new SimpleResourceReloadListener<>() {
                     @Override
@@ -27,18 +28,38 @@ public class ExordiumMod extends ExordiumModBase implements ClientModInitializer
                     }
 
                     @Override
-                    public CompletableFuture<Object> load(ResourceManager manager, ProfilerFiller profiler,
-                            Executor executor) {
+                    public CompletableFuture<Object> load(ResourceManager manager, Executor executor) {
                         return CompletableFuture.completedFuture(null);
                     }
 
                     @Override
-                    public CompletableFuture<Void> apply(Object data, ResourceManager manager, ProfilerFiller profiler,
-                            Executor executor) {
+                    public CompletableFuture<Void> apply(Object data, ResourceManager manager, Executor executor) {
                         ReloadTracker.reload();
                         return CompletableFuture.completedFuture(null);
                     }
                 });
+        //#else
+        //$$ResourceManagerHelper.get(PackType.CLIENT_RESOURCES)
+        //$$                .registerReloadListener(new SimpleResourceReloadListener<>() {
+        //$$                    @Override
+        //$$                    public ResourceLocation getFabricId() {
+        //$$                        return NMSHelper.getResourceLocation("exordium", "reload_listener");
+        //$$                    }
+        //$$
+        //$$                    @Override
+        //$$                    public CompletableFuture<Object> load(ResourceManager manager, ProfilerFiller profiler,
+        //$$                            Executor executor) {
+        //$$                        return CompletableFuture.completedFuture(null);
+        //$$                    }
+        //$$
+        //$$                    @Override
+        //$$                    public CompletableFuture<Void> apply(Object data, ResourceManager manager, ProfilerFiller profiler,
+        //$$                            Executor executor) {
+        //$$                        ReloadTracker.reload();
+        //$$                        return CompletableFuture.completedFuture(null);
+        //$$                    }
+        //$$                });
+        //#endif
     }
 
     @Override

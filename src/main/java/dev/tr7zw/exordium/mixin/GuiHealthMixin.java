@@ -62,7 +62,7 @@ public class GuiHealthMixin implements HealthAccess {
 
     @Shadow
     public void renderVehicleHealth(GuiGraphics guiGraphics) {
-    };
+    }
 
     @Shadow
     private LivingEntity getPlayerVehicleWithHealth() {

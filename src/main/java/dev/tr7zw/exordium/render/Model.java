@@ -1,5 +1,6 @@
 package dev.tr7zw.exordium.render;
 
+
 import org.joml.Matrix4f;
 import org.joml.Vector3f;
 
@@ -10,11 +11,14 @@ import com.mojang.blaze3d.vertex.Tesselator;
 import com.mojang.blaze3d.vertex.VertexBuffer;
 import com.mojang.blaze3d.vertex.VertexFormat.Mode;
 
-import net.minecraft.client.renderer.ShaderInstance;
+import net.minecraft.client.renderer.CompiledShaderProgram;
 
 //spotless:off
 //#if MC >= 12100
 import com.mojang.blaze3d.vertex.MeshData;
+//#if MC >= 12102
+import com.mojang.blaze3d.buffers.BufferUsage;
+//#endif
 //#else
 //$$ import com.mojang.blaze3d.vertex.VertexFormat;
 //#endif
@@ -44,7 +48,11 @@ public class Model {
             //#endif
             //spotless:on
         }
-        toDraw = new VertexBuffer(VertexBuffer.Usage.STATIC);
+        //#if MC >= 12102
+        toDraw = new VertexBuffer(BufferUsage.STATIC_WRITE);
+        //#else
+        //$$toDraw = new VertexBuffer(VertexBuffer.Usage.STATIC);
+        //#endif
         // spotless:off
         //#if MC >= 12100
         upload(bufferbuilder.build());
@@ -54,7 +62,7 @@ public class Model {
         //spotless:on
     }
 
-    public void drawWithShader(Matrix4f matrix4f, Matrix4f matrix4f2, ShaderInstance shaderInstance) {
+    public void drawWithShader(Matrix4f matrix4f, Matrix4f matrix4f2, CompiledShaderProgram shaderInstance) {
         toDraw.bind();
         toDraw.drawWithShader(matrix4f, matrix4f2, shaderInstance);
     }

@@ -19,7 +19,11 @@ public class BufferedComponent {
     @Getter
     private static Model model = null;
     private final Supplier<Config.ComponentSettings> settings;
-    private final RenderTarget guiTarget = new TextureTarget(100, 100, true, false);
+    //#if MC >= 12102
+    private final RenderTarget guiTarget = new TextureTarget(100, 100, true);
+    //#else
+    //$$private final RenderTarget guiTarget = new TextureTarget(100, 100, true, false);
+    //#endif
     private final ScreenTracker screenTracker = new ScreenTracker(guiTarget);
     private final BlendStateHolder blendStateHolder = new BlendStateHolder();
     private boolean forceBlending = false;
@@ -57,7 +61,11 @@ public class BufferedComponent {
         }
 
         guiTarget.setClearColor(0, 0, 0, 0);
-        guiTarget.clear(false);
+        //#if MC >= 12102
+        guiTarget.clear();
+        //#else
+        //$$guiTarget.clear(false);
+        //#endif
         guiTarget.bindWrite(false);
         ExordiumModBase.instance.setTemporaryScreenOverwrite(guiTarget);
 

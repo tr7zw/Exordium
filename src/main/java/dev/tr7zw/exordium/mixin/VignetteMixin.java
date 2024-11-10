@@ -1,5 +1,9 @@
 package dev.tr7zw.exordium.mixin;
 
+//#if MC >= 12102
+import net.minecraft.client.renderer.RenderType;
+import net.minecraft.util.ARGB;
+//#endif
 import org.spongepowered.asm.mixin.Final;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Shadow;
@@ -70,22 +74,38 @@ public class VignetteMixin {
         ResourceLocation texture = FAST_VIGNETTE_DARK_LOCATION;
         float brightness = ((Gui) (Object) this).vignetteBrightness;
         g = Mth.clamp(brightness, 0.0F, 1.0F);
+        int color = -1;
         if (f > 0.0F) {
             // red tint
             f = Mth.clamp(f, 0.0F, 1.0F);
             g = Math.max(g, f);
-            guiGraphics.setColor(f, 0.0F, 0.0F, g);
+            //#if MC >= 12102
+            color = ARGB.colorFromFloat(f, 0f, 0f, g);
+            //#else
+            //$$guiGraphics.setColor(f, 0.0F, 0.0F, g);
+            //#endif
             texture = FAST_VIGNETTE_LOCATION;
         } else {
-            guiGraphics.setColor(1.0F, 1.0F, 1.0F, g);
+            //#if MC >= 12102
+            color = ARGB.colorFromFloat(0f, 0f, 0f, g);
+            //#else
+            //$$guiGraphics.setColor(1.0F, 1.0F, 1.0F, g);
+            //#endif
         }
 
-        guiGraphics.blit(texture, 0, 0, -90, 0.0F, 0.0F, guiGraphics.guiWidth(), guiGraphics.guiHeight(),
-                guiGraphics.guiWidth(), guiGraphics.guiHeight());
+        //#if MC >= 12102
+        guiGraphics.blit(RenderType::guiTextured, texture, 0, 0, 0.0F, 0.0F, guiGraphics.guiWidth(), guiGraphics.guiHeight(),
+                guiGraphics.guiWidth(), guiGraphics.guiHeight(), color);
+        //#else
+        //$$guiGraphics.blit(texture, 0, 0, -90, 0.0F, 0.0F, guiGraphics.guiWidth(), guiGraphics.guiHeight(),
+        //$$                guiGraphics.guiWidth(), guiGraphics.guiHeight());
+        //#endif
 
         RenderSystem.depthMask(true);
         RenderSystem.enableDepthTest();
-        guiGraphics.setColor(1.0F, 1.0F, 1.0F, 1.0F);
+        //#if MC < 12102
+        //$$guiGraphics.setColor(1.0F, 1.0F, 1.0F, 1.0F);
+        //#endif
         RenderSystem.defaultBlendFunc();
     }
 

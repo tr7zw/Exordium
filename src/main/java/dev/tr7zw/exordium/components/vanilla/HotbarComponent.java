@@ -80,7 +80,11 @@ public class HotbarComponent implements BufferComponent<Void> {
             if (item.isEnchanted()) {
                 this.hasEnchantedItem = true;
             }
-            if (player.getCooldowns().isOnCooldown(item.getItem())) {
+            //#if MC >= 12102
+            if (player.getCooldowns().isOnCooldown(item)) {
+            //#else
+            //$$if (player.getCooldowns().isOnCooldown(item.getItem())) {
+            //#endif
                 this.cooldownActive = true;
             }
         } else {

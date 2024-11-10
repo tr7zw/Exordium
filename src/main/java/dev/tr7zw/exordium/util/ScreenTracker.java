@@ -21,8 +21,12 @@ public class ScreenTracker {
     }
 
     public void updateState() {
-        target.resize(Minecraft.getInstance().getWindow().getWidth(), Minecraft.getInstance().getWindow().getHeight(),
-                true);
+        //#if MC >= 12102
+        target.resize(Minecraft.getInstance().getWindow().getWidth(), Minecraft.getInstance().getWindow().getHeight());
+        //#else
+        //$$target.resize(Minecraft.getInstance().getWindow().getWidth(), Minecraft.getInstance().getWindow().getHeight(),
+        //$$        true);
+        //#endif
         guiScale = Minecraft.getInstance().options.guiScale().get();
     }
 
