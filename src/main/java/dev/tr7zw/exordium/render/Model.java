@@ -64,9 +64,9 @@ public class Model {
 
     //#if MC >= 12100
     private void upload(MeshData renderedBuffer) {
-    //#else
-    //$$ private void upload(BufferBuilder.RenderedBuffer renderedBuffer) {
-    //#endif
+        //#else
+        //$$ private void upload(BufferBuilder.RenderedBuffer renderedBuffer) {
+        //#endif
         RenderSystem.assertOnRenderThread();
         toDraw.bind();
         toDraw.upload(renderedBuffer);

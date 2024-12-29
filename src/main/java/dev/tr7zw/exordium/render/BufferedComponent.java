@@ -6,6 +6,8 @@ import org.joml.Vector3f;
 
 import com.mojang.blaze3d.pipeline.RenderTarget;
 import com.mojang.blaze3d.pipeline.TextureTarget;
+import com.mojang.blaze3d.platform.GlStateManager;
+
 import dev.tr7zw.exordium.ExordiumModBase;
 import dev.tr7zw.exordium.util.BlendStateHolder;
 import dev.tr7zw.exordium.util.ScreenTracker;
@@ -65,15 +67,17 @@ public class BufferedComponent {
         guiTarget.clear();
         //#else
         //$$guiTarget.clear(false);
+        //$$guiTarget.bindWrite(false);
         //#endif
-        guiTarget.bindWrite(false);
-        ExordiumModBase.instance.setTemporaryScreenOverwrite(guiTarget);
 
         ExordiumModBase.correctBlendMode();
         if (forceBlending || settings.get().isForceBlend()) {
             ExordiumModBase.setForceBlend(true);
         }
+
         guiTarget.bindWrite(false);
+        // TODO: This needs to happen last, as it disabled the target binding... but do we even need that?
+        ExordiumModBase.instance.setTemporaryScreenOverwrite(guiTarget);
     }
 
     public void renderBuffer() {

@@ -10,6 +10,8 @@ import dev.tr7zw.exordium.util.PacingTracker;
 import dev.tr7zw.exordium.util.ReloadListener;
 import dev.tr7zw.exordium.versionless.config.Config;
 import lombok.Getter;
+import net.minecraft.client.gui.GuiGraphics;
+import net.minecraft.client.renderer.RenderType;
 import net.minecraft.resources.ResourceLocation;
 
 public final class BufferInstance<T> {
@@ -44,7 +46,7 @@ public final class BufferInstance<T> {
      * @param context
      * @return
      */
-    public boolean renderBuffer(int ticks, T context) {
+    public boolean renderBuffer(int ticks, T context, GuiGraphics guiGraphics) {
         if (!enabled()) {
             // not enabled, skip
             return false;
@@ -59,6 +61,7 @@ public final class BufferInstance<T> {
 
         if (updateFrame) {
             // start capturing
+            guiGraphics.flush();
             isCapturing = true;
             buffer.captureComponent();
             return false;
@@ -88,7 +91,7 @@ public final class BufferInstance<T> {
      * 
      * @param context
      */
-    public void postRender(T context) {
+    public void postRender(T context, GuiGraphics guiGraphics) {
         buffer.captureBlendstateSample();
         if (!isCapturing) {
             // we were not capturing, so nothing to do
@@ -96,6 +99,7 @@ public final class BufferInstance<T> {
         }
         isCapturing = false;
         component.captureState(context);
+        guiGraphics.flush();
         pacing.setCooldown(System.currentTimeMillis() + (1000 / settings.get().getMaxFps()));
         buffer.finishCapture();
     }

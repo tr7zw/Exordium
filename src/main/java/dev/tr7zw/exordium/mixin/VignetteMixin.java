@@ -44,14 +44,14 @@ public class VignetteMixin {
         BufferInstance<Float> buffer = ExordiumModBase.instance.getBufferManager()
                 .getBufferInstance(VignetteComponent.getId(), Float.class);
         float brightness = ((Gui) (Object) this).vignetteBrightness;
-        if (!buffer.renderBuffer(0, brightness)) {
+        if (!buffer.renderBuffer(0, brightness, guiGraphics)) {
             if (buffer.enabled()) {
                 renderCustomVignette(guiGraphics);
             } else {
                 operation.call(gui, guiGraphics, entity);
             }
         }
-        buffer.postRender(brightness);
+        buffer.postRender(brightness, guiGraphics);
     }
 
     public void renderCustomVignette(GuiGraphics guiGraphics) {

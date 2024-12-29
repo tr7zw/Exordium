@@ -26,12 +26,12 @@ public class CrosshairMixin {
     @Inject(method = "renderCrosshair", at = @At("HEAD"), cancellable = true)
     //#if MC >= 12100
     private void renderCrosshairStart(GuiGraphics guiGraphics, DeltaTracker delta, CallbackInfo ci) {
-    //#else
-    //$$ private void renderCrosshairStart(GuiGraphics guiGraphics, float f, CallbackInfo ci) {
-    //#endif
+        //#else
+        //$$ private void renderCrosshairStart(GuiGraphics guiGraphics, float f, CallbackInfo ci) {
+        //#endif
         BufferInstance<DebugScreenOverlay> buffer = ExordiumModBase.instance.getBufferManager()
                 .getBufferInstance(CrosshairComponent.getId(), DebugScreenOverlay.class);
-        if (buffer.renderBuffer(0, debugOverlay)) {
+        if (buffer.renderBuffer(0, debugOverlay, guiGraphics)) {
             ci.cancel();
         }
 
@@ -40,12 +40,12 @@ public class CrosshairMixin {
     @Inject(method = "renderCrosshair", at = @At("TAIL"))
     //#if MC >= 12100
     private void renderCrosshairEnd(GuiGraphics guiGraphics, DeltaTracker delta, CallbackInfo ci) {
-    //#else
-    //$$ private void renderCrosshairEnd(GuiGraphics guiGraphics, float f, CallbackInfo ci) {
-    //#endif
+        //#else
+        //$$ private void renderCrosshairEnd(GuiGraphics guiGraphics, float f, CallbackInfo ci) {
+        //#endif
         BufferInstance<DebugScreenOverlay> buffer = ExordiumModBase.instance.getBufferManager()
                 .getBufferInstance(CrosshairComponent.getId(), DebugScreenOverlay.class);
-        buffer.postRender(debugOverlay);
+        buffer.postRender(debugOverlay, guiGraphics);
     }
 
 }
