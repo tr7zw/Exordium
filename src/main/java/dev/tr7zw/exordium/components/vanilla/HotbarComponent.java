@@ -6,6 +6,7 @@ import lombok.Getter;
 import net.minecraft.client.AttackIndicatorStatus;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.resources.model.BakedModel;
+import net.minecraft.core.component.DataComponents;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.player.Player;
@@ -18,7 +19,7 @@ public class HotbarComponent implements BufferComponent<Void> {
     private static final ResourceLocation id = NMSHelper.getResourceLocation("minecraft", "hotbar");
 
     private float lastAttackState = 0;
-    private final BakedModel[] hotbarModels = new BakedModel[10];
+    private final Object[] hotbarModels = new Object[10];
     private final int[] itemPopAnimation = new int[10];
     private final int[] itemAmount = new int[10];
     private final int[] itemDurability = new int[10];
@@ -73,7 +74,7 @@ public class HotbarComponent implements BufferComponent<Void> {
 
     private void store(ItemStack item, int id, Player player) {
         if (item != null && !item.isEmpty()) {
-            hotbarModels[id] = Minecraft.getInstance().getItemRenderer().getModel(item, player.level(), player, 0);
+            hotbarModels[id] = getModel(item, player);
             itemPopAnimation[id] = item.getPopTime();
             itemAmount[id] = item.getCount();
             itemDurability[id] = item.getDamageValue();
@@ -106,8 +107,7 @@ public class HotbarComponent implements BufferComponent<Void> {
             if (itemDurability[id] != item.getDamageValue()) {
                 return true;
             }
-            if (Minecraft.getInstance().getItemRenderer().getModel(item, player.level(), player,
-                    0) != hotbarModels[id]) {
+            if (getModel(item, player) != hotbarModels[id]) {
                 return true;
             }
         } else if (hotbarModels[id] != null) {
@@ -119,6 +119,20 @@ public class HotbarComponent implements BufferComponent<Void> {
     private Player getCameraPlayer() {
         Entity var2 = minecraft.getCameraEntity();
         return var2 instanceof Player player ? player : null;
+    }
+
+    private Object getModel(ItemStack itemStack, Player player) {
+        //#if MC >= 12104
+//        return Math.random(); // FIXME The new ItemModel class/ItemStackRenderState logic is incompatible with all of this
+        ResourceLocation resourceLocation = (ResourceLocation) itemStack.get(DataComponents.ITEM_MODEL);
+        if (resourceLocation != null) {
+            return minecraft.getModelManager().getItemModel(resourceLocation);
+        } else {
+            return null;
+        }
+        //#else
+        //$$ return minecraft.getItemRenderer().getModel(itemStack, player.level(), player, 0);
+        //#endif
     }
 
 }
