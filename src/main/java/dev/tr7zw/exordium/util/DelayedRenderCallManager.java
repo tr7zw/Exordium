@@ -34,7 +34,11 @@ public class DelayedRenderCallManager {
         RenderSystem.depthMask(false);
         RenderSystem.enableBlend();
         RenderSystem.blendFunc(GlStateManager.SourceFactor.ONE, GlStateManager.DestFactor.ONE_MINUS_SRC_ALPHA);
-        RenderSystem.setShader(shaderManager::getPositionMultiTexShader);
+        //#if MC >= 12102
+        RenderSystem.setShader(shaderManager.getPositionMultiTexShader());
+        //#else
+        //$$RenderSystem.setShader(shaderManager::getPositionMultiTexShader);
+        //#endif
         RenderSystem.setShaderColor(1.0F, 1.0F, 1.0F, 1.0F);
         Model model = BufferedComponent.getModel();
         int textureId = 0;

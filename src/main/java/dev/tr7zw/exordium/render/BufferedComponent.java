@@ -6,6 +6,8 @@ import org.joml.Vector3f;
 
 import com.mojang.blaze3d.pipeline.RenderTarget;
 import com.mojang.blaze3d.pipeline.TextureTarget;
+import com.mojang.blaze3d.platform.GlStateManager;
+
 import dev.tr7zw.exordium.ExordiumModBase;
 import dev.tr7zw.exordium.util.BlendStateHolder;
 import dev.tr7zw.exordium.util.ScreenTracker;
@@ -19,7 +21,11 @@ public class BufferedComponent {
     @Getter
     private static Model model = null;
     private final Supplier<Config.ComponentSettings> settings;
-    private final RenderTarget guiTarget = new TextureTarget(100, 100, true, false);
+    //#if MC >= 12102
+    private final RenderTarget guiTarget = new TextureTarget(100, 100, true);
+    //#else
+    //$$private final RenderTarget guiTarget = new TextureTarget(100, 100, true, false);
+    //#endif
     private final ScreenTracker screenTracker = new ScreenTracker(guiTarget);
     private final BlendStateHolder blendStateHolder = new BlendStateHolder();
     private boolean forceBlending = false;
@@ -57,15 +63,21 @@ public class BufferedComponent {
         }
 
         guiTarget.setClearColor(0, 0, 0, 0);
-        guiTarget.clear(false);
-        guiTarget.bindWrite(false);
-        ExordiumModBase.instance.setTemporaryScreenOverwrite(guiTarget);
+        //#if MC >= 12102
+        guiTarget.clear();
+        //#else
+        //$$guiTarget.clear(false);
+        //$$guiTarget.bindWrite(false);
+        //#endif
 
         ExordiumModBase.correctBlendMode();
         if (forceBlending || settings.get().isForceBlend()) {
             ExordiumModBase.setForceBlend(true);
         }
+
         guiTarget.bindWrite(false);
+        // TODO: This needs to happen last, as it disabled the target binding... but do we even need that?
+        ExordiumModBase.instance.setTemporaryScreenOverwrite(guiTarget);
     }
 
     public void renderBuffer() {

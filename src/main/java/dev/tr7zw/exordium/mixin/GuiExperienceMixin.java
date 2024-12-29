@@ -25,10 +25,10 @@ public class GuiExperienceMixin {
     private void renderExperienceBarWrapper(Gui gui, GuiGraphics guiGraphics, int i, final Operation<Void> operation) {
         BufferInstance<Void> buffer = ExordiumModBase.instance.getBufferManager()
                 .getBufferInstance(ExperienceComponent.getId(), Void.class);
-        if (!buffer.renderBuffer(0, null)) {
+        if (!buffer.renderBuffer(0, null, guiGraphics)) {
             operation.call(gui, guiGraphics, i);
         }
-        buffer.postRender(null);
+        buffer.postRender(null, guiGraphics);
     }
 
 }

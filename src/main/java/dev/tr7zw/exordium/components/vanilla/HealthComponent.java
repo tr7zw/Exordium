@@ -2,6 +2,7 @@ package dev.tr7zw.exordium.components.vanilla;
 
 import dev.tr7zw.exordium.access.HealthAccess;
 import dev.tr7zw.exordium.components.BufferComponent;
+import dev.tr7zw.exordium.mixin.FoodDataAccessor;
 import dev.tr7zw.util.NMSHelper;
 import lombok.Getter;
 import net.minecraft.client.Minecraft;
@@ -47,7 +48,7 @@ public class HealthComponent implements BufferComponent<HealthAccess> {
         lastPlayerHealth = minecraft.player.getHealth();
         lastPlayerAbsorption = minecraft.player.getAbsorptionAmount();
         lastFoodLevel = minecraft.player.getFoodData().getFoodLevel();
-        lastExhaustionLevel = minecraft.player.getFoodData().getExhaustionLevel();
+        lastExhaustionLevel = ((FoodDataAccessor) minecraft.player.getFoodData()).getExhaustionLevel();
         hadVisualEffects = minecraft.player.hasEffect(MobEffects.HUNGER)
                 || minecraft.player.hasEffect(MobEffects.REGENERATION);
     }
@@ -68,7 +69,7 @@ public class HealthComponent implements BufferComponent<HealthAccess> {
                 || lastSaturation != minecraft.player.getFoodData().getSaturationLevel()
                 || (hasVisualEffects || (hasVisualEffects != hadVisualEffects && lastRenderedTick != tickCount))
                 || lastFoodLevel != minecraft.player.getFoodData().getFoodLevel()
-                || lastExhaustionLevel != minecraft.player.getFoodData().getExhaustionLevel()
+                || lastExhaustionLevel != ((FoodDataAccessor) minecraft.player.getFoodData()).getExhaustionLevel()
                 || lastPlayerHealth != minecraft.player.getHealth() || Mth.ceil(lastPlayerHealth) <= 4
                 || lastPlayerAbsorption != minecraft.player.getAbsorptionAmount();
     }

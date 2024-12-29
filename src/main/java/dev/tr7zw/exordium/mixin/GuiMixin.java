@@ -26,11 +26,9 @@ import net.minecraft.client.gui.components.PlayerTabOverlay;
 import net.minecraft.world.scores.Objective;
 import net.minecraft.world.scores.Scoreboard;
 
-//spotless:off
 //#if MC >= 12100
 import net.minecraft.client.DeltaTracker;
 //#endif
-//spotless:on
 
 @Mixin(Gui.class)
 public abstract class GuiMixin implements GuiAccess {
@@ -52,10 +50,10 @@ public abstract class GuiMixin implements GuiAccess {
         ChatAccess chatAccess = (ChatAccess) chat;
         BufferInstance<ChatAccess> buffer = ExordiumModBase.instance.getBufferManager()
                 .getBufferInstance(dev.tr7zw.exordium.components.vanilla.ChatComponent.getId(), ChatAccess.class);
-        if (!buffer.renderBuffer(tickCount, chatAccess)) {
+        if (!buffer.renderBuffer(tickCount, chatAccess, guiGraphics)) {
             operation.call(instance, guiGraphics, tickCount, j, k, b);
         }
-        buffer.postRender(chatAccess);
+        buffer.postRender(chatAccess, guiGraphics);
     }
 
     @WrapOperation(method = "renderTabList", at = {
@@ -66,10 +64,10 @@ public abstract class GuiMixin implements GuiAccess {
         BufferInstance<PlayerListContext> buffer = ExordiumModBase.instance.getBufferManager()
                 .getBufferInstance(PlayerListComponent.getId(), PlayerListContext.class);
         PlayerListContext context = new PlayerListContext(tablistAccess, scoreboard, objective2);
-        if (!buffer.renderBuffer(tickCount, context)) {
+        if (!buffer.renderBuffer(tickCount, context, guiGraphics)) {
             operation.call(instance, guiGraphics, screenWidth, scoreboard, objective2);
         }
-        buffer.postRender(context);
+        buffer.postRender(context, guiGraphics);
     }
 
     @WrapOperation(method = "method_55808", at = @At(value = "INVOKE", target = "Lnet/minecraft/client/gui/components/BossHealthOverlay;render(Lnet/minecraft/client/gui/GuiGraphics;)V"))
@@ -78,20 +76,18 @@ public abstract class GuiMixin implements GuiAccess {
         @SuppressWarnings("unchecked")
         BufferInstance<BossOverlayAccess> buffer = ExordiumModBase.instance.getBufferManager()
                 .getBufferInstance(BossHealthBarComponent.getId(), BossOverlayAccess.class);
-        if (!buffer.renderBuffer(tickCount, overlayAccess)) {
+        if (!buffer.renderBuffer(tickCount, overlayAccess, guiGraphics)) {
             original.call(instance, guiGraphics);
         }
-        buffer.postRender(overlayAccess);
+        buffer.postRender(overlayAccess, guiGraphics);
     }
 
     @Inject(method = "render", at = @At(value = "TAIL"))
-    // spotless:off
     //#if MC >= 12100
     public void render(GuiGraphics guiGraphics, DeltaTracker partialTick, CallbackInfo ci) {
-    //#else
-    //$$ public void render(GuiGraphics guiGraphics, float partialTick, CallbackInfo ci) {
-    //#endif
-    //spotless:on
+        //#else
+        //$$ public void render(GuiGraphics guiGraphics, float partialTick, CallbackInfo ci) {
+        //#endif
         ExordiumModBase.instance.getDelayedRenderCallManager().renderComponents();
     }
 

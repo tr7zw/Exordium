@@ -42,13 +42,13 @@ public class GuiHealthMixin implements HealthAccess {
     private void renderPlayerHealthWrapper(Gui gui, GuiGraphics guiGraphics, final Operation<Void> operation) {
         BufferInstance<HealthAccess> buffer = ExordiumModBase.instance.getBufferManager()
                 .getBufferInstance(HealthComponent.getId(), HealthAccess.class);
-        if (!buffer.renderBuffer(tickCount, this)) {
+        if (!buffer.renderBuffer(tickCount, this, guiGraphics)) {
             operation.call(gui, guiGraphics);
             renderingMountHealth = true;
             renderVehicleHealth(guiGraphics);
             renderingMountHealth = false;
         }
-        buffer.postRender(this);
+        buffer.postRender(this, guiGraphics);
     }
 
     @WrapOperation(method = "renderHotbarAndDecorations", at = @At(value = "INVOKE", target = "Lnet/minecraft/client/gui/Gui;renderVehicleHealth(Lnet/minecraft/client/gui/GuiGraphics;)V"))
@@ -62,7 +62,7 @@ public class GuiHealthMixin implements HealthAccess {
 
     @Shadow
     public void renderVehicleHealth(GuiGraphics guiGraphics) {
-    };
+    }
 
     @Shadow
     private LivingEntity getPlayerVehicleWithHealth() {
