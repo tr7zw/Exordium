@@ -16,7 +16,7 @@ Renders the GUI at a lower fixed framerate (configurable in the settings), freei
 
 ## Compatibility
 
-__This is still work in progress software! There will be visual issues/compatibility issues with other mods, please report them on Github!__
+__This is still work in progress software! There will be visual issues/compatibility issues with other mods!__
 
 ### Affected vanilla features
 
@@ -43,21 +43,26 @@ __This is still work in progress software! There will be visual issues/compatibi
 - JourneyMap
 - ToroHealth Damage Indicator
 - BetterF3
-- Roughly Enough Items(REI)(has small visual issues with enchants)
 
 ### Not compatible
 
 - VulkanMod
+- High resolution fonts on signs(disable buffering in the config)
+- Caxton(same issue as above)
+- Inventorio
+- MiniHUD(bug on their side, the fps counter shows the gui fps instead of the world fps)
+- Canvas
+- Many other mods that render their own GUI elements, the wilder the mod, the more likely it is to not work with this mod.
 
 ## FAQ
 
 ### Forge support?
 
-Currently not planned, but I might add it in the future.
+No.
 
 ### Does this work with mod xyz?
 
-I don't know, I haven't tested it with every mod out there. If you find a mod that doesn't work with this mod, please report it on Github.
+I don't know, I haven't tested it with every mod out there. If you find a mod that doesn't work with this mod, you can report it on Github(but there is no guarantee that it will be fixed).
 
 ### Backport to 1.16.5/1.12.2/1.8.9?
 
