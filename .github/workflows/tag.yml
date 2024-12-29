@@ -38,6 +38,25 @@ jobs:
           name: ${{github.ref_name}}-1.20.6 - Fabric
           files: 'versions/1.20.6-fabric/build/libs/!(*-@(dev|sources|javadoc|all)).jar'
           game-versions: 1.20.6
+      - name: Publish-1.21-forge-Curseforge
+        uses: Kir-Antipov/mc-publish@v3.3.0
+        with:
+          curseforge-id: 681953
+          curseforge-token: ${{ secrets.CURSEFORGE_TOKEN }}
+          loaders: forge
+          name: ${{github.ref_name}}-1.21 - Forge
+          version-type: beta
+          files: 'versions/1.21-forge/build/libs/!(*-@(dev|sources|javadoc)).jar'
+          game-versions: 1.21
+      - name: Publish-1.21-forge-Modrinth
+        uses: Kir-Antipov/mc-publish@v3.3.0
+        with:
+          modrinth-id: DynYZEae
+          modrinth-token: ${{ secrets.MODRINTH_TOKEN }}
+          loaders: forge
+          name: ${{github.ref_name}}-1.21 - Forge
+          files: 'versions/1.21-forge/build/libs/!(*-@(dev|sources|javadoc)).jar'
+          game-versions: 1.21
       - name: Publish-1.21-fabric-Curseforge
         uses: Kir-Antipov/mc-publish@v3.3.0
         with:
