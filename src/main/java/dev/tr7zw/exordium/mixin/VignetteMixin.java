@@ -55,7 +55,6 @@ public class VignetteMixin {
     }
 
     public void renderCustomVignette(GuiGraphics guiGraphics) {
-        // FIXME: breaks the 1.21 pause menu blur
         WorldBorder worldBorder = minecraft.level.getWorldBorder();
         float f = 0.0F;
         float g = (float) worldBorder.getDistanceToBorder(minecraft.player);

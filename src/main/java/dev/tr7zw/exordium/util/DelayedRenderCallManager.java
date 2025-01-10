@@ -9,11 +9,14 @@ import com.mojang.blaze3d.systems.RenderSystem;
 import dev.tr7zw.exordium.ExordiumModBase;
 import dev.tr7zw.exordium.render.BufferedComponent;
 import dev.tr7zw.exordium.render.Model;
+import dev.tr7zw.exordium.util.rendersystem.BlendStateHolder;
+import dev.tr7zw.exordium.util.rendersystem.DepthStateHolder;
+import dev.tr7zw.exordium.util.rendersystem.MultiStateHolder;
+import dev.tr7zw.exordium.util.rendersystem.ShaderColorHolder;
 
 /**
  * Iris causes issues when trying to switch render buffers during world
- * rendering. This class delays the draws to after the world rendering(causes a
- * 1 frame delay in signs, which isn't that bad).
+ * rendering. This class delays the draws to after the world rendering
  * 
  * @author tr7zw
  *
@@ -21,14 +24,15 @@ import dev.tr7zw.exordium.render.Model;
 public class DelayedRenderCallManager {
     private static final int MAX_TEXTURES_PER_DRAW = 8;
     private final List<BufferedComponent> componentRenderCalls = new ArrayList<>();
-    private final BlendStateHolder blendStateHolder = new BlendStateHolder();
+    private final MultiStateHolder stateHolder = new MultiStateHolder(new BlendStateHolder(), new DepthStateHolder(),
+            new ShaderColorHolder());
 
     public void addBufferedComponent(BufferedComponent component) {
         this.componentRenderCalls.add(component);
     }
 
     public void renderComponents() {
-        blendStateHolder.fetch();
+        stateHolder.fetch();
         CustomShaderManager shaderManager = ExordiumModBase.instance.getCustomShaderManager();
         RenderSystem.disableDepthTest();
         RenderSystem.depthMask(false);
@@ -55,10 +59,7 @@ public class DelayedRenderCallManager {
             shaderManager.getPositionMultiTexTextureCountUniform().set(textureId);
             model.draw(RenderSystem.getModelViewMatrix());
         }
-        RenderSystem.depthMask(true);
-        RenderSystem.enableDepthTest();
-        RenderSystem.setShaderColor(1.0F, 1.0F, 1.0F, 1.0F);
-        blendStateHolder.apply();
+        stateHolder.apply();
         componentRenderCalls.clear();
     }
 }

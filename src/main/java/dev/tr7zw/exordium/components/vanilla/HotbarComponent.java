@@ -123,7 +123,7 @@ public class HotbarComponent implements BufferComponent<Void> {
 
     private Object getModel(ItemStack itemStack, Player player) {
         //#if MC >= 12104
-//        return Math.random(); // FIXME The new ItemModel class/ItemStackRenderState logic is incompatible with all of this
+        //        return Math.random(); // FIXME The new ItemModel class/ItemStackRenderState logic is incompatible with all of this
         ResourceLocation resourceLocation = (ResourceLocation) itemStack.get(DataComponents.ITEM_MODEL);
         if (resourceLocation != null) {
             return minecraft.getModelManager().getItemModel(resourceLocation);

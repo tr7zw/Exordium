@@ -1,6 +1,7 @@
 package dev.tr7zw.exordium.components.vanilla;
 
 import dev.tr7zw.exordium.components.BufferComponent;
+import dev.tr7zw.exordium.versionless.config.Config.ComponentSettings;
 import dev.tr7zw.util.NMSHelper;
 import lombok.Getter;
 import net.minecraft.client.AttackIndicatorStatus;
@@ -9,6 +10,7 @@ import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.components.DebugScreenOverlay;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.entity.LivingEntity;
+import net.minecraft.world.level.GameType;
 
 public class CrosshairComponent implements BufferComponent<DebugScreenOverlay> {
 
@@ -66,6 +68,15 @@ public class CrosshairComponent implements BufferComponent<DebugScreenOverlay> {
             return flag != lastHighlight;
         }
         return false;
+    }
+
+    @Override
+    public boolean enabled(ComponentSettings settings) {
+        if (!minecraft.options.getCameraType().isFirstPerson()
+                || minecraft.gameMode.getPlayerMode() == GameType.SPECTATOR) {
+            return false;
+        }
+        return BufferComponent.super.enabled(settings);
     }
 
 }

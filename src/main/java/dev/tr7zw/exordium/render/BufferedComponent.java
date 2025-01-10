@@ -6,11 +6,12 @@ import org.joml.Vector3f;
 
 import com.mojang.blaze3d.pipeline.RenderTarget;
 import com.mojang.blaze3d.pipeline.TextureTarget;
-import com.mojang.blaze3d.platform.GlStateManager;
 
 import dev.tr7zw.exordium.ExordiumModBase;
-import dev.tr7zw.exordium.util.BlendStateHolder;
 import dev.tr7zw.exordium.util.ScreenTracker;
+import dev.tr7zw.exordium.util.rendersystem.BlendStateHolder;
+import dev.tr7zw.exordium.util.rendersystem.DepthStateHolder;
+import dev.tr7zw.exordium.util.rendersystem.MultiStateHolder;
 import dev.tr7zw.exordium.versionless.config.Config;
 import lombok.Getter;
 import net.minecraft.client.Minecraft;
@@ -27,7 +28,7 @@ public class BufferedComponent {
     //$$private final RenderTarget guiTarget = new TextureTarget(100, 100, true, false);
     //#endif
     private final ScreenTracker screenTracker = new ScreenTracker(guiTarget);
-    private final BlendStateHolder blendStateHolder = new BlendStateHolder();
+    private final MultiStateHolder stateHolder = new MultiStateHolder(new BlendStateHolder(), new DepthStateHolder());
     private boolean forceBlending = false;
 
     public BufferedComponent(Supplier<Config.ComponentSettings> settings) {
@@ -83,7 +84,7 @@ public class BufferedComponent {
     public void renderBuffer() {
         ExordiumModBase.instance.getDelayedRenderCallManager().addBufferedComponent(this);
         // set the blendstate to what it would be if the normal render logic had run
-        blendStateHolder.apply();
+        stateHolder.apply();
     }
 
     public void finishCapture() {
@@ -101,12 +102,12 @@ public class BufferedComponent {
     }
 
     public boolean needsBlendstateSample() {
-        return !blendStateHolder.isBlendStateFetched();
+        return !stateHolder.isFetched();
     }
 
     public void captureBlendstateSample() {
         if (needsBlendstateSample()) {
-            blendStateHolder.fetch();
+            stateHolder.fetch();
         }
     }
 
