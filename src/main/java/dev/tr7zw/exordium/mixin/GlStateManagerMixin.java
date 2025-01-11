@@ -31,11 +31,4 @@ public class GlStateManagerMixin {
         }
     }
 
-    @Inject(method = "_glBindFramebuffer", at = @At("HEAD"), cancellable = true)
-    private static void _glBindFramebuffer(int i, int j, CallbackInfo ci) {
-        if (ExordiumModBase.instance.getTemporaryScreenOverwrite() != null) {
-            ci.cancel();
-        }
-    }
-
 }
