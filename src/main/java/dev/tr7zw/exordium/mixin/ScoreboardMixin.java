@@ -16,8 +16,13 @@ import net.minecraft.world.scores.Objective;
 @Mixin(Gui.class)
 public class ScoreboardMixin {
 
+    //#if MC >= 12005
     @WrapOperation(method = "renderScoreboardSidebar", at = {
             @At(value = "INVOKE", target = "Lnet/minecraft/client/gui/Gui;displayScoreboardSidebar(Lnet/minecraft/client/gui/GuiGraphics;Lnet/minecraft/world/scores/Objective;)V"), })
+    //#else
+    //$$ @WrapOperation(method = "render", at = {
+    //$$         @At(value = "INVOKE", target = "Lnet/minecraft/client/gui/Gui;displayScoreboardSidebar(Lnet/minecraft/client/gui/GuiGraphics;Lnet/minecraft/world/scores/Objective;)V"), })
+    //#endif
     private void displayScoreboardSidebarWrapper(Gui gui, GuiGraphics guiGraphics, Objective objective,
             final Operation<Void> operation) {
         BufferInstance<Void> buffer = ExordiumModBase.instance.getBufferManager()

@@ -11,7 +11,6 @@ import dev.tr7zw.exordium.util.ReloadListener;
 import dev.tr7zw.exordium.versionless.config.Config;
 import lombok.Getter;
 import net.minecraft.client.gui.GuiGraphics;
-import net.minecraft.client.renderer.RenderType;
 import net.minecraft.resources.ResourceLocation;
 
 public final class BufferInstance<T> {

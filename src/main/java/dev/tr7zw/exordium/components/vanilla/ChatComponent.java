@@ -32,7 +32,6 @@ public class ChatComponent implements BufferComponent<ChatAccess> {
                 || messageCount != context.getTrimmedMessages().size() || context.isChatFocused() != wasFocused
                 || msg != lastMessage;
         if (changed) {
-            System.out.println("Changed");
             return true;
         }
         int j = context.getLinesPerPage();

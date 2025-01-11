@@ -24,15 +24,23 @@ public class GuiHotbarMixin {
             @At(value = "INVOKE", target = "Lnet/minecraft/client/gui/Gui;renderItemHotbar(Lnet/minecraft/client/gui/GuiGraphics;Lnet/minecraft/client/DeltaTracker;)V") })
     private void renderHotbarWrapper(Gui gui, GuiGraphics guiGraphics, DeltaTracker f,
             final Operation<Void> operation) {
-        //#else
+        //#elseif MC >= 12005
         //$$     @WrapOperation(method = "renderHotbarAndDecorations", at = {
         //$$         @At(value = "INVOKE", target = "Lnet/minecraft/client/gui/Gui;renderItemHotbar(Lnet/minecraft/client/gui/GuiGraphics;F)V")})
         //$$ private void renderHotbarWrapper(Gui gui, GuiGraphics guiGraphics, float f, final Operation<Void> operation) {
+        //#else
+        //$$ @WrapOperation(method = "render", at = {
+        //$$         @At(value = "INVOKE", target = "Lnet/minecraft/client/gui/Gui;renderHotbar(FLnet/minecraft/client/gui/GuiGraphics;)V"), })
+        //$$ private void renderHotbarWrapper(Gui gui, float f, GuiGraphics guiGraphics, final Operation<Void> operation) {
         //#endif
         BufferInstance<Void> buffer = ExordiumModBase.instance.getBufferManager()
                 .getBufferInstance(HotbarComponent.getId(), Void.class);
         if (!buffer.renderBuffer(0, null, guiGraphics)) {
+            //#if MC >= 12005
             operation.call(gui, guiGraphics, f);
+            //#else
+            //$$ operation.call(gui, f, guiGraphics);
+            //#endif
         }
         buffer.postRender(null, guiGraphics);
     }

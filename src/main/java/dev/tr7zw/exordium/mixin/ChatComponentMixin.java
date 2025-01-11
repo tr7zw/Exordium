@@ -9,7 +9,9 @@ import org.spongepowered.asm.mixin.Shadow;
 import dev.tr7zw.exordium.access.ChatAccess;
 import lombok.Getter;
 import net.minecraft.client.GuiMessage;
+import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.components.ChatComponent;
+import net.minecraft.client.gui.screens.ChatScreen;
 
 @Mixin(ChatComponent.class)
 public abstract class ChatComponentMixin implements ChatAccess {
@@ -20,6 +22,8 @@ public abstract class ChatComponentMixin implements ChatAccess {
     private List<GuiMessage.Line> trimmedMessages;
     @Shadow
     private int chatScrollbarPos;
+    @Shadow
+    private Minecraft minecraft;
 
     @Override
     public int getChatScollbarPos() {
@@ -27,8 +31,9 @@ public abstract class ChatComponentMixin implements ChatAccess {
     }
 
     @Override
-    @Shadow
-    public abstract boolean isChatFocused();
+    public boolean isChatFocused() {
+        return minecraft.screen instanceof ChatScreen;
+    };
 
     @Override
     @Shadow

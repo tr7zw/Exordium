@@ -43,21 +43,38 @@ public abstract class GuiMixin implements GuiAccess {
     @Shadow
     public abstract BossHealthOverlay getBossOverlay();
 
+    //#if MC >= 12005
     @WrapOperation(method = "renderChat", at = {
             @At(value = "INVOKE", target = "Lnet/minecraft/client/gui/components/ChatComponent;render(Lnet/minecraft/client/gui/GuiGraphics;IIIZ)V"), })
+    //#else
+    //$$  @WrapOperation(method = "render", at = {
+    //$$          @At(value = "INVOKE", target = "Lnet/minecraft/client/gui/components/ChatComponent;render(Lnet/minecraft/client/gui/GuiGraphics;III)V"), })
+    //#endif
     private void renderChatWrapper(ChatComponent instance, GuiGraphics guiGraphics, int tickCount, int j, int k,
-            boolean b, final Operation<Void> operation) {
+            //#if MC >= 12005
+            boolean b,
+            //#endif
+            final Operation<Void> operation) {
         ChatAccess chatAccess = (ChatAccess) chat;
         BufferInstance<ChatAccess> buffer = ExordiumModBase.instance.getBufferManager()
                 .getBufferInstance(dev.tr7zw.exordium.components.vanilla.ChatComponent.getId(), ChatAccess.class);
         if (!buffer.renderBuffer(tickCount, chatAccess, guiGraphics)) {
+            //#if MC >= 12005
             operation.call(instance, guiGraphics, tickCount, j, k, b);
+            //#else
+            //$$ operation.call(instance, guiGraphics, tickCount, j, k);
+            //#endif
         }
         buffer.postRender(chatAccess, guiGraphics);
     }
 
+    //#if MC >= 12005
     @WrapOperation(method = "renderTabList", at = {
             @At(value = "INVOKE", target = "Lnet/minecraft/client/gui/components/PlayerTabOverlay;render(Lnet/minecraft/client/gui/GuiGraphics;ILnet/minecraft/world/scores/Scoreboard;Lnet/minecraft/world/scores/Objective;)V"), })
+    //#else
+    //$$  @WrapOperation(method = "render", at = {
+    //$$          @At(value = "INVOKE", target = "Lnet/minecraft/client/gui/components/PlayerTabOverlay;render(Lnet/minecraft/client/gui/GuiGraphics;ILnet/minecraft/world/scores/Scoreboard;Lnet/minecraft/world/scores/Objective;)V"), })
+    //#endif
     private void renderTablistWrapper(PlayerTabOverlay instance, GuiGraphics guiGraphics, int screenWidth,
             Scoreboard scoreboard, Objective objective2, final Operation<Void> operation) {
         TablistAccess tablistAccess = (TablistAccess) tabList;
@@ -70,7 +87,11 @@ public abstract class GuiMixin implements GuiAccess {
         buffer.postRender(context, guiGraphics);
     }
 
+    //#if MC >= 12005
     @WrapOperation(method = "method_55808", at = @At(value = "INVOKE", target = "Lnet/minecraft/client/gui/components/BossHealthOverlay;render(Lnet/minecraft/client/gui/GuiGraphics;)V"))
+    //#else
+    //$$ @WrapOperation(method = "render", at = @At(value = "INVOKE", target = "Lnet/minecraft/client/gui/components/BossHealthOverlay;render(Lnet/minecraft/client/gui/GuiGraphics;)V"))
+    //#endif
     private void renderBossBarWrapper(BossHealthOverlay instance, GuiGraphics guiGraphics, Operation<Void> original) {
         BossOverlayAccess overlayAccess = (BossOverlayAccess) this.getBossOverlay();
         @SuppressWarnings("unchecked")

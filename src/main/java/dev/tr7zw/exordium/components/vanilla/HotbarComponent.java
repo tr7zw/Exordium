@@ -5,12 +5,13 @@ import dev.tr7zw.util.NMSHelper;
 import lombok.Getter;
 import net.minecraft.client.AttackIndicatorStatus;
 import net.minecraft.client.Minecraft;
-import net.minecraft.client.resources.model.BakedModel;
-import net.minecraft.core.component.DataComponents;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
+//#if MC >= 12104
+import net.minecraft.core.component.DataComponents;
+//#endif
 
 public class HotbarComponent implements BufferComponent<Void> {
 

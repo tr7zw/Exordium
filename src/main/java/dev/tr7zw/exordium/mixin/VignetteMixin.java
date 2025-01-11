@@ -37,10 +37,16 @@ public class VignetteMixin {
     private static ResourceLocation FAST_VIGNETTE_DARK_LOCATION = NMSHelper.getResourceLocation("exordium",
             "textures/misc/fast_vignette_dark.png");
 
+    //#if MC >= 12005
     @WrapOperation(method = "renderCameraOverlays", at = {
             @At(value = "INVOKE", target = "Lnet/minecraft/client/gui/Gui;renderVignette(Lnet/minecraft/client/gui/GuiGraphics;Lnet/minecraft/world/entity/Entity;)V"), })
+    //#else
+    //$$ @WrapOperation(method = "render", at = {
+    //$$        @At(value = "INVOKE", target = "Lnet/minecraft/client/gui/Gui;renderVignette(Lnet/minecraft/client/gui/GuiGraphics;Lnet/minecraft/world/entity/Entity;)V"), })
+    //#endif
     private void renderVignetteWrapper(Gui gui, GuiGraphics guiGraphics, Entity entity,
             final Operation<Void> operation) {
+
         BufferInstance<Float> buffer = ExordiumModBase.instance.getBufferManager()
                 .getBufferInstance(VignetteComponent.getId(), Float.class);
         float brightness = ((Gui) (Object) this).vignetteBrightness;

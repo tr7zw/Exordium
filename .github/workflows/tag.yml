@@ -20,6 +20,24 @@ jobs:
         uses: softprops/action-gh-release@v1
         with:
           files: 'versions/**/build/libs/!(*-@(dev|sources|javadoc|all)).jar'
+      - name: Publish-1.20.4-fabric-Curseforge
+        uses: Kir-Antipov/mc-publish@v3.3.0
+        with:
+          curseforge-id: 681953
+          curseforge-token: ${{ secrets.CURSEFORGE_TOKEN }}
+          loaders: fabric
+          name: ${{github.ref_name}}-1.20.4 - Fabric
+          files: 'versions/1.20.4-fabric/build/libs/!(*-@(dev|sources|javadoc|all)).jar'
+          game-versions: 1.20.4
+      - name: Publish-1.20.4-fabric-Modrinth
+        uses: Kir-Antipov/mc-publish@v3.3.0
+        with:
+          modrinth-id: DynYZEae
+          modrinth-token: ${{ secrets.MODRINTH_TOKEN }}
+          loaders: fabric
+          name: ${{github.ref_name}}-1.20.4 - Fabric
+          files: 'versions/1.20.4-fabric/build/libs/!(*-@(dev|sources|javadoc|all)).jar'
+          game-versions: 1.20.4
       - name: Publish-1.20.6-fabric-Curseforge
         uses: Kir-Antipov/mc-publish@v3.3.0
         with:
