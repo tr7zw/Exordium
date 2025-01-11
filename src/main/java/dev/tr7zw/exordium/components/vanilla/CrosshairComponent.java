@@ -28,7 +28,11 @@ public class CrosshairComponent implements BufferComponent<DebugScreenOverlay> {
     @Override
     public void captureState(DebugScreenOverlay debugOverlay) {
         lastHidden = minecraft.options.getCameraType() != CameraType.FIRST_PERSON || minecraft.player.isSpectator();
+        //#if MC >= 12002
         wasRenderingF3 = debugOverlay.showDebugScreen();
+        //#else
+        //$$ wasRenderingF3 = minecraft.options.renderDebug;
+        //#endif
         lastPitch = minecraft.getCameraEntity().getXRot();
         lastYaw = minecraft.getCameraEntity().getYRot();
         lastCooldown = minecraft.player.getAttackStrengthScale(0.0F);
@@ -43,9 +47,15 @@ public class CrosshairComponent implements BufferComponent<DebugScreenOverlay> {
 
     @Override
     public boolean hasChanged(int tickCount, DebugScreenOverlay debugOverlay) {
+        //#if MC >= 12002
         if (wasRenderingF3 != debugOverlay.showDebugScreen()) {
             return true;
         }
+        //#else
+        //$$ if (wasRenderingF3 != minecraft.options.renderDebug) {
+        //$$return true;
+        //$$}
+        //#endif
         if (lastHidden != ((minecraft.options.getCameraType() != CameraType.FIRST_PERSON)
                 || minecraft.player.isSpectator())) {
             return true;

@@ -11,7 +11,6 @@ import com.mojang.datafixers.util.Pair;
 import lombok.experimental.UtilityClass;
 import net.minecraft.client.Minecraft;
 import net.minecraft.network.chat.Component;
-import net.minecraft.world.scores.DisplaySlot;
 import net.minecraft.world.scores.Objective;
 import net.minecraft.world.scores.PlayerTeam;
 import net.minecraft.world.scores.Scoreboard;
@@ -20,6 +19,9 @@ import net.minecraft.network.chat.numbers.NumberFormat;
 import net.minecraft.world.scores.PlayerScoreEntry;
 //#else
 //$$ import net.minecraft.world.scores.Score;
+//#endif
+//#if MC >= 12002
+import net.minecraft.world.scores.DisplaySlot;
 //#endif
 
 @UtilityClass
@@ -33,11 +35,20 @@ public class ScoreboardHelper {
         PlayerTeam playerTeam = scoreboard.getPlayersTeam(MINECRAFT.player.getScoreboardName());
         if (playerTeam != null) {
             int n = playerTeam.getColor().getId();
-            if (n >= 0)
+            if (n >= 0) {
+                //#if MC >= 12002
                 objective = scoreboard.getDisplayObjective(DisplaySlot.BY_ID.apply(3 + n));
+                //#else
+                //$$ objective = scoreboard.getDisplayObjective(3 + n);
+                //#endif
+            }
         }
         if (objective == null) {
+            //#if MC >= 12002
             objective = scoreboard.getDisplayObjective(DisplaySlot.SIDEBAR);
+            //#else
+            //$$ objective = scoreboard.getDisplayObjective(1);
+            //#endif
         }
         if (objective == null) {
             return null;

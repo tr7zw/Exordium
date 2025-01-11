@@ -105,7 +105,11 @@ public class PlayerListComponent
                         suffix.getStyle(), suffix.getString());
             }
             playerHash += playerInfo.getGameMode() == GameType.SPECTATOR ? 31 : 0;
+            //#if MC >= 12002
             playerHash += playerInfo.getSkin().texture().hashCode();
+            //#else
+            //$$ playerHash += playerInfo.getSkinLocation().hashCode();
+            //#endif
             playerHash += playerInfo.getLatency() * 63;
 
             if (lastTrackedObjective != null
