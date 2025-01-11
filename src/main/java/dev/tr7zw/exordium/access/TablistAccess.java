@@ -1,9 +1,24 @@
 package dev.tr7zw.exordium.access;
 
-import net.minecraft.world.scores.Objective;
-import net.minecraft.world.scores.Scoreboard;
+import java.util.List;
+import java.util.Map;
+import java.util.UUID;
 
-public interface TablistAccess extends VanillaBufferAccess.PlayerListOverlayAccess {
-    void updateState(Scoreboard scoreboard, Objective objective);
+import net.minecraft.client.gui.Gui;
+import net.minecraft.client.gui.components.PlayerTabOverlay;
+import net.minecraft.client.multiplayer.PlayerInfo;
+import net.minecraft.network.chat.Component;
+
+public interface TablistAccess {
+
+    Gui getGui();
+
+    Map<UUID, PlayerTabOverlay.HealthState> getHealthStates();
+
+    Component getHeader();
+
+    Component getFooter();
+
+    List<PlayerInfo> getPlayerInfosExordium();
 
 }

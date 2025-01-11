@@ -8,47 +8,32 @@ import com.llamalad7.mixinextras.injector.wrapoperation.Operation;
 import com.llamalad7.mixinextras.injector.wrapoperation.WrapOperation;
 
 import dev.tr7zw.exordium.ExordiumModBase;
-import dev.tr7zw.exordium.access.VanillaBufferAccess.ExperienceBarOverlayAccess;
-import dev.tr7zw.exordium.util.BufferedComponent;
+import dev.tr7zw.exordium.components.BufferInstance;
+import dev.tr7zw.exordium.components.vanilla.ExperienceComponent;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.Gui;
 import net.minecraft.client.gui.GuiGraphics;
 
 @Mixin(Gui.class)
-public class GuiExperienceMixin implements ExperienceBarOverlayAccess {
+public class GuiExperienceMixin {
 
     @Shadow
     private Minecraft minecraft;
-    private int lastlevel = 0;
-    private float lastprogress = 0;
 
-    private BufferedComponent experienceBuffer = new BufferedComponent(
-            () -> ExordiumModBase.instance.config.experienceSettings) {
-
-        @Override
-        public boolean shouldRenderNextCappedFrame() {
-            return minecraft.player.experienceLevel != lastlevel || minecraft.player.experienceProgress != lastprogress;
-        }
-
-        @Override
-        public void captureState() {
-            lastlevel = minecraft.player.experienceLevel;
-            lastprogress = minecraft.player.experienceProgress;
-        }
-    };
-
+    //#if MC >= 12005
     @WrapOperation(method = "renderHotbarAndDecorations", at = {
             @At(value = "INVOKE", target = "Lnet/minecraft/client/gui/Gui;renderExperienceBar(Lnet/minecraft/client/gui/GuiGraphics;I)V"), })
+    //#else
+    //$$@WrapOperation(method = "render", at = {
+    //$$        @At(value = "INVOKE", target = "Lnet/minecraft/client/gui/Gui;renderExperienceBar(Lnet/minecraft/client/gui/GuiGraphics;I)V"), })
+    //#endif
     private void renderExperienceBarWrapper(Gui gui, GuiGraphics guiGraphics, int i, final Operation<Void> operation) {
-        if (!experienceBuffer.render()) {
+        BufferInstance<Void> buffer = ExordiumModBase.instance.getBufferManager()
+                .getBufferInstance(ExperienceComponent.getId(), Void.class);
+        if (!buffer.renderBuffer(0, null, guiGraphics)) {
             operation.call(gui, guiGraphics, i);
         }
-        experienceBuffer.renderEnd();
-    }
-
-    @Override
-    public BufferedComponent getExperienceBarOverlayBuffer() {
-        return experienceBuffer;
+        buffer.postRender(null, guiGraphics);
     }
 
 }

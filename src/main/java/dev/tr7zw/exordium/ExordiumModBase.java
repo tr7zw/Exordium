@@ -56,6 +56,9 @@ public abstract class ExordiumModBase {
         }
         if (config == null) {
             config = new Config();
+            //#if MC >= 12104
+            config.hotbarSettings.setForceUpdates(true);
+            //#endif
             writeConfig();
         } else {
             if (ConfigUpgrader.upgradeConfig(config)) {

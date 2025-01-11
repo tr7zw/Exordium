@@ -4,8 +4,8 @@
         "srcrgb": "srcalpha",
         "dstrgb": "1-srcalpha"
     },
-    "vertex": "position_multi_tex",
-    "fragment": "position_multi_tex",
+    "vertex": "core/position_multi_tex",
+    "fragment": "core/position_multi_tex",
     "attributes": [
         "Position",
         "UV0"

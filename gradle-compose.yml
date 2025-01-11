@@ -1,10 +1,10 @@
 version: '0.0.2'
-source: "https://github.com/tr7zw/ProcessedModTemplate/tree/legacy12006"
+source: "https://github.com/tr7zw/ProcessedModTemplate/tree/master"
 replacements:
   name: "Exordium"
   id: "exordium"
-  version: "1.2.1"
-  description: "UI Frames go die"
+  version: "1.3.0"
+  description: "Renders the UI at a lower framerate to give the gameplay more legroom."
   homepageUrl: "https://modrinth.com/mod/exordium"
   sourcesUrl: "https://github.com/tr7zw/Exordium"
   issuesUrl: "https://github.com/tr7zw/Exordium/issues"

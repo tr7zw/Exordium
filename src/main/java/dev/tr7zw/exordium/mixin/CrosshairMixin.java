@@ -7,91 +7,64 @@ import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 
 import dev.tr7zw.exordium.ExordiumModBase;
-import dev.tr7zw.exordium.access.VanillaBufferAccess.CrosshairOverlayAccess;
-import dev.tr7zw.exordium.util.BufferedComponent;
-import net.minecraft.client.AttackIndicatorStatus;
-import net.minecraft.client.CameraType;
-import net.minecraft.client.Minecraft;
+import dev.tr7zw.exordium.components.BufferInstance;
+import dev.tr7zw.exordium.components.vanilla.CrosshairComponent;
+
 import net.minecraft.client.gui.Gui;
 import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.client.gui.components.DebugScreenOverlay;
-import net.minecraft.world.entity.LivingEntity;
+//#if MC < 12006
+//$$import com.llamalad7.mixinextras.injector.wrapoperation.Operation;
+//$$import com.llamalad7.mixinextras.injector.wrapoperation.WrapOperation;
+//$$import dev.tr7zw.exordium.components.vanilla.DebugOverlayComponent;
+//#endif
+
+//#if MC >= 12100
+import net.minecraft.client.DeltaTracker;
+//#endif
 
 @Mixin(Gui.class)
-public class CrosshairMixin implements CrosshairOverlayAccess {
+public class CrosshairMixin {
 
-    @Shadow
-    private Minecraft minecraft;
     @Shadow
     private DebugScreenOverlay debugOverlay;
 
-    private boolean wasRenderingF3 = false;
-    private float lastPitch = 0;
-    private float lastYaw = 0;
-    private float lastCooldown = 0;
-    private boolean lastHighlight = false;
-    private boolean lastHidden = false;
-
-    private BufferedComponent crosshairBufferedComponent = new BufferedComponent(true,
-            () -> ExordiumModBase.instance.config.crosshairSettings) {
-
-        @Override
-        public boolean shouldRenderNextCappedFrame() {
-            if (wasRenderingF3 != debugOverlay.showDebugScreen()) {
-                return true;
-            }
-            if (lastHidden != ((minecraft.options.getCameraType() != CameraType.FIRST_PERSON)
-                    || minecraft.player.isSpectator())) {
-                return true;
-            }
-            if (wasRenderingF3) {
-                return lastPitch != minecraft.getCameraEntity().getXRot()
-                        || lastYaw != minecraft.getCameraEntity().getYRot();
-            }
-            if (minecraft.options.attackIndicator().get() == AttackIndicatorStatus.CROSSHAIR) {
-                float cooldown = minecraft.player.getAttackStrengthScale(0.0F);
-                if (lastCooldown != cooldown) {
-                    return true;
-                }
-                boolean flag = false;
-                if (minecraft.crosshairPickEntity != null && minecraft.crosshairPickEntity instanceof LivingEntity
-                        && cooldown >= 1.0F) {
-                    flag = minecraft.player.getCurrentItemAttackStrengthDelay() > 5.0F;
-                    flag &= minecraft.crosshairPickEntity.isAlive();
-                }
-                return flag != lastHighlight;
-            }
-            return false;
-        }
-
-        @Override
-        public void captureState() {
-            lastHidden = minecraft.options.getCameraType() != CameraType.FIRST_PERSON || minecraft.player.isSpectator();
-            wasRenderingF3 = debugOverlay.showDebugScreen();
-            lastPitch = minecraft.getCameraEntity().getXRot();
-            lastYaw = minecraft.getCameraEntity().getYRot();
-            lastCooldown = minecraft.player.getAttackStrengthScale(0.0F);
-            boolean flag = false;
-            if (minecraft.crosshairPickEntity != null && minecraft.crosshairPickEntity instanceof LivingEntity
-                    && lastCooldown >= 1.0F) {
-                flag = minecraft.player.getCurrentItemAttackStrengthDelay() > 5.0F;
-                flag &= minecraft.crosshairPickEntity.isAlive();
-            }
-            lastHighlight = flag;
-        }
-    };
-
+    //#if MC >= 12005
     @Inject(method = "renderCrosshair", at = @At("HEAD"), cancellable = true)
-    private void renderCrosshairWrapper(GuiGraphics guiGraphics, float f, CallbackInfo ci) {
-        if (crosshairBufferedComponent.render()) {
+    //#if MC >= 12100
+    private void renderCrosshairStart(GuiGraphics guiGraphics, DeltaTracker delta, CallbackInfo ci) {
+        //#else
+        //$$ private void renderCrosshairStart(GuiGraphics guiGraphics, float f, CallbackInfo ci) {
+        //#endif
+        BufferInstance<DebugScreenOverlay> buffer = ExordiumModBase.instance.getBufferManager()
+                .getBufferInstance(CrosshairComponent.getId(), DebugScreenOverlay.class);
+        if (buffer.renderBuffer(0, debugOverlay, guiGraphics)) {
             ci.cancel();
         }
-        crosshairBufferedComponent.renderEnd();
+
     }
 
-    @Override
-    public BufferedComponent exordium_getCrosshairOverlayBuffer() {
-        return crosshairBufferedComponent;
+    @Inject(method = "renderCrosshair", at = @At("TAIL"))
+    //#if MC >= 12100
+    private void renderCrosshairEnd(GuiGraphics guiGraphics, DeltaTracker delta, CallbackInfo ci) {
+        //#else
+        //$$ private void renderCrosshairEnd(GuiGraphics guiGraphics, float f, CallbackInfo ci) {
+        //#endif
+        BufferInstance<DebugScreenOverlay> buffer = ExordiumModBase.instance.getBufferManager()
+                .getBufferInstance(CrosshairComponent.getId(), DebugScreenOverlay.class);
+        buffer.postRender(debugOverlay, guiGraphics);
     }
+    //#else
+    //$$@WrapOperation(method = "render", at = {
+    //$$        @At(value = "INVOKE", target = "Lnet/minecraft/client/gui/Gui;renderCrosshair(Lnet/minecraft/client/gui/GuiGraphics;)V"), })
+    //$$private void renderCrosshairWrapper(Gui gui, GuiGraphics guiGraphics, final Operation<Void> operation) {
+    //$$    BufferInstance<Void> buffer = ExordiumModBase.instance.getBufferManager()
+    //$$            .getBufferInstance(CrosshairComponent.getId(), Void.class);
+    //$$    if (!buffer.renderBuffer(0, null, guiGraphics)) {
+    //$$        operation.call(gui, guiGraphics);
+    //$$    }
+    //$$    buffer.postRender(null, guiGraphics);
+    //$$}
+    //#endif
 
 }
