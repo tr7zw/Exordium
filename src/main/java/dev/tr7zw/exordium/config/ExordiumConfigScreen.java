@@ -22,24 +22,24 @@ public class ExordiumConfigScreen extends CustomConfigScreen {
 
         options.add(getIntOption("text.exordium.pollRate", 20, 240, () -> config.pollRate, (v) -> config.pollRate = v));
 
-        addSettings(options, config.chatSettings, "chat", false);
-        addSettings(options, config.debugScreenSettings, "debug", false);
-        addSettings(options, config.healthSettings, "health", false);
-        addSettings(options, config.hotbarSettings, "hotbar", false);
-        addSettings(options, config.experienceSettings, "experience", false);
-        addSettings(options, config.scoreboardSettings, "scoreboard", false);
-        addSettings(options, config.tablistSettings, "tablist", false);
-        addSettings(options, config.vignetteSettings, "vignette", true);
-        addSettings(options, config.crosshairSettings, "crosshair", true);
-        addSettings(options, config.bossbarSettings, "bossbar", true);
-        addSettings(options, config.xaerosMinimapSettings, "xaerosmimimap", false);
+        addSettings(options, config.chatSettings, "chat", false, false);
+        addSettings(options, config.debugScreenSettings, "debug", false, true);
+        addSettings(options, config.healthSettings, "health", false, false);
+        addSettings(options, config.hotbarSettings, "hotbar", false, false);
+        addSettings(options, config.experienceSettings, "experience", false, false);
+        addSettings(options, config.scoreboardSettings, "scoreboard", false, false);
+        addSettings(options, config.tablistSettings, "tablist", false, false);
+        addSettings(options, config.vignetteSettings, "vignette", true, false);
+        addSettings(options, config.crosshairSettings, "crosshair", true, false);
+        addSettings(options, config.bossbarSettings, "bossbar", true, false);
+        addSettings(options, config.xaerosMinimapSettings, "xaerosmimimap", true, true);
 
         getOptions().addSmall(options.toArray(new OptionInstance[0]));
 
     }
 
     private void addSettings(List<OptionInstance<?>> options, Config.ComponentSettings settings, String name,
-            boolean hideBlending) {
+            boolean hideBlending, boolean hideForceUpdates) {
         options.add(getOnOffOption("text.exordium.setting." + name + ".enabled", () -> settings.isEnabled(),
                 (b) -> settings.setEnabled(b)));
         options.add(getIntOption("text.exordium.setting." + name + ".fps", 5, 60, () -> settings.getMaxFps(),
@@ -48,7 +48,7 @@ public class ExordiumConfigScreen extends CustomConfigScreen {
             options.add(getOnOffOption("text.exordium.setting." + name + ".forceblend", () -> settings.isForceBlend(),
                     (b) -> settings.setForceBlend(b)));
         }
-        if (!name.equals("debug")) { // debug has that already built in and on
+        if (!hideForceUpdates) {
             options.add(getOnOffOption("text.exordium.setting." + name + ".forceupdates",
                     () -> settings.isForceUpdates(), (b) -> settings.setForceUpdates(b)));
         }
