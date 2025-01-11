@@ -5,15 +5,6 @@ import java.util.Map;
 import java.util.function.Supplier;
 
 import dev.tr7zw.exordium.ExordiumModBase;
-import dev.tr7zw.exordium.access.ChatAccess;
-import dev.tr7zw.exordium.access.GuiAccess;
-import dev.tr7zw.exordium.access.TablistAccess;
-import dev.tr7zw.exordium.access.VanillaBufferAccess.CrosshairOverlayAccess;
-import dev.tr7zw.exordium.access.VanillaBufferAccess.DebugOverlayAccess;
-import dev.tr7zw.exordium.access.VanillaBufferAccess.ExperienceBarOverlayAccess;
-import dev.tr7zw.exordium.access.VanillaBufferAccess.HotbarOverlayAccess;
-import dev.tr7zw.exordium.access.VanillaBufferAccess.ScoreBoardOverlayAccess;
-import dev.tr7zw.exordium.access.VanillaBufferAccess.VignetteOverlayAccess;
 import dev.tr7zw.exordium.components.support.XaerosMinimapComponent;
 import dev.tr7zw.exordium.components.vanilla.BossHealthBarComponent;
 import dev.tr7zw.exordium.components.vanilla.ChatComponent;
