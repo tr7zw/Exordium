@@ -16,10 +16,14 @@ import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.level.GameType;
 import net.minecraft.world.scores.Objective;
-import net.minecraft.world.scores.PlayerScoreEntry;
 import net.minecraft.world.scores.PlayerTeam;
 import net.minecraft.world.scores.Scoreboard;
 import net.minecraft.world.scores.criteria.ObjectiveCriteria;
+//#if MC >= 12004
+import net.minecraft.world.scores.PlayerScoreEntry;
+//#else
+//$$ import net.minecraft.world.scores.Score;
+//#endif
 
 public class PlayerListComponent
         implements BufferComponent<dev.tr7zw.exordium.components.vanilla.PlayerListComponent.PlayerListContext> {
@@ -63,8 +67,13 @@ public class PlayerListComponent
             return false;
 
         int scoreboardHashCode = 1;
+        //#if MC >= 12004
         for (PlayerScoreEntry score : scoreboard.listPlayerScores(objective))
             scoreboardHashCode = 31 * scoreboardHashCode + (score == null ? 0 : score.value());
+        //#else
+        //$$for (Score score : scoreboard.getPlayerScores(objective))
+        //$$    scoreboardHashCode = 31 * scoreboardHashCode + (score == null ? 0 : score.getScore());
+        //#endif
 
         int newObjectiveHashCode = objective == null ? 0 : objective.getName().hashCode();
         if (scoreboardHashCode == scoreboardHash && newObjectiveHashCode == objectiveHash)
@@ -107,7 +116,11 @@ public class PlayerListComponent
                     PlayerTabOverlay.HealthState healthState = context.tablist().getHealthStates().computeIfAbsent(
                             playerInfo.getProfile().getId(),
                             (_uuid) -> new PlayerTabOverlay.HealthState(lastTrackedObjective.getScoreboard()
+                                    //#if MC >= 12004
                                     .getOrCreatePlayerScore(player, lastTrackedObjective).get()));
+                    //#else
+                    //$$.getOrCreatePlayerScore(player.getName().toString(), lastTrackedObjective).getScore()));
+                    //#endif
                     playerHash += healthState.isBlinking(context.tablist.getGui().getGuiTicks()) ? 63 : 127;
                 }
             }
