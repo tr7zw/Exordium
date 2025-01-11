@@ -33,6 +33,7 @@ public class ExordiumConfigScreen extends CustomConfigScreen {
         addSettings(options, config.crosshairSettings, "crosshair", true, false);
         addSettings(options, config.bossbarSettings, "bossbar", true, false);
         addSettings(options, config.xaerosMinimapSettings, "xaerosmimimap", true, true);
+        addSettings(options, config.paperdollSettings, "paperdoll", true, true);
 
         getOptions().addSmall(options.toArray(new OptionInstance[0]));
 

@@ -77,5 +77,9 @@
     "text.exordium.setting.xaerosmimimap.enabled": "Buffer XaerosMinimap",
     "text.exordium.setting.xaerosmimimap.enabled.tooltip": "Enable/Disable buffering the XaerosMinimap overlay",
     "text.exordium.setting.xaerosmimimap.fps": "XaerosMinimap FPS",
-    "text.exordium.setting.xaerosmimimap.fps.tooltip": "The target framerate for the XaerosMinimap overlay"
+    "text.exordium.setting.xaerosmimimap.fps.tooltip": "The target framerate for XaerosMinimap",
+    "text.exordium.setting.paperdoll.enabled": "Buffer Paperdoll",
+    "text.exordium.setting.paperdoll.enabled.tooltip": "Enable/Disable buffering the Paperdoll overlay",
+    "text.exordium.setting.paperdoll.fps": "Paperdoll FPS",
+    "text.exordium.setting.paperdoll.fps.tooltip": "The target framerate for the Paperdoll"
 }
