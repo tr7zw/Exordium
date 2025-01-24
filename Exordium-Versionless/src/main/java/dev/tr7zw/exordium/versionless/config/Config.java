@@ -17,6 +17,8 @@ public class Config {
     public ComponentSettings vignetteSettings = new ComponentSettings(true, 5);
     public ComponentSettings crosshairSettings = new ComponentSettings(false, 20);
     public ComponentSettings bossbarSettings = new ComponentSettings(true, 5);
+    public ComponentSettings xaerosMinimapSettings = new ComponentSettings(true, 30, true);
+    public ComponentSettings paperdollSettings = new ComponentSettings(true, 30);
 
     @Getter
     @Setter
@@ -29,6 +31,12 @@ public class Config {
         public ComponentSettings(boolean enabled, int maxFps) {
             this.enabled = enabled;
             this.maxFps = maxFps;
+        }
+
+        public ComponentSettings(boolean enabled, int maxFps, boolean forceBlend) {
+            this.enabled = enabled;
+            this.maxFps = maxFps;
+            this.forceBlend = forceBlend;
         }
     }
 

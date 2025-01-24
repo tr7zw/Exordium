@@ -60,7 +60,9 @@ public final class BufferInstance<T> {
 
         if (updateFrame) {
             // start capturing
-            guiGraphics.flush();
+            if (guiGraphics != null) {
+                guiGraphics.flush();
+            }
             isCapturing = true;
             buffer.captureComponent();
             return false;
@@ -98,7 +100,9 @@ public final class BufferInstance<T> {
         }
         isCapturing = false;
         component.captureState(context);
-        guiGraphics.flush();
+        if (guiGraphics != null) {
+            guiGraphics.flush();
+        }
         pacing.setCooldown(System.currentTimeMillis() + (1000 / settings.get().getMaxFps()));
         buffer.finishCapture();
     }

@@ -10,8 +10,8 @@
     "text.exordium.setting.chat.forceupdates.tooltip": "Force the chat to update every possible update frame(keeping in mind the fps limit). Might fix some issues with other mods.",
     "text.exordium.setting.debug.enabled": "Buffer F3",
     "text.exordium.setting.debug.enabled.tooltip": "Enable/Disable buffering the F3 overlay",
-    "text.exordium.setting.debug.fps": "Buffer F3 Max. FPS",
-    "text.exordium.setting.debug.fps.tooltip": "The maximum framerate for the F3 overlay",
+    "text.exordium.setting.debug.fps": "F3 FPS",
+    "text.exordium.setting.debug.fps.tooltip": "The target framerate for the F3 overlay",
     "text.exordium.setting.debug.forceblend": "Force F3 Blend",
     "text.exordium.setting.debug.forceblend.tooltip": "Force on texture blending for the F3 overlay. Might fix some issues with other mods.",
     "text.exordium.setting.health.enabled": "Buffer Health",
@@ -73,5 +73,13 @@
     "text.exordium.setting.bossbar.fps": "Fast Bossbars Max. FPS",
     "text.exordium.setting.bossbar.fps.tooltip": "The maximum framerate for bossbars",
     "text.exordium.setting.bossbar.forceupdates": "Force Bossbar Updates",
-    "text.exordium.setting.bossbar.forceupdates.tooltip": "Force bossbars to update every possible update frame (keeping in mind the fps limit). Might fix some issues with other mods."
+    "text.exordium.setting.bossbar.forceupdates.tooltip": "Force bossbars to update every possible update frame (keeping in mind the fps limit). Might fix some issues with other mods.",
+    "text.exordium.setting.xaerosmimimap.enabled": "Buffer XaerosMinimap",
+    "text.exordium.setting.xaerosmimimap.enabled.tooltip": "Enable/Disable buffering the XaerosMinimap overlay",
+    "text.exordium.setting.xaerosmimimap.fps": "XaerosMinimap FPS",
+    "text.exordium.setting.xaerosmimimap.fps.tooltip": "The target framerate for XaerosMinimap",
+    "text.exordium.setting.paperdoll.enabled": "Buffer Paperdoll",
+    "text.exordium.setting.paperdoll.enabled.tooltip": "Enable/Disable buffering the Paperdoll overlay",
+    "text.exordium.setting.paperdoll.fps": "Paperdoll FPS",
+    "text.exordium.setting.paperdoll.fps.tooltip": "The target framerate for the Paperdoll"
 }

@@ -5,6 +5,8 @@ import java.util.Map;
 import java.util.function.Supplier;
 
 import dev.tr7zw.exordium.ExordiumModBase;
+import dev.tr7zw.exordium.components.support.PaperDollComponent;
+import dev.tr7zw.exordium.components.support.XaerosMinimapComponent;
 import dev.tr7zw.exordium.components.vanilla.BossHealthBarComponent;
 import dev.tr7zw.exordium.components.vanilla.ChatComponent;
 import dev.tr7zw.exordium.components.vanilla.CrosshairComponent;
@@ -36,9 +38,12 @@ public class BufferManager {
         registerBuffer(ScoreboardComponent.getId(), new ScoreboardComponent(), () -> inst.config.scoreboardSettings);
         registerBuffer(HotbarComponent.getId(), new HotbarComponent(), () -> inst.config.hotbarSettings);
         registerBuffer(ChatComponent.getId(), new ChatComponent(), () -> inst.config.chatSettings);
+        registerBuffer(XaerosMinimapComponent.getId(), new XaerosMinimapComponent(),
+                () -> inst.config.xaerosMinimapSettings);
         registerBuffer(PlayerListComponent.getId(), new PlayerListComponent(), () -> inst.config.tablistSettings);
         registerBuffer(BossHealthBarComponent.getId(), new BossHealthBarComponent(), () -> inst.config.bossbarSettings);
         registerBuffer(HealthComponent.getId(), new HealthComponent(), () -> inst.config.healthSettings);
+        registerBuffer(PaperDollComponent.getId(), new PaperDollComponent(), () -> inst.config.paperdollSettings);
 
     }
 
