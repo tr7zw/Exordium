@@ -27,7 +27,7 @@ public class GuiDebugOverlayMixin {
             final Operation<Void> operation) {
         BufferInstance<Void> buffer = ExordiumModBase.instance.getBufferManager()
                 .getBufferInstance(DebugOverlayComponent.getId(), Void.class);
-        if (!buffer.renderBuffer(0, null, guiGraphics)) {
+        if (!buffer.renderBuffer(null, guiGraphics)) {
             operation.call(overlay, guiGraphics);
         }
         buffer.postRender(null, guiGraphics);

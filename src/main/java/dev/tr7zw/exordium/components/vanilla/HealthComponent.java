@@ -54,12 +54,12 @@ public class HealthComponent implements BufferComponent<HealthAccess> {
     }
 
     @Override
-    public boolean hasChanged(int tickCount, HealthAccess context) {
+    public boolean hasChanged(HealthAccess context) {
         boolean hasVisualEffects = minecraft.player.hasEffect(MobEffects.HUNGER)
                 || minecraft.player.hasEffect(MobEffects.REGENERATION);
 
-        boolean blinking = (context.getHealthBlinkTime() > tickCount
-                && (context.getHealthBlinkTime() - tickCount) / 3L % 2L == 1L);
+        boolean blinking = (context.getHealthBlinkTime() > context.getTickCount()
+                && (context.getHealthBlinkTime() - context.getTickCount()) / 3L % 2L == 1L);
         LivingEntity vehicle = context.getExordiumPlayerVehicleWithHealth();
         return healthBlinking != blinking || lastRenderedHealth != context.getLastHealth()
                 || lastDisplayHealth != context.getDisplayHealth() || lastArmorValue != minecraft.player.getArmorValue()
@@ -67,7 +67,8 @@ public class HealthComponent implements BufferComponent<HealthAccess> {
                 || lastVehicleHearts != (vehicle == null ? -1 : vehicle.getHealth())
                 || lastAirSupply != minecraft.player.getAirSupply()
                 || lastSaturation != minecraft.player.getFoodData().getSaturationLevel()
-                || (hasVisualEffects || (hasVisualEffects != hadVisualEffects && lastRenderedTick != tickCount))
+                || (hasVisualEffects
+                        || (hasVisualEffects != hadVisualEffects && lastRenderedTick != context.getTickCount()))
                 || lastFoodLevel != minecraft.player.getFoodData().getFoodLevel()
                 || lastExhaustionLevel != ((FoodDataAccessor) minecraft.player.getFoodData()).getExhaustionLevel()
                 || lastPlayerHealth != minecraft.player.getHealth() || Mth.ceil(lastPlayerHealth) <= 4

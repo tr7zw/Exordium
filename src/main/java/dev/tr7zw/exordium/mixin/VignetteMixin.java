@@ -50,7 +50,7 @@ public class VignetteMixin {
         BufferInstance<Float> buffer = ExordiumModBase.instance.getBufferManager()
                 .getBufferInstance(VignetteComponent.getId(), Float.class);
         float brightness = ((Gui) (Object) this).vignetteBrightness;
-        if (!buffer.renderBuffer(0, brightness, guiGraphics)) {
+        if (!buffer.renderBuffer(brightness, guiGraphics)) {
             if (buffer.enabled()) {
                 renderCustomVignette(guiGraphics);
             } else {

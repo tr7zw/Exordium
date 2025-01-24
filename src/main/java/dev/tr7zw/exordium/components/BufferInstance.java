@@ -45,7 +45,7 @@ public final class BufferInstance<T> {
      * @param context
      * @return
      */
-    public boolean renderBuffer(int ticks, T context, GuiGraphics guiGraphics) {
+    public boolean renderBuffer(T context, GuiGraphics guiGraphics) {
         if (!enabled()) {
             // not enabled, skip
             return false;
@@ -56,7 +56,7 @@ public final class BufferInstance<T> {
             return false;
         }
 
-        boolean updateFrame = buffer.screenChanged() || (pacing.isCooldownOver() && hasUpdate(ticks, context));
+        boolean updateFrame = buffer.screenChanged() || (pacing.isCooldownOver() && hasUpdate(context));
 
         if (updateFrame) {
             // start capturing
@@ -72,13 +72,13 @@ public final class BufferInstance<T> {
         return true;
     }
 
-    private boolean hasUpdate(int ticks, T context) {
+    private boolean hasUpdate(T context) {
         for (Supplier<Boolean> listener : updateListeners) {
             if (listener.get()) {
                 return true;
             }
         }
-        if (component.hasChanged(ticks, context)) {
+        if (component.hasChanged(context)) {
             return true;
         }
         // nothing changed, so wait the poll rate for the next check

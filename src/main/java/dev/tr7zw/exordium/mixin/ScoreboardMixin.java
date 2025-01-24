@@ -27,7 +27,7 @@ public class ScoreboardMixin {
             final Operation<Void> operation) {
         BufferInstance<Void> buffer = ExordiumModBase.instance.getBufferManager()
                 .getBufferInstance(ScoreboardComponent.getId(), Void.class);
-        if (!buffer.renderBuffer(0, null, guiGraphics)) {
+        if (!buffer.renderBuffer(null, guiGraphics)) {
             operation.call(gui, guiGraphics, objective);
         }
         buffer.postRender(null, guiGraphics);

@@ -35,7 +35,7 @@ public class GuiHotbarMixin {
         //#endif
         BufferInstance<Void> buffer = ExordiumModBase.instance.getBufferManager()
                 .getBufferInstance(HotbarComponent.getId(), Void.class);
-        if (!buffer.renderBuffer(0, null, guiGraphics)) {
+        if (!buffer.renderBuffer(null, guiGraphics)) {
             //#if MC >= 12005
             operation.call(gui, guiGraphics, f);
             //#else

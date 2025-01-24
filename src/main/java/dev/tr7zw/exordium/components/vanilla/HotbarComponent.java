@@ -44,7 +44,7 @@ public class HotbarComponent implements BufferComponent<Void> {
     }
 
     @Override
-    public boolean hasChanged(int tickCount, Void context) {
+    public boolean hasChanged(Void context) {
         if (minecraft.options.attackIndicator().get() == AttackIndicatorStatus.HOTBAR) {
             float g = minecraft.player.getAttackStrengthScale(0.0F);
             if (g != lastAttackState) {

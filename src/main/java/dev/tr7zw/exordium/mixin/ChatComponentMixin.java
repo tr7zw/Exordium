@@ -8,6 +8,7 @@ import org.spongepowered.asm.mixin.Shadow;
 
 import dev.tr7zw.exordium.access.ChatAccess;
 import lombok.Getter;
+import lombok.Setter;
 import net.minecraft.client.GuiMessage;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.components.ChatComponent;
@@ -24,6 +25,9 @@ public abstract class ChatComponentMixin implements ChatAccess {
     private int chatScrollbarPos;
     @Shadow
     private Minecraft minecraft;
+    @Getter
+    @Setter
+    private int tickCount;
 
     @Override
     public int getChatScollbarPos() {

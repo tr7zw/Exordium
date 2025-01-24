@@ -56,9 +56,10 @@ public abstract class GuiMixin implements GuiAccess {
             //#endif
             final Operation<Void> operation) {
         ChatAccess chatAccess = (ChatAccess) chat;
+        chatAccess.setTickCount(tickCount);
         BufferInstance<ChatAccess> buffer = ExordiumModBase.instance.getBufferManager()
                 .getBufferInstance(dev.tr7zw.exordium.components.vanilla.ChatComponent.getId(), ChatAccess.class);
-        if (!buffer.renderBuffer(tickCount, chatAccess, guiGraphics)) {
+        if (!buffer.renderBuffer(chatAccess, guiGraphics)) {
             //#if MC >= 12005
             operation.call(instance, guiGraphics, tickCount, j, k, b);
             //#else
@@ -81,7 +82,7 @@ public abstract class GuiMixin implements GuiAccess {
         BufferInstance<PlayerListContext> buffer = ExordiumModBase.instance.getBufferManager()
                 .getBufferInstance(PlayerListComponent.getId(), PlayerListContext.class);
         PlayerListContext context = new PlayerListContext(tablistAccess, scoreboard, objective2);
-        if (!buffer.renderBuffer(tickCount, context, guiGraphics)) {
+        if (!buffer.renderBuffer(context, guiGraphics)) {
             operation.call(instance, guiGraphics, screenWidth, scoreboard, objective2);
         }
         buffer.postRender(context, guiGraphics);
@@ -94,10 +95,9 @@ public abstract class GuiMixin implements GuiAccess {
     //#endif
     private void renderBossBarWrapper(BossHealthOverlay instance, GuiGraphics guiGraphics, Operation<Void> original) {
         BossOverlayAccess overlayAccess = (BossOverlayAccess) this.getBossOverlay();
-        @SuppressWarnings("unchecked")
         BufferInstance<BossOverlayAccess> buffer = ExordiumModBase.instance.getBufferManager()
                 .getBufferInstance(BossHealthBarComponent.getId(), BossOverlayAccess.class);
-        if (!buffer.renderBuffer(tickCount, overlayAccess, guiGraphics)) {
+        if (!buffer.renderBuffer(overlayAccess, guiGraphics)) {
             original.call(instance, guiGraphics);
         }
         buffer.postRender(overlayAccess, guiGraphics);

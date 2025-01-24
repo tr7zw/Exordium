@@ -16,4 +16,8 @@ public interface ChatAccess {
 
     int getLinesPerPage();
 
+    int getTickCount();
+
+    void setTickCount(int ticks);
+
 }

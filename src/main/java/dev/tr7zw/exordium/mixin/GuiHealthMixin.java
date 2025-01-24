@@ -51,7 +51,7 @@ public class GuiHealthMixin implements HealthAccess {
     private void renderPlayerHealthWrapper(Gui gui, GuiGraphics guiGraphics, final Operation<Void> operation) {
         BufferInstance<HealthAccess> buffer = ExordiumModBase.instance.getBufferManager()
                 .getBufferInstance(HealthComponent.getId(), HealthAccess.class);
-        if (!buffer.renderBuffer(tickCount, this, guiGraphics)) {
+        if (!buffer.renderBuffer(this, guiGraphics)) {
             operation.call(gui, guiGraphics);
             renderingMountHealth = true;
             renderVehicleHealth(guiGraphics);

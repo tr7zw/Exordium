@@ -22,7 +22,7 @@ public class ExperienceComponent implements BufferComponent<Void> {
     }
 
     @Override
-    public boolean hasChanged(int tickCount, Void context) {
+    public boolean hasChanged(Void context) {
         return minecraft.player.experienceLevel != lastlevel || minecraft.player.experienceProgress != lastprogress;
     }
 

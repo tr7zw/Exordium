@@ -22,7 +22,7 @@ public class XaerosMinimapMixin {
             final Operation<Void> operation) {
         BufferInstance<Void> buffer = ExordiumModBase.instance.getBufferManager()
                 .getBufferInstance(XaerosMinimapComponent.getId(), Void.class);
-        if (!buffer.renderBuffer(0, null, guiGraphics)) {
+        if (!buffer.renderBuffer(null, guiGraphics)) {
             operation.call(renderer, hud, guiGraphics, tick);
         }
         buffer.postRender(null, guiGraphics);

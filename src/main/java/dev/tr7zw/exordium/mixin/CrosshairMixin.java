@@ -38,7 +38,7 @@ public class CrosshairMixin {
         //#endif
         BufferInstance<DebugScreenOverlay> buffer = ExordiumModBase.instance.getBufferManager()
                 .getBufferInstance(CrosshairComponent.getId(), DebugScreenOverlay.class);
-        if (buffer.renderBuffer(0, debugOverlay, guiGraphics)) {
+        if (buffer.renderBuffer(debugOverlay, guiGraphics)) {
             ci.cancel();
         }
 
@@ -60,7 +60,7 @@ public class CrosshairMixin {
     //$$private void renderCrosshairWrapper(Gui gui, GuiGraphics guiGraphics, final Operation<Void> operation) {
     //$$    BufferInstance<Void> buffer = ExordiumModBase.instance.getBufferManager()
     //$$            .getBufferInstance(CrosshairComponent.getId(), Void.class);
-    //$$    if (!buffer.renderBuffer(0, null, guiGraphics)) {
+    //$$    if (!buffer.renderBuffer(null, guiGraphics)) {
     //$$        operation.call(gui, guiGraphics);
     //$$    }
     //$$    buffer.postRender(null, guiGraphics);

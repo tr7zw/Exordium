@@ -24,7 +24,7 @@ public class ScoreboardComponent implements BufferComponent<Void> {
     }
 
     @Override
-    public boolean hasChanged(int tickCount, Void context) {
+    public boolean hasChanged(Void context) {
         ScoreboardState cur = ScoreboardHelper.getScoreboardData();
         return !Objects.equals(scoreboardState, "" + cur); // dirty workaround
     }

@@ -16,6 +16,7 @@ public class ChatComponent implements BufferComponent<ChatAccess> {
     private int messageCount = 0;
     private boolean wasFocused = false;
     private GuiMessage.Line lastMessage = null;
+    private int lastTimer = 0;
 
     @Override
     public void captureState(ChatAccess context) {
@@ -23,10 +24,11 @@ public class ChatComponent implements BufferComponent<ChatAccess> {
         lastScrollbarPos = context.getChatScollbarPos();
         messageCount = context.getTrimmedMessages().size();
         wasFocused = context.isChatFocused();
+        lastTimer = context.getTickCount();
     }
 
     @Override
-    public boolean hasChanged(int tickCount, ChatAccess context) {
+    public boolean hasChanged(ChatAccess context) {
         GuiMessage.Line msg = context.getTrimmedMessages().isEmpty() ? null : context.getTrimmedMessages().get(0);
         boolean changed = context.getChatScollbarPos() != lastScrollbarPos
                 || messageCount != context.getTrimmedMessages().size() || context.isChatFocused() != wasFocused
@@ -38,8 +40,14 @@ public class ChatComponent implements BufferComponent<ChatAccess> {
         for (int o = 0; o + context.getChatScollbarPos() < context.getTrimmedMessages().size() && o < j; o++) {
             GuiMessage.Line guiMessage = context.getTrimmedMessages().get(o + context.getChatScollbarPos());
             if (guiMessage != null) {
-                int p = tickCount - guiMessage.addedTime();
+                int p = context.getTickCount() - guiMessage.addedTime();
                 if (p > 170 && p < 200) { // 180 is correct, add a tiny buffer for the frame to catch up
+                    return true;
+                }
+                int lastDelay = lastTimer - guiMessage.addedTime();
+                if (lastDelay < 200 && p > 170) {
+                    // time jumped from under 200 ticks to now being after the fadeout, update!
+                    // This happens when you keep the chat open in 1.21.4+
                     return true;
                 }
             }

@@ -33,7 +33,7 @@ public class VignetteComponent implements BufferComponent<Float> {
     }
 
     @Override
-    public boolean hasChanged(int tickCount, Float vignetteBrightness) {
+    public boolean hasChanged(Float vignetteBrightness) {
         if (exordium_lastVignetteBrightness != vignetteBrightness) {
             return true;
         }

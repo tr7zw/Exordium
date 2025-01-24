@@ -18,7 +18,7 @@ public class PaperDollMixin {
     private void renderCrosshairStart(float delta, CallbackInfo ci) {
         BufferInstance<PaperDollComponent> buffer = ExordiumModBase.instance.getBufferManager()
                 .getBufferInstance(PaperDollComponent.getId(), PaperDollComponent.class);
-        if (buffer.renderBuffer(0, null, null)) {
+        if (buffer.renderBuffer(null, null)) {
             ci.cancel();
         }
 

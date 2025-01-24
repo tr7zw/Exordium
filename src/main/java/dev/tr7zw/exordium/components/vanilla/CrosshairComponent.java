@@ -46,7 +46,7 @@ public class CrosshairComponent implements BufferComponent<DebugScreenOverlay> {
     }
 
     @Override
-    public boolean hasChanged(int tickCount, DebugScreenOverlay debugOverlay) {
+    public boolean hasChanged(DebugScreenOverlay debugOverlay) {
         //#if MC >= 12002
         if (wasRenderingF3 != debugOverlay.showDebugScreen()) {
             return true;

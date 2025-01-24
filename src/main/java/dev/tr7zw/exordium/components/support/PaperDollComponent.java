@@ -16,7 +16,7 @@ public class PaperDollComponent implements BufferComponent<Void> {
     }
 
     @Override
-    public boolean hasChanged(int tickCount, Void context) {
+    public boolean hasChanged(Void context) {
         return true;
     }
 

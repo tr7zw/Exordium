@@ -50,7 +50,7 @@ public class PlayerListComponent
     }
 
     @Override
-    public boolean hasChanged(int tickCount, PlayerListContext context) {
+    public boolean hasChanged(PlayerListContext context) {
         boolean scoreboardOrObjectiveChange = scoreboardOrObjectiveChanged(context.scoreboard, context.objective);
         int newHeaderHash = context.tablist().getHeader() == null ? 0
                 : context.tablist().getHeader().getString().hashCode();
