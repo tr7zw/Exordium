@@ -54,6 +54,17 @@ public class CrosshairMixin {
                 .getBufferInstance(CrosshairComponent.getId(), DebugScreenOverlay.class);
         buffer.postRender(debugOverlay, guiGraphics);
     }
+    //#elseif MC >= 12002
+    //$$@WrapOperation(method = "render", at = {
+    //$$        @At(value = "INVOKE", target = "Lnet/minecraft/client/gui/Gui;renderCrosshair(Lnet/minecraft/client/gui/GuiGraphics;)V"), })
+    //$$private void renderCrosshairWrapper(Gui gui, GuiGraphics guiGraphics, final Operation<Void> operation) {
+    //$$    BufferInstance<DebugScreenOverlay> buffer = ExordiumModBase.instance.getBufferManager()
+    //$$            .getBufferInstance(CrosshairComponent.getId(), DebugScreenOverlay.class);
+    //$$    if (!buffer.renderBuffer(debugOverlay, guiGraphics)) {
+    //$$        operation.call(gui, guiGraphics);
+    //$$    }
+    //$$    buffer.postRender(debugOverlay, guiGraphics);
+    //$$}
     //#else
     //$$@WrapOperation(method = "render", at = {
     //$$        @At(value = "INVOKE", target = "Lnet/minecraft/client/gui/Gui;renderCrosshair(Lnet/minecraft/client/gui/GuiGraphics;)V"), })
