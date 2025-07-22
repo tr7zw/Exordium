@@ -27,6 +27,7 @@ enabledFlags:
   - includeLibs
   - addTRansitionLib
   - addTRenderLib
+  - mixinextras
 rootProject:
   template: "."
 subProjects:

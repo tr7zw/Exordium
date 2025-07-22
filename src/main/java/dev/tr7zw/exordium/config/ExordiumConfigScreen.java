@@ -36,7 +36,7 @@ public class ExordiumConfigScreen extends AbstractConfigScreen {
         generalOptionList.setGap(-1);
         generalOptionList.setSize(14 * 20, 9 * 20);
         wTabPanel.add(generalOptionList,
-                b -> b.title(ComponentProvider.translatable("text.paperdoll.tab.general_options")));
+                b -> b.title(ComponentProvider.translatable("text.exordium.tab.general_options")));
 
         wTabPanel.layout();
         root.add(wTabPanel, 0, 2);

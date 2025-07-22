@@ -16,11 +16,13 @@ import dev.tr7zw.exordium.components.BufferInstance;
 import dev.tr7zw.exordium.config.ExordiumConfigScreen;
 import dev.tr7zw.exordium.versionless.config.Config;
 import dev.tr7zw.exordium.versionless.config.ConfigUpgrader;
+import dev.tr7zw.transition.loader.ModLoaderEventUtil;
+import dev.tr7zw.transition.loader.ModLoaderUtil;
 import lombok.Getter;
 import lombok.Setter;
 import net.minecraft.client.gui.screens.Screen;
 
-public abstract class ExordiumModBase {
+public class ExordiumModBase {
 
     public static final Logger LOGGER = LogManager.getLogger("Exordium");
     public static ExordiumModBase instance;
@@ -35,6 +37,8 @@ public abstract class ExordiumModBase {
     private RenderTarget temporaryScreenOverwrite = null;
     private BufferInstance mainBuffer;
     private boolean lateInit = true;
+    @Getter
+    private boolean isInitialized = false;
 
     void onInitialize() {
         instance = this;
@@ -54,7 +58,10 @@ public abstract class ExordiumModBase {
                 writeConfig(); // Config got modified
             }
         }
-        initModloader();
+        ModLoaderUtil.registerConfigScreen(s -> createConfigScreen(s));
+        ModLoaderEventUtil.registerClientTickStartListener(() -> {
+            isInitialized = true;
+        });
     }
 
     public void writeConfig() {
@@ -66,8 +73,6 @@ public abstract class ExordiumModBase {
             e1.printStackTrace();
         }
     }
-
-    public abstract void initModloader();
 
     Screen createConfigScreen(Screen parent) {
         return new ExordiumConfigScreen(parent).createScreen();

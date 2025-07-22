@@ -2,6 +2,7 @@ package dev.tr7zw.exordium.components;
 
 import java.util.function.Supplier;
 
+import dev.tr7zw.exordium.ExordiumModBase;
 import dev.tr7zw.exordium.util.PacingTracker;
 import dev.tr7zw.exordium.versionless.config.Config;
 import net.minecraft.client.Minecraft;
@@ -20,7 +21,7 @@ public final class BufferInstance {
     }
 
     public boolean enabled() {
-        return settings.get().isEnabled();
+        return settings.get().isEnabled() && ExordiumModBase.instance.isInitialized();
     }
 
     /**
