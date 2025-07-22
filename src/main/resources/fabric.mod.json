@@ -27,7 +27,6 @@
     "mixins": [
         "exordium.mixins.json"
     ],
-    "accessWidener": "exordium.accesswidener",
     "depends": {
         "${fabric_api_name}": "*",
         "minecraft": "${minecraft_version_range_fabric}"

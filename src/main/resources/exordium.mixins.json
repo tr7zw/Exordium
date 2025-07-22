@@ -4,26 +4,12 @@
     "package": "dev.tr7zw.exordium.mixin",
     "compatibilityLevel": "JAVA_16",
     "mixins": [
-        "BossHealthOverlayMixin",
-        "FoodDataAccessor",
-        "LerpingBossEventMixin"
+
     ],
     "client": [
-        "ChatComponentMixin",
-        "CrosshairMixin",
-        "GameRendererMixin",
-        "GlStateManagerMixin",
-        "GuiDebugOverlayMixin",
-        "GuiExperienceMixin",
-        "GuiHealthMixin",
-        "GuiHotbarMixin",
-        "GuiMixin",
         "MinecraftMixin",
-        "PlayerTabOverlayMixin",
-        "ScoreboardMixin",
-        "VignetteMixin",
-        "support/XaerosMinimapMixin",
-        "support/PaperDollMixin"
+		"GuiRendererMixin",
+		"GuiMixin"
     ],
     "injectors": {
         "defaultRequire": 1

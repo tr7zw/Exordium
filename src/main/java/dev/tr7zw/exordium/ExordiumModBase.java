@@ -11,13 +11,9 @@ import org.apache.logging.log4j.Logger;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.mojang.blaze3d.pipeline.RenderTarget;
-import com.mojang.blaze3d.platform.GlStateManager;
-import com.mojang.blaze3d.systems.RenderSystem;
 
-import dev.tr7zw.exordium.components.BufferManager;
+import dev.tr7zw.exordium.components.BufferInstance;
 import dev.tr7zw.exordium.config.ExordiumConfigScreen;
-import dev.tr7zw.exordium.util.CustomShaderManager;
-import dev.tr7zw.exordium.util.DelayedRenderCallManager;
 import dev.tr7zw.exordium.versionless.config.Config;
 import dev.tr7zw.exordium.versionless.config.ConfigUpgrader;
 import lombok.Getter;
@@ -37,11 +33,7 @@ public abstract class ExordiumModBase {
     @Setter
     @Getter
     private RenderTarget temporaryScreenOverwrite = null;
-    @Getter
-    private final DelayedRenderCallManager delayedRenderCallManager = new DelayedRenderCallManager();
-    @Getter
-    private final CustomShaderManager customShaderManager = new CustomShaderManager();
-    private final BufferManager bufferManager = new BufferManager();
+    private BufferInstance mainBuffer;
     private boolean lateInit = true;
 
     void onInitialize() {
@@ -56,9 +48,6 @@ public abstract class ExordiumModBase {
         }
         if (config == null) {
             config = new Config();
-            //#if MC >= 12104
-            config.hotbarSettings.setForceUpdates(true);
-            //#endif
             writeConfig();
         } else {
             if (ConfigUpgrader.upgradeConfig(config)) {
@@ -81,7 +70,7 @@ public abstract class ExordiumModBase {
     public abstract void initModloader();
 
     Screen createConfigScreen(Screen parent) {
-        return new ExordiumConfigScreen(parent);
+        return new ExordiumConfigScreen(parent).createScreen();
     }
 
     public static void setForceBlend(boolean forceBlend) {
@@ -89,19 +78,20 @@ public abstract class ExordiumModBase {
     }
 
     public static void correctBlendMode() {
-        RenderSystem.enableBlend();
-        RenderSystem.blendFuncSeparate(GlStateManager.SourceFactor.SRC_ALPHA,
-                GlStateManager.DestFactor.ONE_MINUS_SRC_ALPHA, GlStateManager.SourceFactor.ONE,
-                GlStateManager.DestFactor.ONE_MINUS_SRC_ALPHA);
+        //#if MC <= 12104
+        //$$ RenderSystem.enableBlend();
+        //$$ RenderSystem.blendFuncSeparate(GlStateManager.SourceFactor.SRC_ALPHA,
+        //$$         GlStateManager.DestFactor.ONE_MINUS_SRC_ALPHA, GlStateManager.SourceFactor.ONE,
+        //$$          GlStateManager.DestFactor.ONE_MINUS_SRC_ALPHA);
+        //#endif
     }
 
-    public BufferManager getBufferManager() {
-        // FIXME
+    public BufferInstance getMainBuffer() {
         if (lateInit) {
-            bufferManager.initialize();
+            mainBuffer = new BufferInstance(() -> config.globalSettings);
             lateInit = false;
         }
-        return bufferManager;
+        return mainBuffer;
     }
 
 }
