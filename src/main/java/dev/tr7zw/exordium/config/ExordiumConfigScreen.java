@@ -20,7 +20,7 @@ public class ExordiumConfigScreen extends AbstractConfigScreen {
 
     public ExordiumConfigScreen(Screen lastScreen) {
         super(ComponentProvider.translatable("text.exordium.title"), lastScreen);
-        
+
         List<OptionInstance> options = new ArrayList<>();
 
         addSettings(options, ExordiumModBase.instance.config.globalSettings, "global");

@@ -21,5 +21,5 @@ public class PacingTracker {
     public void clearFlag() {
         cooldownOver = null;
     }
-    
+
 }

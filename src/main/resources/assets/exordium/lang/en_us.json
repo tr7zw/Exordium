@@ -1,6 +1,6 @@
 {
     "text.exordium.title": "Exordium",
-	"text.exordium.tab.general_options": "General Options",
+    "text.exordium.tab.general_options": "General Options",
     "text.exordium.setting.global.enabled": "Enable Exordium",
     "text.exordium.setting.global.enabled.tooltip": "Enable/Disable buffering the entire UI and Screens",
     "text.exordium.setting.global.fps": "UI Framerate",

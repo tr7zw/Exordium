@@ -45,14 +45,15 @@ public final class BufferInstance {
             return false;
         }
         // we just render this buffered component
-      buffer.getGuiTarget().blitAndBlendToTexture(Minecraft.getInstance().getMainRenderTarget().getColorTextureView());
+        buffer.getGuiTarget()
+                .blitAndBlendToTexture(Minecraft.getInstance().getMainRenderTarget().getColorTextureView());
         return true;
     }
 
     public boolean skipGuiRendering() {
         return enabled() && !pacing.isCooldownOver();
     }
-    
+
     /**
      * This method should be called after the render logic, no matter if the buffer
      * or normal render logic was used.
@@ -66,7 +67,8 @@ public final class BufferInstance {
         isCapturing = false;
         pacing.setCooldown(System.currentTimeMillis() + (1000 / settings.get().getMaxFps()));
         buffer.finishCapture();
-        buffer.getGuiTarget().blitAndBlendToTexture(Minecraft.getInstance().getMainRenderTarget().getColorTextureView());
+        buffer.getGuiTarget()
+                .blitAndBlendToTexture(Minecraft.getInstance().getMainRenderTarget().getColorTextureView());
     }
 
 }

@@ -14,7 +14,7 @@
         "issues": "https://github.com/tr7zw"
     },
     "license": "tr7zw Protective License",
-    "icon": "assets/exordium/icon.png",
+    "icon": "icon.png",
     "environment": "client",
     "entrypoints": {
         "client": [

@@ -3,13 +3,11 @@
     "minVersion": "0.8",
     "package": "dev.tr7zw.exordium.mixin",
     "compatibilityLevel": "JAVA_16",
-    "mixins": [
-
-    ],
+    "mixins": [],
     "client": [
         "MinecraftMixin",
-		"GuiRendererMixin",
-		"GuiMixin"
+        "GuiRendererMixin",
+        "GuiMixin"
     ],
     "injectors": {
         "defaultRequire": 1

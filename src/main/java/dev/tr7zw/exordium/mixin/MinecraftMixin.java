@@ -23,7 +23,7 @@ public class MinecraftMixin {
 
     @Inject(method = "getMainRenderTarget", at = @At("HEAD"), cancellable = true)
     public void getMainRenderTarget(CallbackInfoReturnable<RenderTarget> ci) {
-        if(ExordiumModBase.instance == null) {
+        if (ExordiumModBase.instance == null) {
             return; // Mod not initialized yet, so no temporary screen overwrite
         }
         RenderTarget target = ExordiumModBase.instance.getTemporaryScreenOverwrite();
