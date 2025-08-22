@@ -19,7 +19,7 @@ replacements:
     modCompileOnly 'maven.modrinth:xaeros-minimap:25.2.12_Fabric_1.21.8'\n
     "
   forge_dependencies: "
-    modCompileOnly 'maven.modrinth:xaeros-minimap:25.2.12_Forge_1.20.6'\n
+    modCompileOnly 'maven.modrinth:xaeros-minimap:25.2.12_Forge_1.21.8'\n
     "
   neoforge_dependencies: "
     modCompileOnly 'maven.modrinth:xaeros-minimap:25.2.12_NeoForge_1.21.8'\n
