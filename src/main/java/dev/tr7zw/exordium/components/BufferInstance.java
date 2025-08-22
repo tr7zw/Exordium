@@ -21,7 +21,8 @@ public final class BufferInstance {
     }
 
     public boolean enabled() {
-        return Minecraft.getInstance().screen == null && settings.get().isEnabled() && ExordiumModBase.instance.isInitialized();
+        return Minecraft.getInstance().screen == null && settings.get().isEnabled()
+                && ExordiumModBase.instance.isInitialized();
     }
 
     /**

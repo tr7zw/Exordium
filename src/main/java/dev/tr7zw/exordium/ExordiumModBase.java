@@ -4,6 +4,8 @@ import java.io.File;
 import java.io.IOException;
 import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
+import java.util.ArrayList;
+import java.util.List;
 
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
@@ -12,6 +14,8 @@ import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.mojang.blaze3d.pipeline.RenderTarget;
 
+import dev.tr7zw.exordium.compat.CustomRenderHook;
+import dev.tr7zw.exordium.compat.XaeroMinimapCompat;
 import dev.tr7zw.exordium.components.BufferInstance;
 import dev.tr7zw.exordium.config.ExordiumConfigScreen;
 import dev.tr7zw.exordium.versionless.config.Config;
@@ -28,6 +32,8 @@ public class ExordiumModBase {
     public static ExordiumModBase instance;
     @Getter
     private static boolean forceBlend;
+    @Getter
+    private List<CustomRenderHook> customRenderHooks = new ArrayList<>();
 
     public Config config;
     private final File settingsFile = new File("config", "exordium.json");
@@ -62,6 +68,25 @@ public class ExordiumModBase {
         ModLoaderEventUtil.registerClientTickStartListener(() -> {
             isInitialized = true;
         });
+        if (doesClassExist("xaero.common.core.XaeroMinimapCore")) {
+            customRenderHooks.add(new XaeroMinimapCompat());
+        }
+    }
+
+    /**
+     * Checks if a class exists or not
+     * 
+     * @param name
+     * @return
+     */
+    private static boolean doesClassExist(String name) {
+        try {
+            if (Class.forName(name) != null) {
+                return true;
+            }
+        } catch (ClassNotFoundException e) {
+        }
+        return false;
     }
 
     public void writeConfig() {
