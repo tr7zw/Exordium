@@ -16,7 +16,7 @@ import dev.tr7zw.exordium.versionless.config.Config;
 import lombok.Getter;
 import net.minecraft.client.Minecraft;
 
-public class BufferedComponent {
+public class BufferedComponent implements IBufferedComponent {
 
     private static final Minecraft MINECRAFT = Minecraft.getInstance();
     @Getter
@@ -113,6 +113,16 @@ public class BufferedComponent {
 
     public boolean screenChanged() {
         return screenTracker.hasChanged();
+    }
+
+    private boolean isCrosshair = false;
+
+    public boolean getCrosshair() {
+        return this.isCrosshair;
+    }
+
+    public void setCrosshair(boolean isCrosshair) {
+        this.isCrosshair = isCrosshair;
     }
 
 }
