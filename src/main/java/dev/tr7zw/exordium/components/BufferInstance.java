@@ -13,7 +13,6 @@ import dev.tr7zw.exordium.versionless.config.Config;
 import lombok.Getter;
 import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.resources.ResourceLocation;
-import
 
 public final class BufferInstance<T> {
 
