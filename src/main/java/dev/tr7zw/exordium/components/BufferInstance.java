@@ -5,7 +5,9 @@ import java.util.List;
 import java.util.function.Supplier;
 
 import dev.tr7zw.exordium.ExordiumModBase;
+import dev.tr7zw.exordium.components.vanilla.CrosshairComponent;
 import dev.tr7zw.exordium.render.BufferedComponent;
+import dev.tr7zw.exordium.util.IBufferedComponent;
 import dev.tr7zw.exordium.util.PacingTracker;
 import dev.tr7zw.exordium.util.ReloadListener;
 import dev.tr7zw.exordium.versionless.config.Config;
@@ -32,6 +34,9 @@ public final class BufferInstance<T> {
         this.settings = settings;
         registerUpdateListener(() -> settings.get().isForceUpdates());
         registerUpdateListener(new ReloadListener());
+        if (id.equals(CrosshairComponent.getId())) {
+            ((IBufferedComponent) this.buffer).setCrosshair(true);
+        }
     }
 
     public boolean enabled() {

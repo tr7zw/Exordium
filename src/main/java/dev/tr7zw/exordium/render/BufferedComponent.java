@@ -2,12 +2,14 @@ package dev.tr7zw.exordium.render;
 
 import java.util.function.Supplier;
 
+import dev.tr7zw.exordium.util.IBufferedComponent;
 import org.joml.Vector3f;
 
 import com.mojang.blaze3d.pipeline.RenderTarget;
 import com.mojang.blaze3d.pipeline.TextureTarget;
 
 import dev.tr7zw.exordium.ExordiumModBase;
+import dev.tr7zw.exordium.util.IBufferedComponent;
 import dev.tr7zw.exordium.util.ScreenTracker;
 import dev.tr7zw.exordium.util.rendersystem.BlendStateHolder;
 import dev.tr7zw.exordium.util.rendersystem.DepthStateHolder;
@@ -16,7 +18,7 @@ import dev.tr7zw.exordium.versionless.config.Config;
 import lombok.Getter;
 import net.minecraft.client.Minecraft;
 
-public class BufferedComponent {
+public class BufferedComponent implements IBufferedComponent {
 
     private static final Minecraft MINECRAFT = Minecraft.getInstance();
     @Getter
@@ -113,6 +115,17 @@ public class BufferedComponent {
 
     public boolean screenChanged() {
         return screenTracker.hasChanged();
+    }
+
+    private boolean isCrosshair = false;
+    @Override
+    public boolean getCrosshair() {
+        return this.isCrosshair;
+    }
+
+    @Override
+    public void setCrosshair(boolean isCrosshair) {
+        this.isCrosshair = isCrosshair;
     }
 
 }
