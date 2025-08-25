@@ -3,7 +3,7 @@ source: "https://github.com/tr7zw/ProcessedModTemplate/tree/1.21.4legacy"
 replacements:
   name: "Exordium"
   id: "exordium"
-  version: "1.4.1"
+  version: "1.4.2"
   description: "Renders the UI at a lower framerate to give the gameplay more legroom."
   homepageUrl: "https://modrinth.com/mod/exordium"
   sourcesUrl: "https://github.com/tr7zw/Exordium"
