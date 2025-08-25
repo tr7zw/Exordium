@@ -61,19 +61,13 @@ public class DelayedRenderCallManager {
         }
 
         if (!normalComponents.isEmpty()) {
-            RenderSystem.blendFunc(
-                    GlStateManager.SourceFactor.ONE,
-                    GlStateManager.DestFactor.ONE_MINUS_SRC_ALPHA
-            );
+            RenderSystem.blendFunc(GlStateManager.SourceFactor.ONE, GlStateManager.DestFactor.ONE_MINUS_SRC_ALPHA);
             drawBatch(normalComponents, shaderManager, model);
         }
         if (!crosshairComponents.isEmpty()) {
-            RenderSystem.blendFuncSeparate(
-                    GlStateManager.SourceFactor.ONE_MINUS_DST_COLOR,
-                    GlStateManager.DestFactor.ONE_MINUS_SRC_COLOR,
-                    GlStateManager.SourceFactor.ONE,
-                    GlStateManager.DestFactor.ZERO
-            );
+            RenderSystem.blendFuncSeparate(GlStateManager.SourceFactor.ONE_MINUS_DST_COLOR,
+                    GlStateManager.DestFactor.ONE_MINUS_SRC_COLOR, GlStateManager.SourceFactor.ONE,
+                    GlStateManager.DestFactor.ZERO);
             drawBatch(crosshairComponents, shaderManager, model);
         }
 

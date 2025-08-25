@@ -9,6 +9,7 @@ import com.mojang.blaze3d.pipeline.RenderTarget;
 import com.mojang.blaze3d.pipeline.TextureTarget;
 
 import dev.tr7zw.exordium.ExordiumModBase;
+import dev.tr7zw.exordium.util.IBufferedComponent;
 import dev.tr7zw.exordium.util.ScreenTracker;
 import dev.tr7zw.exordium.util.rendersystem.BlendStateHolder;
 import dev.tr7zw.exordium.util.rendersystem.DepthStateHolder;
