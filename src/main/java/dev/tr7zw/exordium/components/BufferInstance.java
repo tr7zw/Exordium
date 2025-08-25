@@ -6,6 +6,7 @@ import java.util.function.Supplier;
 
 import dev.tr7zw.exordium.ExordiumModBase;
 import dev.tr7zw.exordium.render.BufferedComponent;
+import dev.tr7zw.exordium.util.IBufferedComponent;
 import dev.tr7zw.exordium.util.PacingTracker;
 import dev.tr7zw.exordium.util.ReloadListener;
 import dev.tr7zw.exordium.versionless.config.Config;
@@ -32,6 +33,9 @@ public final class BufferInstance<T> {
         this.settings = settings;
         registerUpdateListener(() -> settings.get().isForceUpdates());
         registerUpdateListener(new ReloadListener());
+        if (id.equals(NMSHelper.getResourceLocation("minecraft", "crosshair"))) {
+            ((IBufferedComponent) this.buffer).setCrosshair(true);
+        }
     }
 
     public boolean enabled() {
