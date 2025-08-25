@@ -6,12 +6,14 @@ import java.util.function.Supplier;
 
 import dev.tr7zw.exordium.ExordiumModBase;
 import dev.tr7zw.exordium.render.BufferedComponent;
+import dev.tr7zw.exordium.util.IBufferedComponent;
 import dev.tr7zw.exordium.util.PacingTracker;
 import dev.tr7zw.exordium.util.ReloadListener;
 import dev.tr7zw.exordium.versionless.config.Config;
 import lombok.Getter;
 import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.resources.ResourceLocation;
+import
 
 public final class BufferInstance<T> {
 

@@ -2,6 +2,7 @@ package dev.tr7zw.exordium.render;
 
 import java.util.function.Supplier;
 
+import dev.tr7zw.exordium.util.IBufferedComponent;
 import org.joml.Vector3f;
 
 import com.mojang.blaze3d.pipeline.RenderTarget;
@@ -116,11 +117,12 @@ public class BufferedComponent implements IBufferedComponent {
     }
 
     private boolean isCrosshair = false;
-
+    @Override
     public boolean getCrosshair() {
         return this.isCrosshair;
     }
 
+    @Override
     public void setCrosshair(boolean isCrosshair) {
         this.isCrosshair = isCrosshair;
     }
