@@ -18,7 +18,7 @@ public class GuiMixin {
 
     @Inject(method = "render", at = @At("HEAD"), cancellable = true)
     public void render(GuiGraphics guiGraphics, DeltaTracker deltaTracker, CallbackInfo ci) {
-        if (ExordiumModBase.instance.getMainBuffer().skipGuiRendering()) {
+        if (ExordiumModBase.instance != null && ExordiumModBase.instance.getMainBuffer().skipGuiRendering()) {
             // Trick minecraft into thinking we rendered something, so it still runs the GuiRenderer logic
             guiGraphics.drawString(Minecraft.getInstance().font, ComponentProvider.literal("Missingno."), 10, 10, -1);
             for (CustomRenderHook hook : ExordiumModBase.instance.getCustomRenderHooks()) {

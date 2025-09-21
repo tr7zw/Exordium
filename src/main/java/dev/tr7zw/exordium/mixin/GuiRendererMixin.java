@@ -31,7 +31,7 @@ public class GuiRendererMixin {
     @WrapOperation(method = "render", at = {
             @At(value = "INVOKE", target = "Lnet/minecraft/client/gui/render/GuiRenderer;draw(Lcom/mojang/blaze3d/buffers/GpuBufferSlice;)V"), })
     private void drawWrapper(GuiRenderer guiRenderer, GpuBufferSlice gpuBufferSlice, final Operation<Void> operation) {
-        if (!this.draws.isEmpty()) {
+        if (!this.draws.isEmpty() && ExordiumModBase.instance != null) {
             BufferInstance buffer = ExordiumModBase.instance.getMainBuffer();
             if (!buffer.renderBuffer()) {
                 operation.call(guiRenderer, gpuBufferSlice);
