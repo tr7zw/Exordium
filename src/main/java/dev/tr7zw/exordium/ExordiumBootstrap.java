@@ -23,21 +23,27 @@
 //    
 // }
 //? } else if neoforge {
+/*
+ package dev.tr7zw.exordium;
 
-// package dev.tr7zw.exordium;
-//
-// import net.neoforged.api.distmarker.Dist;
-// import net.neoforged.fml.loading.FMLEnvironment;
-// import net.neoforged.fml.common.Mod;
-//
-// @Mod("exordium")
-// public class ExordiumBootstrap {
-//
-//    public ExordiumBootstrap() {
-//            if(FMLEnvironment.dist == Dist.CLIENT) {
-//                dev.tr7zw.transition.loader.ModLoaderEventUtil.registerClientSetupListener(() -> new ExordiumModBase().onInitialize());
-//            }
-//    }
-//    
-// }
-//? }
+ import net.neoforged.api.distmarker.Dist;
+ import net.neoforged.fml.loading.FMLEnvironment;
+ import net.neoforged.fml.common.Mod;
+
+ @Mod("exordium")
+ public class ExordiumBootstrap {
+
+    public ExordiumBootstrap() {
+        //? if < 1.21.9 {
+        /^
+         if (FMLEnvironment.dist == Dist.CLIENT) {
+             ^///? } else {
+
+        if (FMLEnvironment.getDist() == Dist.CLIENT) {
+            //? }
+                dev.tr7zw.transition.loader.ModLoaderEventUtil.registerClientSetupListener(() -> new ExordiumModBase().onInitialize());
+            }
+    }
+    
+ }
+*///? }
