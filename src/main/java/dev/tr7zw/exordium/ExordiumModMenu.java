@@ -1,4 +1,5 @@
-//#if FABRIC
+//? if fabric {
+
 package dev.tr7zw.exordium;
 
 import com.terraformersmc.modmenu.api.ConfigScreenFactory;
@@ -12,4 +13,4 @@ public class ExordiumModMenu implements ModMenuApi {
     }
 
 }
-//#endif
+//? }

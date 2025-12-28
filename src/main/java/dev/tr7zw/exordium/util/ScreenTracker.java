@@ -21,12 +21,14 @@ public class ScreenTracker {
     }
 
     public void updateState() {
-        //#if MC >= 12102
+        //? if >= 1.21.2 {
+
         target.resize(Minecraft.getInstance().getWindow().getWidth(), Minecraft.getInstance().getWindow().getHeight());
-        //#else
-        //$$target.resize(Minecraft.getInstance().getWindow().getWidth(), Minecraft.getInstance().getWindow().getHeight(),
-        //$$        true);
-        //#endif
+        //? } else {
+
+        // target.resize(Minecraft.getInstance().getWindow().getWidth(), Minecraft.getInstance().getWindow().getHeight(),
+        //        true);
+        //? }
         guiScale = Minecraft.getInstance().options.guiScale().get();
     }
 

@@ -108,12 +108,13 @@ public class ExordiumModBase {
     }
 
     public static void correctBlendMode() {
-        //#if MC <= 12104
-        //$$ RenderSystem.enableBlend();
-        //$$ RenderSystem.blendFuncSeparate(GlStateManager.SourceFactor.SRC_ALPHA,
-        //$$         GlStateManager.DestFactor.ONE_MINUS_SRC_ALPHA, GlStateManager.SourceFactor.ONE,
-        //$$          GlStateManager.DestFactor.ONE_MINUS_SRC_ALPHA);
-        //#endif
+        //? if <= 1.21.4 {
+
+        // RenderSystem.enableBlend();
+        // RenderSystem.blendFuncSeparate(GlStateManager.SourceFactor.SRC_ALPHA,
+        //         GlStateManager.DestFactor.ONE_MINUS_SRC_ALPHA, GlStateManager.SourceFactor.ONE,
+        //          GlStateManager.DestFactor.ONE_MINUS_SRC_ALPHA);
+        //? }
     }
 
     public BufferInstance getMainBuffer() {
