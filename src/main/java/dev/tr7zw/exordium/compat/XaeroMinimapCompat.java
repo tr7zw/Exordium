@@ -1,14 +1,16 @@
 package dev.tr7zw.exordium.compat;
 
 import net.minecraft.client.DeltaTracker;
-import net.minecraft.client.gui.GuiGraphics;
-import xaero.common.core.XaeroMinimapCore;
+import net.minecraft.client.gui.GuiGraphicsExtractor;
 
 public class XaeroMinimapCompat implements CustomRenderHook {
 
     @Override
-    public void render(GuiGraphics guiGraphics, DeltaTracker partialTicks) {
-        XaeroMinimapCore.handleRenderModOverlay(guiGraphics, partialTicks);
+    public void render(GuiGraphicsExtractor guiGraphics, DeltaTracker partialTicks) {
+        //? if < 26.0 {
+        /*
+        xaero.common.core.XaeroMinimapCore.handleRenderModOverlay(guiGraphics, partialTicks);
+         *///? }
     }
 
 }

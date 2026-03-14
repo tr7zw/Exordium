@@ -1,5 +1,5 @@
 version: '0.0.2'
-source: "https://github.com/tr7zw/ProcessedModTemplate/tree/stonecutter"
+source: "https://github.com/tr7zw/ProcessedModTemplate/tree/stonecutter261"
 replacements:
   name: "Exordium"
   id: "exordium"
@@ -16,7 +16,9 @@ replacements:
   curseforgeid: 681953
   versionlessname: "Exordium-Versionless"
   fabric_dependencies: "
+    if (stonecutter.eval(mcVersion, '<= 26.0')) {\n
     modCompileOnly 'maven.modrinth:xaeros-minimap:25.2.12_Fabric_1.21.8'\n
+    }\n
     "
   forge_dependencies: "
     modCompileOnly 'maven.modrinth:xaeros-minimap:25.2.12_Forge_1.21.8'\n
