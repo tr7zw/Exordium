@@ -11,6 +11,7 @@ replacements:
   fabric_entrypoint: "dev.tr7zw.exordium.ExordiumMod"
   fabric_modmenu_entrypoint: "dev.tr7zw.exordium.ExordiumModMenu"
   relocationpackage: "dev.tr7zw.exordium"
+  licenseName: "GNU General Public License v3"
   licensename: "LICENSE-Exordium"
   modrinthid: DynYZEae
   curseforgeid: 681953
