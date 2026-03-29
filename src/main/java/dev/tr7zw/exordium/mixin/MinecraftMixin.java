@@ -1,9 +1,12 @@
 package dev.tr7zw.exordium.mixin;
 
-import org.spongepowered.asm.mixin.Mixin;
+import dev.tr7zw.transition.mc.*;
+import net.minecraft.client.gui.screens.*;
+import org.jspecify.annotations.*;
+import org.spongepowered.asm.mixin.*;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
-import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
+import org.spongepowered.asm.mixin.injection.callback.*;
 
 import com.mojang.blaze3d.pipeline.RenderTarget;
 
@@ -21,6 +24,10 @@ import net.minecraft.client.Minecraft;
 @Mixin(Minecraft.class)
 public class MinecraftMixin {
 
+    @Shadow
+    private static Minecraft instance;
+    private boolean naggedThisSession = false;
+
     @Inject(method = "getMainRenderTarget", at = @At("HEAD"), cancellable = true)
     public void getMainRenderTarget(CallbackInfoReturnable<RenderTarget> ci) {
         if (ExordiumModBase.instance == null) {
@@ -37,5 +44,21 @@ public class MinecraftMixin {
     //    private void init(GameConfig config, CallbackInfo info) {
     //       System.loadLibrary("renderdoc");
     //    }
+
+    @Inject(method = "setScreen", at = @At("HEAD"), cancellable = true)
+    public void setScreen(@Nullable Screen screen, CallbackInfo ci) {
+        if (!naggedThisSession && !ExordiumModBase.instance.config.iKnowThisIsNotAnActivelyDevelopedMod && screen != null && screen instanceof TitleScreen) {
+            // Only nag once per session
+            naggedThisSession = true;
+            Minecraft.getInstance().setScreen(new ConfirmScreen(b -> {
+                if (b) {
+                    ExordiumModBase.instance.config.iKnowThisIsNotAnActivelyDevelopedMod = true;
+                    ExordiumModBase.instance.writeConfig();
+                }
+                Minecraft.getInstance().setScreen(screen);
+            }, ComponentProvider.translatable("text.exordium.warning"), ComponentProvider.translatable("text.exordium.warning_desc")));
+            ci.cancel();
+        }
+    }
 
 }

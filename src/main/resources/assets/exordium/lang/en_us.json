@@ -4,5 +4,7 @@
     "text.exordium.setting.global.enabled": "Enable Exordium",
     "text.exordium.setting.global.enabled.tooltip": "Enable/Disable buffering the entire UI and Screens",
     "text.exordium.setting.global.fps": "UI Framerate",
-    "text.exordium.setting.global.fps.tooltip": "The maximum framerate for the UI."
+    "text.exordium.setting.global.fps.tooltip": "The maximum framerate for the UI.",
+    "text.exordium.warning": "Before you use Exordium",
+    "text.exordium.warning_desc": "Exordium is not an actively developed/maintained mod, and it will cause visual issues with other mods and vanilla features. Please don't spam me about issues with it. The mod is open source, if you want something fixed/a new feature, go ahead and make a Pull Request. Please confirm, to hide this warning in the future."
 }

@@ -7,6 +7,7 @@ public class Config {
 
     public int configVersion = 3;
     public ComponentSettings globalSettings = new ComponentSettings(true, 30);
+    public boolean iKnowThisIsNotAnActivelyDevelopedMod = false;
 
     @Getter
     @Setter
