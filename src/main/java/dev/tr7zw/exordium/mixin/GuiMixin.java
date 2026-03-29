@@ -11,13 +11,19 @@ import dev.tr7zw.transition.mc.ComponentProvider;
 import net.minecraft.client.DeltaTracker;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.Gui;
-import net.minecraft.client.gui.GuiGraphicsExtractor;
 
 @Mixin(value = Gui.class, priority = 1500)
 public class GuiMixin {
 
+    //? if >= 26.0 {
+
     @Inject(method = "extractRenderState", at = @At("HEAD"), cancellable = true)
-    public void render(GuiGraphicsExtractor guiGraphics, DeltaTracker deltaTracker, CallbackInfo ci) {
+    //? } else {
+    /*
+    @Inject(method = "render", at = @At("HEAD"), cancellable = true)
+    *///? }
+    public void render(net.minecraft.client.gui.GuiGraphicsExtractor guiGraphics, DeltaTracker deltaTracker,
+            CallbackInfo ci) {
         if (ExordiumModBase.instance != null && ExordiumModBase.instance.getMainBuffer().skipGuiRendering()) {
             // Trick minecraft into thinking we rendered something, so it still runs the GuiRenderer logic
             //? if >= 26.0 {

@@ -2,7 +2,6 @@ package dev.tr7zw.exordium.mixin;
 
 import dev.tr7zw.transition.mc.*;
 import net.minecraft.client.gui.screens.*;
-import org.jspecify.annotations.*;
 import org.spongepowered.asm.mixin.*;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
@@ -46,8 +45,9 @@ public class MinecraftMixin {
     //    }
 
     @Inject(method = "setScreen", at = @At("HEAD"), cancellable = true)
-    public void setScreen(@Nullable Screen screen, CallbackInfo ci) {
-        if (!naggedThisSession && !ExordiumModBase.instance.config.iKnowThisIsNotAnActivelyDevelopedMod && screen != null && screen instanceof TitleScreen) {
+    public void setScreen(Screen screen, CallbackInfo ci) {
+        if (!naggedThisSession && !ExordiumModBase.instance.config.iKnowThisIsNotAnActivelyDevelopedMod
+                && screen != null && screen instanceof TitleScreen) {
             // Only nag once per session
             naggedThisSession = true;
             Minecraft.getInstance().setScreen(new ConfirmScreen(b -> {
@@ -56,7 +56,8 @@ public class MinecraftMixin {
                     ExordiumModBase.instance.writeConfig();
                 }
                 Minecraft.getInstance().setScreen(screen);
-            }, ComponentProvider.translatable("text.exordium.warning"), ComponentProvider.translatable("text.exordium.warning_desc")));
+            }, ComponentProvider.translatable("text.exordium.warning"),
+                    ComponentProvider.translatable("text.exordium.warning_desc")));
             ci.cancel();
         }
     }
