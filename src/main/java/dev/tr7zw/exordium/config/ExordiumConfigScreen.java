@@ -64,7 +64,7 @@ public class ExordiumConfigScreen extends AbstractConfigScreen {
     private void addSettings(List<OptionInstance> options, Config.ComponentSettings settings, String name) {
         options.add(getOnOffOption("text.exordium.setting." + name + ".enabled", () -> settings.isEnabled(),
                 (b) -> settings.setEnabled(b)));
-        options.add(getIntOption("text.exordium.setting." + name + ".fps", 5, 60, () -> settings.getMaxFps(),
+        options.add(getIntOption("text.exordium.setting." + name + ".fps", 5, 240, () -> settings.getMaxFps(),
                 (v) -> settings.setMaxFps(v)));
     }
 
